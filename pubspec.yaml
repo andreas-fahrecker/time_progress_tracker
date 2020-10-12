@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_redux:
+  meta:
   percent_indicator:
   shared_preferences:
 
