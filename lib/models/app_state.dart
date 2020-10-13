@@ -3,21 +3,33 @@ import 'package:time_progress_calculator/models/timer.dart';
 
 @immutable
 class AppState {
-  final Timer timer;
+  final bool isLoading;
+  final List<Timer> timers;
 
-  AppState({this.timer});
+  AppState({
+    this.isLoading = false,
+    this.timers = const [],
+  });
 
-  AppState copyWith({Timer timer}) {
-    return AppState(timer: timer ?? this.timer);
+  factory AppState.initial() => AppState(isLoading: true);
+
+  AppState copyWith({
+    bool isLoading,
+    List<Timer> timers,
+  }) {
+    return AppState(
+      isLoading: isLoading ?? this.isLoading,
+      timers: timers ?? this.timers,
+    );
   }
 
   @override
-  int get hashCode => timer.hashCode;
+  int get hashCode => timers.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is AppState &&
           runtimeType == other.runtimeType &&
-          timer == other.timer;
+          timers == other.timers;
 }
