@@ -26,6 +26,7 @@ dependencies:
   flutter_redux:
   meta:
   percent_indicator:
+  redux:
   shared_preferences:
 
 

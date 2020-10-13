@@ -220,7 +220,7 @@ packages:
     source: hosted
     version: "3.0.13"
   redux:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: redux
       url: "https://pub.dartlang.org"
