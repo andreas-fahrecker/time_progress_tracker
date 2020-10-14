@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:time_progress_calculator/app.dart';
+import 'package:time_progress_calculator/middleware/store_timers_middleware.dart';
 import 'package:time_progress_calculator/models/app_state.dart';
+import 'package:time_progress_calculator/persistence/timers_repository.dart';
 import 'package:time_progress_calculator/reducers/app_state_reducer.dart';
-import 'package:time_progress_calculator/screens/progress_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   runApp(TimeProgressCalculatorApp(
-    store: Store<AppState>(appStateReducer, initialState: AppState.initial()),
+    store: Store<AppState>(
+      appStateReducer,
+      initialState: AppState.initial(),
+      middleware: createStoreTimersMiddleware(
+        TimersRepository(await SharedPreferences.getInstance()),
+      ),
+    ),
   ));
 }
