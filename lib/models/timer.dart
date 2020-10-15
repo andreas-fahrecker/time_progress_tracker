@@ -31,6 +31,11 @@ class Timer {
           startTime == other.startTime &&
           endTime == other.endTime;
 
+  @override
+  String toString() {
+    return "Timer{id: $id, startTimer: $startTime, endTimer: $endTime}";
+  }
+
   TimerEntity toEntity() {
     return TimerEntity(id, startTime, endTime);
   }
