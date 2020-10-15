@@ -19,7 +19,9 @@ List<Timer> _setEmptyTimers(List<Timer> timers, TimersNotLoadedAction action) {
 }
 
 List<Timer> _addTimer(List<Timer> timers, AddTimerAction action) {
-  return List.from(timers, growable: false)..add(action.timer);
+  return List.from(timers)
+    ..add(action.timer)
+    ..toList(growable: false);
 }
 
 List<Timer> _updateTimer(List<Timer> timers, UpdateTimerAction action) {
