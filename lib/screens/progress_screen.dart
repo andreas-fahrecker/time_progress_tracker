@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:redux/redux.dart';
+import 'package:time_progress_calculator/actions/timer_actions.dart';
+import 'package:time_progress_calculator/models/app_state.dart';
+import 'package:time_progress_calculator/models/timer.dart';
 
 class ProgressScreen extends StatefulWidget {
-  const ProgressScreen({Key key, this.name}) : super(key: key);
+  const ProgressScreen({Key key, @required this.context, this.name})
+      : super(key: key);
 
+  final BuildContext context;
   final String name;
 
   @override
@@ -15,78 +21,59 @@ class ProgressScreen extends StatefulWidget {
 }
 
 class _ProgressScreenState extends State<ProgressScreen> {
-  final String _startDateKey = "startDate";
-  final String _endDateKey = "endDate";
-  DateTime startDate = DateTime(2000);
-  DateTime endDate = DateTime(2100);
-
-  void _retrieveDates() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      startDate = DateTime.fromMillisecondsSinceEpoch(
-          prefs.getInt(_startDateKey) ?? DateTime(2000).millisecondsSinceEpoch);
-      endDate = DateTime.fromMillisecondsSinceEpoch(
-          prefs.getInt(_endDateKey) ?? DateTime(2100).millisecondsSinceEpoch);
-    });
-  }
-
   void _selectStartDate(BuildContext context) async {
+    Store<AppState> store = StoreProvider.of<AppState>(context);
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: startDate,
+        initialDate: store.state.timers[0].startTime,
         firstDate: DateTime(2000),
         lastDate: DateTime(2100));
-    if (picked != null && picked != startDate) {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setInt(_startDateKey, picked.millisecondsSinceEpoch);
-      setState(() {
-        startDate = picked;
-      });
+    if (picked != null && picked != store.state.timers[0].startTime) {
+      store.dispatch(UpdateTimerAction(
+        store.state.timers[0].id,
+        store.state.timers[0].copyWith(startTime: picked),
+      ));
     }
   }
 
   void _selectEndDate(BuildContext context) async {
+    Store<AppState> store = StoreProvider.of<AppState>(context);
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: endDate,
+        initialDate: store.state.timers[0].endTime,
         firstDate: DateTime(2000),
         lastDate: DateTime(2100));
-    if (picked != null && picked != endDate) {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setInt(_endDateKey, picked.millisecondsSinceEpoch);
-      setState(() {
-        endDate = picked;
-      });
+    if (picked != null && picked != store.state.timers[0].endTime) {
+      store.dispatch(UpdateTimerAction(
+        store.state.timers[0].id,
+        store.state.timers[0].copyWith(endTime: picked),
+      ));
     }
-  }
-
-  int _getAmountOfDaysDone() {
-    return DateTime.now().difference(startDate).inDays;
-  }
-
-  int _getAmountOfDaysLeft() {
-    return endDate.difference(DateTime.now()).inDays;
-  }
-
-  int _getAmountOfAllDays() {
-    return endDate.difference(startDate).inDays;
-  }
-
-  double _getPercent() {
-    final int wholeDuration = _getAmountOfAllDays();
-    final int currentDuration = _getAmountOfDaysDone();
-    final double onePercent = wholeDuration / 100;
-    return currentDuration / onePercent / 100;
   }
 
   @override
   void initState() {
     super.initState();
-    _retrieveDates();
+    if (StoreProvider.of<AppState>(widget.context).state.timers.length < 1) {
+      StoreProvider.of<AppState>(widget.context).dispatch(AddTimerAction(Timer(
+        DateTime(2000),
+        DateTime(2100),
+      )));
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final Store<AppState> store = StoreProvider.of<AppState>(context);
+    final int daysDone =
+        DateTime.now().difference(store.state.timers[0].startTime).inDays;
+    final int daysLeft =
+        store.state.timers[0].endTime.difference(DateTime.now()).inDays;
+    final int allDays = store.state.timers[0].endTime
+        .difference(store.state.timers[0].startTime)
+        .inDays;
+    final double percent = daysDone / (allDays / 100) / 100;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.name} Progress"),
@@ -108,7 +95,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   ),
                   Expanded(
                     flex: 2,
-                    child: Text("${startDate.toLocal()}".split(" ")[0]),
+                    child: Text("${store.state.timers[0].startTime.toLocal()}"
+                        .split(" ")[0]),
                   ),
                   Expanded(
                     flex: 2,
@@ -135,7 +123,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
                   ),
                   Expanded(
                     flex: 2,
-                    child: Text("${endDate.toLocal()}".split(" ")[0]),
+                    child: Text("${store.state.timers[0].endTime.toLocal()}"
+                        .split(" ")[0]),
                   ),
                   Expanded(
                     flex: 2,
@@ -154,20 +143,20 @@ class _ProgressScreenState extends State<ProgressScreen> {
               child: CircularPercentIndicator(
                 radius: 100,
                 lineWidth: 10,
-                percent: _getPercent(),
+                percent: percent,
                 progressColor: Colors.green,
                 backgroundColor: Colors.red,
-                center: Text("${(_getPercent() * 100).floor()} %"),
+                center: Text("${(percent * 100).floor()} %"),
               ),
             ),
             Expanded(
               flex: 1,
               child: LinearPercentIndicator(
                 padding: EdgeInsets.symmetric(horizontal: 15.0),
-                percent: _getPercent(),
-                leading: Text("${_getAmountOfDaysDone()} Days"),
-                center: Text("${(_getPercent() * 100).floor()} %"),
-                trailing: Text("${_getAmountOfDaysLeft()} Days"),
+                percent: percent,
+                leading: Text("$daysDone Days"),
+                center: Text("${(percent * 100).floor()} %"),
+                trailing: Text("$daysLeft Days"),
                 progressColor: Colors.green,
                 backgroundColor: Colors.red,
                 lineHeight: 25,
@@ -175,7 +164,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
             ),
             Expanded(
               flex: 1,
-              child: Text("${_getAmountOfAllDays()} Days"),
+              child: Text("$allDays Days"),
             ),
           ],
         ),

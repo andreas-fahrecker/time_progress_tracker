@@ -20,7 +20,10 @@ class TimeProgressCalculatorApp extends StatelessWidget {
             visualDensity: VisualDensity.adaptivePlatformDensity),
         initialRoute: "/",
         routes: {
-          "/": (BuildContext context) => ProgressScreen(name: "Zivildienst")
+          "/": (BuildContext context) => ProgressScreen(
+                name: "Zivildienst",
+                context: context,
+              )
         },
       ),
     );
