@@ -64,111 +64,127 @@ class _ProgressScreenState extends State<ProgressScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final Store<AppState> store = StoreProvider.of<AppState>(context);
-    final int daysDone =
-        DateTime.now().difference(store.state.timers[0].startTime).inDays;
-    final int daysLeft =
-        store.state.timers[0].endTime.difference(DateTime.now()).inDays;
-    final int allDays = store.state.timers[0].endTime
-        .difference(store.state.timers[0].startTime)
-        .inDays;
-    final double percent = daysDone / (allDays / 100) / 100;
-
     return Scaffold(
       appBar: AppBar(
         title: Text("${widget.name} Progress"),
       ),
-      body: Container(
-        margin: const EdgeInsets.all(5),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: Row(
+      body: StoreConnector(
+          converter: _ViewModel.fromStore,
+          builder: (context, _ViewModel vm) {
+            final int daysDone =
+                DateTime.now().difference(vm.timer.startTime).inDays;
+            final int daysLeft =
+                vm.timer.endTime.difference(DateTime.now()).inDays;
+            final int allDays =
+                vm.timer.endTime.difference(vm.timer.startTime).inDays;
+            final double percent = daysDone / (allDays / 100) / 100;
+
+            return Container(
+              margin: const EdgeInsets.all(5),
+              child: Column(
                 children: <Widget>[
                   Expanded(
-                    flex: 2,
-                    child: Text(
-                      "Start Date:",
-                      textAlign: TextAlign.right,
+                    flex: 1,
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            "Start Date:",
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                              "${vm.timer.startTime.toLocal()}".split(" ")[0]),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: RaisedButton(
+                            onPressed: () => _selectStartDate(context),
+                            child: Text("Change"),
+                            color: Colors.lightBlueAccent,
+                          ),
+                        ),
+                        Spacer(flex: 1)
+                      ],
                     ),
                   ),
                   Expanded(
-                    flex: 2,
-                    child: Text("${store.state.timers[0].startTime.toLocal()}"
-                        .split(" ")[0]),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: RaisedButton(
-                      onPressed: () => _selectStartDate(context),
-                      child: Text("Change"),
-                      color: Colors.lightBlueAccent,
+                    flex: 1,
+                    child: Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                            "End Date:",
+                            textAlign: TextAlign.right,
+                          ),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: Text(
+                              "${vm.timer.endTime.toLocal()}".split(" ")[0]),
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child: RaisedButton(
+                            onPressed: () => _selectEndDate(context),
+                            child: Text("Change"),
+                            color: Colors.lightBlueAccent,
+                          ),
+                        ),
+                        Spacer(flex: 1)
+                      ],
                     ),
                   ),
-                  Spacer(flex: 1)
+                  Expanded(
+                    flex: 5,
+                    child: CircularPercentIndicator(
+                      radius: 100,
+                      lineWidth: 10,
+                      percent: percent,
+                      progressColor: Colors.green,
+                      backgroundColor: Colors.red,
+                      center: Text("${(percent * 100).floor()} %"),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: LinearPercentIndicator(
+                      padding: EdgeInsets.symmetric(horizontal: 15.0),
+                      percent: percent,
+                      leading: Text("$daysDone Days"),
+                      center: Text("${(percent * 100).floor()} %"),
+                      trailing: Text("$daysLeft Days"),
+                      progressColor: Colors.green,
+                      backgroundColor: Colors.red,
+                      lineHeight: 25,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Text("$allDays Days"),
+                  ),
                 ],
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      "End Date:",
-                      textAlign: TextAlign.right,
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text("${store.state.timers[0].endTime.toLocal()}"
-                        .split(" ")[0]),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: RaisedButton(
-                      onPressed: () => _selectEndDate(context),
-                      child: Text("Change"),
-                      color: Colors.lightBlueAccent,
-                    ),
-                  ),
-                  Spacer(flex: 1)
-                ],
-              ),
-            ),
-            Expanded(
-              flex: 5,
-              child: CircularPercentIndicator(
-                radius: 100,
-                lineWidth: 10,
-                percent: percent,
-                progressColor: Colors.green,
-                backgroundColor: Colors.red,
-                center: Text("${(percent * 100).floor()} %"),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: LinearPercentIndicator(
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                percent: percent,
-                leading: Text("$daysDone Days"),
-                center: Text("${(percent * 100).floor()} %"),
-                trailing: Text("$daysLeft Days"),
-                progressColor: Colors.green,
-                backgroundColor: Colors.red,
-                lineHeight: 25,
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Text("$allDays Days"),
-            ),
-          ],
-        ),
-      ),
+            );
+          }),
+    );
+  }
+}
+
+class _ViewModel {
+  final Timer timer;
+
+  _ViewModel({
+    @required this.timer,
+  });
+
+  static _ViewModel fromStore(Store<AppState> store) {
+    return _ViewModel(
+      timer: store.state.timers[0],
     );
   }
 }
