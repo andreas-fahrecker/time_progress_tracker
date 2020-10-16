@@ -3,9 +3,9 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:redux/redux.dart';
-import 'package:time_progress_calculator/actions/timer_actions.dart';
+import 'package:time_progress_calculator/actions/actions.dart';
 import 'package:time_progress_calculator/models/app_state.dart';
-import 'package:time_progress_calculator/models/timer.dart';
+import 'package:time_progress_calculator/models/time_progress.dart';
 
 class ProgressScreen extends StatefulWidget {
   const ProgressScreen({Key key, @required this.context, this.name})
@@ -25,13 +25,13 @@ class _ProgressScreenState extends State<ProgressScreen> {
     Store<AppState> store = StoreProvider.of<AppState>(context);
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: store.state.timers[0].startTime,
+        initialDate: store.state.timeProgressList[0].startTime,
         firstDate: DateTime(2000),
         lastDate: DateTime(2100));
-    if (picked != null && picked != store.state.timers[0].startTime) {
-      store.dispatch(UpdateTimerAction(
-        store.state.timers[0].id,
-        store.state.timers[0].copyWith(startTime: picked),
+    if (picked != null && picked != store.state.timeProgressList[0].startTime) {
+      store.dispatch(UpdateTimeProgressAction(
+        store.state.timeProgressList[0].id,
+        store.state.timeProgressList[0].copyWith(startTime: picked),
       ));
     }
   }
@@ -40,13 +40,13 @@ class _ProgressScreenState extends State<ProgressScreen> {
     Store<AppState> store = StoreProvider.of<AppState>(context);
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: store.state.timers[0].endTime,
+        initialDate: store.state.timeProgressList[0].endTime,
         firstDate: DateTime(2000),
         lastDate: DateTime(2100));
-    if (picked != null && picked != store.state.timers[0].endTime) {
-      store.dispatch(UpdateTimerAction(
-        store.state.timers[0].id,
-        store.state.timers[0].copyWith(endTime: picked),
+    if (picked != null && picked != store.state.timeProgressList[0].endTime) {
+      store.dispatch(UpdateTimeProgressAction(
+        store.state.timeProgressList[0].id,
+        store.state.timeProgressList[0].copyWith(endTime: picked),
       ));
     }
   }
@@ -54,8 +54,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
   @override
   void initState() {
     super.initState();
-    if (StoreProvider.of<AppState>(widget.context).state.timers.length < 1) {
-      StoreProvider.of<AppState>(widget.context).dispatch(AddTimerAction(Timer(
+    if (StoreProvider.of<AppState>(widget.context).state.timeProgressList.length < 1) {
+      StoreProvider.of<AppState>(widget.context).dispatch(AddTimeProgressAction(TimeProgress(
         DateTime(2000),
         DateTime(2100),
       )));
@@ -72,11 +72,11 @@ class _ProgressScreenState extends State<ProgressScreen> {
           converter: _ViewModel.fromStore,
           builder: (context, _ViewModel vm) {
             final int daysDone =
-                DateTime.now().difference(vm.timer.startTime).inDays;
+                DateTime.now().difference(vm.timeProgress.startTime).inDays;
             final int daysLeft =
-                vm.timer.endTime.difference(DateTime.now()).inDays;
+                vm.timeProgress.endTime.difference(DateTime.now()).inDays;
             final int allDays =
-                vm.timer.endTime.difference(vm.timer.startTime).inDays;
+                vm.timeProgress.endTime.difference(vm.timeProgress.startTime).inDays;
             final double percent = daysDone / (allDays / 100) / 100;
 
             return Container(
@@ -97,7 +97,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         Expanded(
                           flex: 2,
                           child: Text(
-                              "${vm.timer.startTime.toLocal()}".split(" ")[0]),
+                              "${vm.timeProgress.startTime.toLocal()}".split(" ")[0]),
                         ),
                         Expanded(
                           flex: 2,
@@ -125,7 +125,7 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         Expanded(
                           flex: 2,
                           child: Text(
-                              "${vm.timer.endTime.toLocal()}".split(" ")[0]),
+                              "${vm.timeProgress.endTime.toLocal()}".split(" ")[0]),
                         ),
                         Expanded(
                           flex: 2,
@@ -176,15 +176,15 @@ class _ProgressScreenState extends State<ProgressScreen> {
 }
 
 class _ViewModel {
-  final Timer timer;
+  final TimeProgress timeProgress;
 
   _ViewModel({
-    @required this.timer,
+    @required this.timeProgress,
   });
 
   static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(
-      timer: store.state.timers[0],
+      timeProgress: store.state.timeProgressList[0],
     );
   }
 }

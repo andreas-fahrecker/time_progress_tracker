@@ -1,18 +1,18 @@
 import 'package:meta/meta.dart';
-import 'package:time_progress_calculator/persistence/timer_entity.dart';
+import 'package:time_progress_calculator/persistence/time_progress_entity.dart';
 import 'package:time_progress_calculator/uuid.dart';
 
 @immutable
-class Timer {
+class TimeProgress {
   final String id;
   final DateTime startTime;
   final DateTime endTime;
 
-  Timer(this.startTime, this.endTime, {String id})
+  TimeProgress(this.startTime, this.endTime, {String id})
       : id = id ?? Uuid().generateV4();
 
-  Timer copyWith({String id, DateTime startTime, DateTime endTime}) {
-    return Timer(
+  TimeProgress copyWith({String id, DateTime startTime, DateTime endTime}) {
+    return TimeProgress(
       startTime ?? this.startTime,
       endTime ?? this.endTime,
       id: id ?? this.id,
@@ -25,7 +25,7 @@ class Timer {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Timer &&
+      other is TimeProgress &&
           runtimeType == other.runtimeType &&
           id == other.id &&
           startTime == other.startTime &&
@@ -36,12 +36,12 @@ class Timer {
     return "Timer{id: $id, startTimer: $startTime, endTimer: $endTime}";
   }
 
-  TimerEntity toEntity() {
-    return TimerEntity(id, startTime, endTime);
+  TimeProgressEntity toEntity() {
+    return TimeProgressEntity(id, startTime, endTime);
   }
 
-  static Timer fromEntity(TimerEntity entity) {
-    return Timer(
+  static TimeProgress fromEntity(TimeProgressEntity entity) {
+    return TimeProgress(
       entity.startTime,
       entity.endTime,
       id: entity.id ?? Uuid().generateV4(),
