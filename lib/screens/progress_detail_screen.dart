@@ -9,6 +9,7 @@ import 'package:time_progress_calculator/models/time_progress.dart';
 import 'package:time_progress_calculator/selectors/time_progress_selectors.dart';
 import 'package:time_progress_calculator/widgets/app_drawer_widget.dart';
 import 'package:time_progress_calculator/widgets/progress_detail_circular_percent_widget.dart';
+import 'package:time_progress_calculator/widgets/progress_detail_fab_editing_row_widget.dart';
 import 'package:time_progress_calculator/widgets/progress_detail_linear_percent_widget.dart';
 
 class ProgressDetailScreenArguments {
@@ -137,35 +138,19 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
       ],
     );
 
-    Widget floatingActionButtonsEditing = Row(
-      children: <Widget>[
-        Expanded(
-          child: FloatingActionButton(
-            heroTag: "saveEditedTimeProgressBTN",
-            child: Icon(Icons.save),
-            backgroundColor: Colors.green,
-            onPressed: () {
-              StoreProvider.of<AppState>(context).dispatch(
-                  UpdateTimeProgressAction(args.id, this.editedProgress));
-              this.setState(() {
-                this.isBeingEdited = false;
-              });
-            },
-          ),
-        ),
-        Expanded(
-          child: FloatingActionButton(
-            heroTag: "cancelEditTimeProgressBTN",
-            child: Icon(Icons.cancel),
-            backgroundColor: Colors.red,
-            onPressed: () {
-              this.setState(() {
-                this.isBeingEdited = false;
-              });
-            },
-          ),
-        )
-      ],
+    Widget floatingActionButtonsEditing = ProgressDetailFabEditingRow(
+      onSave: () {
+        StoreProvider.of<AppState>(context)
+            .dispatch(UpdateTimeProgressAction(args.id, this.editedProgress));
+        this.setState(() {
+          this.isBeingEdited = false;
+        });
+      },
+      onCancelEdit: () {
+        this.setState(() {
+          this.isBeingEdited = false;
+        });
+      },
     );
 
     return Scaffold(
@@ -187,47 +172,45 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
               fit: BoxFit.fitWidth,
               child: Text(
                 vm.timeProgress.name,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black87,
+                ),
               ),
             );
-
-            Widget errorText = Text("Error");
 
             return Column(
               children: <Widget>[
                 Expanded(
                   flex: 1,
-                  child: !this.isBeingEdited
-                      ? titleTextNotEditing
-                      : titleTextEditing,
+                  child: this.isBeingEdited
+                      ? titleTextEditing
+                      : titleTextNotEditing,
                 ),
                 Expanded(
                   flex: 2,
                   child: ProgressDetailCircularPercent(
-                    percentDone: !this.isBeingEdited
-                        ? vm.timeProgress.percentDone()
-                        : this.editedProgress.percentDone(),
+                    percentDone: this.isBeingEdited
+                        ? this.editedProgress.percentDone()
+                        : vm.timeProgress.percentDone(),
                   ),
                 ),
-                Expanded(
-                  flex: 2,
-                  child: ProgressDetailLinearPercent(
-                    timeProgress: !this.isBeingEdited
-                        ? vm.timeProgress
-                        : this.editedProgress,
-                  ),
-                ),
-                !this.isBeingEdited
-                    ? Spacer(flex: 1)
-                    : Expanded(
-                        flex: 1,
-                        child: editDatesRow,
-                      ),
                 Expanded(
                   flex: 1,
-                  child: Text(!this.isBeingEdited
-                      ? vm.timeProgress.toString()
-                      : this.editedProgress.toString() + " E"),
+                  child: ProgressDetailLinearPercent(
+                    timeProgress: this.isBeingEdited
+                        ? this.editedProgress
+                        : vm.timeProgress,
+                  ),
+                ),
+                this.isBeingEdited
+                    ? Expanded(
+                        flex: 1,
+                        child: editDatesRow,
+                      )
+                    : Spacer(flex: 1),
+                Spacer(
+                  flex: 1,
                 )
               ],
             );
@@ -235,9 +218,9 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: !this.isBeingEdited
-          ? floatingActionButtonsNotEditing
-          : floatingActionButtonsEditing,
+      floatingActionButton: this.isBeingEdited
+          ? floatingActionButtonsEditing
+          : floatingActionButtonsNotEditing,
     );
   }
 
