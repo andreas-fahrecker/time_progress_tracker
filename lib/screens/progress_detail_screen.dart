@@ -9,11 +9,11 @@ import 'package:time_progress_calculator/models/time_progress.dart';
 import 'package:time_progress_calculator/screens/progress_dashboard_screen.dart';
 import 'package:time_progress_calculator/selectors/time_progress_selectors.dart';
 import 'package:time_progress_calculator/widgets/app_drawer_widget.dart';
-import 'package:time_progress_calculator/widgets/progress_detail_circular_percent_widget.dart';
-import 'package:time_progress_calculator/widgets/progress_detail_fab_editing_row_widget.dart';
-import 'package:time_progress_calculator/widgets/progress_detail_fab_row_widget.dart';
-import 'package:time_progress_calculator/widgets/progress_detail_linear_percent_widget.dart';
-import 'package:time_progress_calculator/widgets/progress_detail_select_date_btn_widget.dart';
+import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_circular_percent_widget.dart';
+import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_fab_editing_row_widget.dart';
+import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_fab_row_widget.dart';
+import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_linear_percent_widget.dart';
+import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_select_date_btn_widget.dart';
 
 class ProgressDetailScreenArguments {
   final String id;
@@ -52,12 +52,6 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
     final ProgressDetailScreenArguments args =
         ModalRoute.of(context).settings.arguments;
     final Store<AppState> store = StoreProvider.of<AppState>(context);
-
-    Widget titleTextEditing = TextField(
-      controller: this._nameController,
-      decoration: InputDecoration(
-          border: OutlineInputBorder(), labelText: "Progress Name"),
-    );
 
     Widget editDatesRow = Row(
       children: <Widget>[
@@ -112,24 +106,27 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
               store.dispatch(LoadTimeProgressListAction());
           },
           builder: (BuildContext context, _ViewModel vm) {
-            Widget titleTextNotEditing = FittedBox(
-              fit: BoxFit.fitWidth,
-              child: Text(
-                vm.timeProgress.name,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black87,
-                ),
-              ),
-            );
-
             return Column(
               children: <Widget>[
                 Expanded(
                   flex: 1,
                   child: this.isBeingEdited
-                      ? titleTextEditing
-                      : titleTextNotEditing,
+                      ? TextField(
+                          controller: this._nameController,
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              labelText: "Progress Name"),
+                        )
+                      : FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(
+                            vm.timeProgress.name,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ),
                 ),
                 Expanded(
                   flex: 2,
