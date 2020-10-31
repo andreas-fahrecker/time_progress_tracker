@@ -54,11 +54,18 @@ class _ProgressScreenState extends State<ProgressScreen> {
   @override
   void initState() {
     super.initState();
-    if (StoreProvider.of<AppState>(widget.context).state.timeProgressList.length < 1) {
-      StoreProvider.of<AppState>(widget.context).dispatch(AddTimeProgressAction(TimeProgress(
-        DateTime(2000),
-        DateTime(2100),
-      )));
+    if (StoreProvider.of<AppState>(widget.context)
+            .state
+            .timeProgressList
+            .length <
+        1) {
+      StoreProvider.of<AppState>(widget.context).dispatch(AddTimeProgressAction(
+        TimeProgress(
+          widget.name,
+          DateTime(2000),
+          DateTime(2100),
+        ),
+      ));
     }
   }
 
@@ -75,8 +82,9 @@ class _ProgressScreenState extends State<ProgressScreen> {
                 DateTime.now().difference(vm.timeProgress.startTime).inDays;
             final int daysLeft =
                 vm.timeProgress.endTime.difference(DateTime.now()).inDays;
-            final int allDays =
-                vm.timeProgress.endTime.difference(vm.timeProgress.startTime).inDays;
+            final int allDays = vm.timeProgress.endTime
+                .difference(vm.timeProgress.startTime)
+                .inDays;
             final double percent = daysDone / (allDays / 100) / 100;
 
             return Container(
@@ -96,8 +104,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         ),
                         Expanded(
                           flex: 2,
-                          child: Text(
-                              "${vm.timeProgress.startTime.toLocal()}".split(" ")[0]),
+                          child: Text("${vm.timeProgress.startTime.toLocal()}"
+                              .split(" ")[0]),
                         ),
                         Expanded(
                           flex: 2,
@@ -124,8 +132,8 @@ class _ProgressScreenState extends State<ProgressScreen> {
                         ),
                         Expanded(
                           flex: 2,
-                          child: Text(
-                              "${vm.timeProgress.endTime.toLocal()}".split(" ")[0]),
+                          child: Text("${vm.timeProgress.endTime.toLocal()}"
+                              .split(" ")[0]),
                         ),
                         Expanded(
                           flex: 2,

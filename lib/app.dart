@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:time_progress_calculator/models/app_state.dart';
+import 'package:time_progress_calculator/screens/progress_creation_screen.dart';
+import 'package:time_progress_calculator/screens/progress_dashboard_screen.dart';
+import 'package:time_progress_calculator/screens/progress_detail_screen.dart';
 import 'package:time_progress_calculator/screens/progress_screen.dart';
+import 'package:time_progress_calculator/screens/time_progress_list_screen.dart';
 
 class TimeProgressCalculatorApp extends StatelessWidget {
   final Store<AppState> store;
@@ -16,11 +20,19 @@ class TimeProgressCalculatorApp extends StatelessWidget {
       child: MaterialApp(
         title: "Time Progress Calculator",
         theme: ThemeData(
-            primarySwatch: Colors.blue,
-            visualDensity: VisualDensity.adaptivePlatformDensity),
-        initialRoute: "/",
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        initialRoute: ProgressDashboardScreen.routeName,
         routes: {
-          "/": (BuildContext context) => ProgressScreen(
+          "/": (BuildContext context) => TimeProgressListScreen(),
+          ProgressDashboardScreen.routeName: (BuildContext context) =>
+              ProgressDashboardScreen(),
+          ProgressDetailScreen.routeName: (BuildContext context) =>
+              ProgressDetailScreen(),
+          ProgressCreationScreen.routeName: (BuildContext context) =>
+              ProgressCreationScreen(),
+          "/prototype-view": (BuildContext context) => ProgressScreen(
                 name: "Zivildienst",
                 context: context,
               )
