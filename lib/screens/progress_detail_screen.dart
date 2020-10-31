@@ -37,6 +37,48 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
   TimeProgress editedProgress = TimeProgress(
       "Default Name", DateTime.now(), DateTime(DateTime.now().year + 1));
 
+  void onStartDateChanged(DateTime picked) {
+    if (picked != null) {
+      setState(() {
+        editedProgress = editedProgress.copyWith(startTime: picked);
+      });
+    }
+  }
+
+  void onEndDateChanged(DateTime picked) {
+    if (picked != null) {
+      setState(() {
+        editedProgress = editedProgress.copyWith(endTime: picked);
+      });
+    }
+  }
+
+  void onSaveTimeProgress(Store<AppState> store, id) {
+    store.dispatch(UpdateTimeProgressAction(id, editedProgress));
+    setState(() {
+      isBeingEdited = false;
+    });
+  }
+
+  void onCancelEditTimeProgress() {
+    setState(() {
+      isBeingEdited = false;
+    });
+  }
+
+  void onEditTimeProgress(Store<AppState> store, id) {
+    setState(() {
+      isBeingEdited = true;
+      editedProgress = timeProgressByIdSelector(store.state, id);
+      _nameController.text = editedProgress.name;
+    });
+  }
+
+  void onDeleteTimeProgress(Store<AppState> store, id) {
+    store.dispatch(DeleteTimeProgressAction(id));
+    Navigator.pushNamed(context, ProgressDashboardScreen.routeName);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -65,17 +107,18 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
           converter: (Store<AppState> store) =>
               _ViewModel.fromStoreAndArg(store, args),
           onInit: (Store<AppState> store) {
-            if (!store.state.hasLoaded)
+            if (!store.state.hasLoaded) {
               store.dispatch(LoadTimeProgressListAction());
+            }
           },
           builder: (BuildContext context, _ViewModel vm) {
             return Column(
               children: <Widget>[
                 Expanded(
                   flex: 1,
-                  child: this.isBeingEdited
+                  child: isBeingEdited
                       ? TextField(
-                          controller: this._nameController,
+                          controller: _nameController,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               labelText: "Progress Name"),
@@ -94,43 +137,26 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                 Expanded(
                   flex: 2,
                   child: ProgressDetailCircularPercent(
-                    percentDone: this.isBeingEdited
-                        ? this.editedProgress.percentDone()
+                    percentDone: isBeingEdited
+                        ? editedProgress.percentDone()
                         : vm.timeProgress.percentDone(),
                   ),
                 ),
                 Expanded(
                   flex: 1,
                   child: ProgressDetailLinearPercent(
-                    timeProgress: this.isBeingEdited
-                        ? this.editedProgress
-                        : vm.timeProgress,
+                    timeProgress:
+                        isBeingEdited ? editedProgress : vm.timeProgress,
                   ),
                 ),
                 this.isBeingEdited
                     ? Expanded(
                         flex: 1,
                         child: ProgressDetailEditDatesRow(
-                          startTime: this.editedProgress.startTime,
-                          endTime: this.editedProgress.endTime,
-                          onStartTimeChanged: (DateTime picked) {
-                            if (picked != null) {
-                              this.setState(() {
-                                this.editedProgress = this
-                                    .editedProgress
-                                    .copyWith(startTime: picked);
-                              });
-                            }
-                          },
-                          onEndTimeChanged: (DateTime picked) {
-                            if (picked != null) {
-                              this.setState(() {
-                                this.editedProgress = this
-                                    .editedProgress
-                                    .copyWith(endTime: picked);
-                              });
-                            }
-                          },
+                          startTime: editedProgress.startTime,
+                          endTime: editedProgress.endTime,
+                          onStartTimeChanged: onStartDateChanged,
+                          onEndTimeChanged: onEndDateChanged,
                         ),
                       )
                     : Spacer(flex: 1),
@@ -143,34 +169,14 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: this.isBeingEdited
+      floatingActionButton: isBeingEdited
           ? ProgressDetailFabEditingRow(
-              onSave: () {
-                store.dispatch(
-                    UpdateTimeProgressAction(args.id, this.editedProgress));
-                this.setState(() {
-                  this.isBeingEdited = false;
-                });
-              },
-              onCancelEdit: () {
-                this.setState(() {
-                  this.isBeingEdited = false;
-                });
-              },
+              onSave: () => onSaveTimeProgress(store, args.id),
+              onCancelEdit: onCancelEditTimeProgress,
             )
           : ProgressDetailFabRow(
-              onEdit: () {
-                this.setState(() {
-                  this.isBeingEdited = true;
-                  this.editedProgress =
-                      timeProgressByIdSelector(store.state, args.id);
-                  this._nameController.text = this.editedProgress.name;
-                });
-              },
-              onDelete: () {
-                store.dispatch(DeleteTimeProgressAction(args.id));
-                Navigator.pushNamed(context, ProgressDashboardScreen.routeName);
-              },
+              onEdit: () => onEditTimeProgress(store, args.id),
+              onDelete: () => onDeleteTimeProgress(store, args.id),
             ),
     );
   }
