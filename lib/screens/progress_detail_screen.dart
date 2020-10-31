@@ -33,48 +33,48 @@ class ProgressDetailScreen extends StatefulWidget {
 
 class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
   final TextEditingController _nameController = TextEditingController();
-  bool isBeingEdited = false;
-  TimeProgress editedProgress = TimeProgress(
+  bool _isBeingEdited = false;
+  TimeProgress _editedProgress = TimeProgress(
       "Default Name", DateTime.now(), DateTime(DateTime.now().year + 1));
 
-  void onStartDateChanged(DateTime picked) {
+  void _onStartDateChanged(DateTime picked) {
     if (picked != null) {
       setState(() {
-        editedProgress = editedProgress.copyWith(startTime: picked);
+        _editedProgress = _editedProgress.copyWith(startTime: picked);
       });
     }
   }
 
-  void onEndDateChanged(DateTime picked) {
+  void _onEndDateChanged(DateTime picked) {
     if (picked != null) {
       setState(() {
-        editedProgress = editedProgress.copyWith(endTime: picked);
+        _editedProgress = _editedProgress.copyWith(endTime: picked);
       });
     }
   }
 
-  void onSaveTimeProgress(Store<AppState> store, id) {
-    store.dispatch(UpdateTimeProgressAction(id, editedProgress));
+  void _onSaveTimeProgress(Store<AppState> store, id) {
+    store.dispatch(UpdateTimeProgressAction(id, _editedProgress));
     setState(() {
-      isBeingEdited = false;
+      _isBeingEdited = false;
     });
   }
 
-  void onCancelEditTimeProgress() {
+  void _onCancelEditTimeProgress() {
     setState(() {
-      isBeingEdited = false;
+      _isBeingEdited = false;
     });
   }
 
-  void onEditTimeProgress(Store<AppState> store, id) {
+  void _onEditTimeProgress(Store<AppState> store, id) {
     setState(() {
-      isBeingEdited = true;
-      editedProgress = timeProgressByIdSelector(store.state, id);
-      _nameController.text = editedProgress.name;
+      _isBeingEdited = true;
+      _editedProgress = timeProgressByIdSelector(store.state, id);
+      _nameController.text = _editedProgress.name;
     });
   }
 
-  void onDeleteTimeProgress(Store<AppState> store, id) {
+  void _onDeleteTimeProgress(Store<AppState> store, id) {
     store.dispatch(DeleteTimeProgressAction(id));
     Navigator.pushNamed(context, ProgressDashboardScreen.routeName);
   }
@@ -84,8 +84,8 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
     super.initState();
     _nameController.addListener(() {
       this.setState(() {
-        this.editedProgress =
-            this.editedProgress.copyWith(name: _nameController.text);
+        this._editedProgress =
+            this._editedProgress.copyWith(name: _nameController.text);
       });
     });
   }
@@ -116,7 +116,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
               children: <Widget>[
                 Expanded(
                   flex: 1,
-                  child: isBeingEdited
+                  child: _isBeingEdited
                       ? TextField(
                           controller: _nameController,
                           decoration: InputDecoration(
@@ -137,8 +137,8 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                 Expanded(
                   flex: 2,
                   child: ProgressDetailCircularPercent(
-                    percentDone: isBeingEdited
-                        ? editedProgress.percentDone()
+                    percentDone: _isBeingEdited
+                        ? _editedProgress.percentDone()
                         : vm.timeProgress.percentDone(),
                   ),
                 ),
@@ -146,17 +146,17 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                   flex: 1,
                   child: ProgressDetailLinearPercent(
                     timeProgress:
-                        isBeingEdited ? editedProgress : vm.timeProgress,
+                        _isBeingEdited ? _editedProgress : vm.timeProgress,
                   ),
                 ),
-                this.isBeingEdited
+                this._isBeingEdited
                     ? Expanded(
                         flex: 1,
                         child: ProgressDetailEditDatesRow(
-                          startTime: editedProgress.startTime,
-                          endTime: editedProgress.endTime,
-                          onStartTimeChanged: onStartDateChanged,
-                          onEndTimeChanged: onEndDateChanged,
+                          startTime: _editedProgress.startTime,
+                          endTime: _editedProgress.endTime,
+                          onStartTimeChanged: _onStartDateChanged,
+                          onEndTimeChanged: _onEndDateChanged,
                         ),
                       )
                     : Spacer(flex: 1),
@@ -169,14 +169,14 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: isBeingEdited
+      floatingActionButton: _isBeingEdited
           ? ProgressDetailFabEditingRow(
-              onSave: () => onSaveTimeProgress(store, args.id),
-              onCancelEdit: onCancelEditTimeProgress,
+              onSave: () => _onSaveTimeProgress(store, args.id),
+              onCancelEdit: _onCancelEditTimeProgress,
             )
           : ProgressDetailFabRow(
-              onEdit: () => onEditTimeProgress(store, args.id),
-              onDelete: () => onDeleteTimeProgress(store, args.id),
+              onEdit: () => _onEditTimeProgress(store, args.id),
+              onDelete: () => _onDeleteTimeProgress(store, args.id),
             ),
     );
   }
