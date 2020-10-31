@@ -6,11 +6,14 @@ import 'package:redux/redux.dart';
 import 'package:time_progress_calculator/actions/actions.dart';
 import 'package:time_progress_calculator/models/app_state.dart';
 import 'package:time_progress_calculator/models/time_progress.dart';
+import 'package:time_progress_calculator/screens/progress_dashboard_screen.dart';
 import 'package:time_progress_calculator/selectors/time_progress_selectors.dart';
 import 'package:time_progress_calculator/widgets/app_drawer_widget.dart';
 import 'package:time_progress_calculator/widgets/progress_detail_circular_percent_widget.dart';
 import 'package:time_progress_calculator/widgets/progress_detail_fab_editing_row_widget.dart';
+import 'package:time_progress_calculator/widgets/progress_detail_fab_row_widget.dart';
 import 'package:time_progress_calculator/widgets/progress_detail_linear_percent_widget.dart';
+import 'package:time_progress_calculator/widgets/progress_detail_select_date_btn_widget.dart';
 
 class ProgressDetailScreenArguments {
   final String id;
@@ -48,6 +51,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
   Widget build(BuildContext context) {
     final ProgressDetailScreenArguments args =
         ModalRoute.of(context).settings.arguments;
+    final Store<AppState> store = StoreProvider.of<AppState>(context);
 
     Widget titleTextEditing = TextField(
       controller: this._nameController,
@@ -59,17 +63,10 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
       children: <Widget>[
         Expanded(
           flex: 5,
-          child: FlatButton(
-            color: Colors.blue,
-            child: Text(
-                "Start Date: ${this.editedProgress.startTime.toLocal().toString().split(" ")[0]}"),
-            onPressed: () async {
-              DateTime picked = await showDatePicker(
-                context: context,
-                initialDate: this.editedProgress.startTime,
-                firstDate: DateTime(this.editedProgress.startTime.year - 1),
-                lastDate: DateTime(this.editedProgress.startTime.year + 1),
-              );
+          child: ProgressDetailSelectDateButton(
+            leadingString: "Start Date:",
+            selectedDate: this.editedProgress.startTime,
+            onDateSelected: (DateTime picked) {
               if (picked != null) {
                 this.setState(() {
                   this.editedProgress =
@@ -84,17 +81,10 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
         ),
         Expanded(
           flex: 5,
-          child: FlatButton(
-            color: Colors.blue,
-            child: Text(
-                "End Date: ${this.editedProgress.endTime.toLocal().toString().split(" ")[0]}"),
-            onPressed: () async {
-              DateTime picked = await showDatePicker(
-                context: context,
-                initialDate: this.editedProgress.endTime,
-                firstDate: DateTime(this.editedProgress.endTime.year - 1),
-                lastDate: DateTime(this.editedProgress.endTime.year + 1),
-              );
+          child: ProgressDetailSelectDateButton(
+            leadingString: "End Date:",
+            selectedDate: this.editedProgress.endTime,
+            onDateSelected: (DateTime picked) {
               if (picked != null) {
                 this.setState(() {
                   this.editedProgress =
@@ -105,52 +95,6 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
           ),
         )
       ],
-    );
-
-    Widget floatingActionButtonsNotEditing = Row(
-      children: <Widget>[
-        Expanded(
-          child: FloatingActionButton(
-            heroTag: "editTimeProgressBTN",
-            child: Icon(Icons.edit),
-            onPressed: () {
-              this.setState(() {
-                this.isBeingEdited = true;
-                this.editedProgress = timeProgressByIdSelector(
-                    StoreProvider.of<AppState>(context).state, args.id);
-                this._nameController.text = this.editedProgress.name;
-              });
-            },
-          ),
-        ),
-        Expanded(
-          child: FloatingActionButton(
-            heroTag: "deleteTimeProgressBTN",
-            child: Icon(Icons.delete),
-            backgroundColor: Colors.red,
-            onPressed: () {
-              StoreProvider.of<AppState>(context)
-                  .dispatch(DeleteTimeProgressAction(args.id));
-              Navigator.pushNamed(context, "/");
-            },
-          ),
-        )
-      ],
-    );
-
-    Widget floatingActionButtonsEditing = ProgressDetailFabEditingRow(
-      onSave: () {
-        StoreProvider.of<AppState>(context)
-            .dispatch(UpdateTimeProgressAction(args.id, this.editedProgress));
-        this.setState(() {
-          this.isBeingEdited = false;
-        });
-      },
-      onCancelEdit: () {
-        this.setState(() {
-          this.isBeingEdited = false;
-        });
-      },
     );
 
     return Scaffold(
@@ -219,8 +163,34 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: this.isBeingEdited
-          ? floatingActionButtonsEditing
-          : floatingActionButtonsNotEditing,
+          ? ProgressDetailFabEditingRow(
+              onSave: () {
+                store.dispatch(
+                    UpdateTimeProgressAction(args.id, this.editedProgress));
+                this.setState(() {
+                  this.isBeingEdited = false;
+                });
+              },
+              onCancelEdit: () {
+                this.setState(() {
+                  this.isBeingEdited = false;
+                });
+              },
+            )
+          : ProgressDetailFabRow(
+              onEdit: () {
+                this.setState(() {
+                  this.isBeingEdited = true;
+                  this.editedProgress =
+                      timeProgressByIdSelector(store.state, args.id);
+                  this._nameController.text = this.editedProgress.name;
+                });
+              },
+              onDelete: () {
+                store.dispatch(DeleteTimeProgressAction(args.id));
+                Navigator.pushNamed(context, ProgressDashboardScreen.routeName);
+              },
+            ),
     );
   }
 
@@ -234,7 +204,9 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
 class _ViewModel {
   final TimeProgress timeProgress;
 
-  _ViewModel({@required this.timeProgress});
+  _ViewModel({
+    @required this.timeProgress,
+  });
 
   static _ViewModel fromStoreAndArg(
       Store<AppState> store, ProgressDetailScreenArguments args) {
