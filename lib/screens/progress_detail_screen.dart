@@ -10,6 +10,7 @@ import 'package:time_progress_calculator/screens/progress_dashboard_screen.dart'
 import 'package:time_progress_calculator/selectors/time_progress_selectors.dart';
 import 'package:time_progress_calculator/widgets/app_drawer_widget.dart';
 import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_circular_percent_widget.dart';
+import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_edit_dates_row_widget.dart';
 import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_fab_editing_row_widget.dart';
 import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_fab_row_widget.dart';
 import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_linear_percent_widget.dart';
@@ -52,44 +53,6 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
     final ProgressDetailScreenArguments args =
         ModalRoute.of(context).settings.arguments;
     final Store<AppState> store = StoreProvider.of<AppState>(context);
-
-    Widget editDatesRow = Row(
-      children: <Widget>[
-        Expanded(
-          flex: 5,
-          child: ProgressDetailSelectDateButton(
-            leadingString: "Start Date:",
-            selectedDate: this.editedProgress.startTime,
-            onDateSelected: (DateTime picked) {
-              if (picked != null) {
-                this.setState(() {
-                  this.editedProgress =
-                      this.editedProgress.copyWith(startTime: picked);
-                });
-              }
-            },
-          ),
-        ),
-        Spacer(
-          flex: 1,
-        ),
-        Expanded(
-          flex: 5,
-          child: ProgressDetailSelectDateButton(
-            leadingString: "End Date:",
-            selectedDate: this.editedProgress.endTime,
-            onDateSelected: (DateTime picked) {
-              if (picked != null) {
-                this.setState(() {
-                  this.editedProgress =
-                      this.editedProgress.copyWith(endTime: picked);
-                });
-              }
-            },
-          ),
-        )
-      ],
-    );
 
     return Scaffold(
       appBar: AppBar(
@@ -147,7 +110,28 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                 this.isBeingEdited
                     ? Expanded(
                         flex: 1,
-                        child: editDatesRow,
+                        child: ProgressDetailEditDatesRow(
+                          startTime: this.editedProgress.startTime,
+                          endTime: this.editedProgress.endTime,
+                          onStartTimeChanged: (DateTime picked) {
+                            if (picked != null) {
+                              this.setState(() {
+                                this.editedProgress = this
+                                    .editedProgress
+                                    .copyWith(startTime: picked);
+                              });
+                            }
+                          },
+                          onEndTimeChanged: (DateTime picked) {
+                            if (picked != null) {
+                              this.setState(() {
+                                this.editedProgress = this
+                                    .editedProgress
+                                    .copyWith(endTime: picked);
+                              });
+                            }
+                          },
+                        ),
                       )
                     : Spacer(flex: 1),
                 Spacer(
