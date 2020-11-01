@@ -9,6 +9,7 @@ import 'package:time_progress_calculator/models/time_progress.dart';
 import 'package:time_progress_calculator/screens/progress_dashboard_screen.dart';
 import 'package:time_progress_calculator/selectors/time_progress_selectors.dart';
 import 'package:time_progress_calculator/widgets/app_drawer_widget.dart';
+import 'package:time_progress_calculator/widgets/app_yes_no_dialog_widget.dart';
 import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_circular_percent_widget.dart';
 import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_edit_dates_row_widget.dart';
 import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_fab_editing_row_widget.dart';
@@ -60,10 +61,32 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
     });
   }
 
+  void _showCancelEditTimeProgressDialog(AppState state, id) {
+    TimeProgress originalTp = timeProgressByIdSelector(state, id);
+    if (originalTp != _editedProgress) {
+      String originalName = timeProgressByIdSelector(state, id).name;
+      showDialog(
+        context: context,
+        builder: (_) => AppYesNoDialog(
+          titleText: "Cancel Editing of $originalName",
+          contentText:
+              "Are you sure that you want to discard the changes done to $originalName",
+          onYesPressed: _onCancelEditTimeProgress,
+          onNoPressed: _onCloseDialog,
+        ),
+      );
+    } else {
+      setState(() {
+        _isBeingEdited = false;
+      });
+    }
+  }
+
   void _onCancelEditTimeProgress() {
     setState(() {
       _isBeingEdited = false;
     });
+    Navigator.pop(context);
   }
 
   void _onEditTimeProgress(Store<AppState> store, id) {
@@ -74,9 +97,25 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
     });
   }
 
-  void _onDeleteTimeProgress(Store<AppState> store, id) {
+  void _showDeleteTimeProgressDialog(Store<AppState> store, id) {
+    showDialog(
+      context: context,
+      builder: (_) => AppYesNoDialog(
+        titleText: "Delete ${timeProgressByIdSelector(store.state, id).name}",
+        contentText: "Are you sure you want to delete this time progress?",
+        onYesPressed: () => _onDeleteTimeProgress(store, id),
+        onNoPressed: _onCloseDialog,
+      ),
+    );
+  }
+
+  void _onDeleteTimeProgress(Store<AppState> store, String id) {
     store.dispatch(DeleteTimeProgressAction(id));
-    Navigator.pushNamed(context, ProgressDashboardScreen.routeName);
+    Navigator.popAndPushNamed(context, ProgressDashboardScreen.routeName);
+  }
+
+  void _onCloseDialog() {
+    Navigator.pop(context);
   }
 
   @override
@@ -145,6 +184,11 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                         _isBeingEdited ? _editedProgress : vm.timeProgress,
                   ),
                 ),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                      "${_isBeingEdited ? _editedProgress.allDays() : vm.timeProgress.allDays()} Days"),
+                ),
                 this._isBeingEdited
                     ? Expanded(
                         flex: 1,
@@ -168,11 +212,12 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
       floatingActionButton: _isBeingEdited
           ? ProgressDetailFabEditingRow(
               onSave: () => _onSaveTimeProgress(store, args.id),
-              onCancelEdit: _onCancelEditTimeProgress,
+              onCancelEdit: () =>
+                  _showCancelEditTimeProgressDialog(store.state, args.id),
             )
           : ProgressDetailFabRow(
               onEdit: () => _onEditTimeProgress(store, args.id),
-              onDelete: () => _onDeleteTimeProgress(store, args.id),
+              onDelete: () => _showDeleteTimeProgressDialog(store, args.id),
             ),
     );
   }
