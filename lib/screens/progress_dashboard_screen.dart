@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:redux/redux.dart';
+import 'package:time_progress_calculator/actions/actions.dart';
 import 'package:time_progress_calculator/models/app_state.dart';
 import 'package:time_progress_calculator/models/time_progress.dart';
 import 'package:time_progress_calculator/screens/progress_creation_screen.dart';
@@ -20,6 +21,7 @@ class ProgressDashboardScreen extends StatelessWidget {
       drawer: AppDrawer(),
       body: StoreConnector(
         converter: _ViewModel.fromStore,
+        onInit: loadTimeProgressListIfUnloaded,
         builder: (BuildContext context, _ViewModel vm) {
           List<Widget> dashboardTileList = List<Widget>();
 

@@ -106,11 +106,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
         child: StoreConnector(
           converter: (Store<AppState> store) =>
               _ViewModel.fromStoreAndArg(store, args),
-          onInit: (Store<AppState> store) {
-            if (!store.state.hasLoaded) {
-              store.dispatch(LoadTimeProgressListAction());
-            }
-          },
+          onInit: loadTimeProgressListIfUnloaded,
           builder: (BuildContext context, _ViewModel vm) {
             return Column(
               children: <Widget>[

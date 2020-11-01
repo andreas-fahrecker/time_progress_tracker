@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:redux/redux.dart';
+import 'package:time_progress_calculator/actions/actions.dart';
 import 'package:time_progress_calculator/models/app_state.dart';
 import 'package:time_progress_calculator/models/time_progress.dart';
 import 'package:time_progress_calculator/screens/progress_dashboard_screen.dart';
@@ -14,6 +15,7 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: StoreConnector(
         converter: _ViewModel.fromStore,
+        onInit: loadTimeProgressListIfUnloaded,
         builder: (context, _ViewModel vm) {
           List<Widget> drawerTileList = List<Widget>();
           drawerTileList.add(DrawerHeader(
@@ -44,8 +46,8 @@ class AppDrawer extends StatelessWidget {
                   backgroundColor: Colors.red,
                   center: FittedBox(
                     fit: BoxFit.scaleDown,
-                    child: Text(
-                        (tp.percentDone() * 100).floor().toString() + "%"),
+                    child:
+                        Text((tp.percentDone() * 100).floor().toString() + "%"),
                   ),
                 ),
                 onTap: () {
