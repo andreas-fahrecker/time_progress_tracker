@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
 import 'package:time_progress_calculator/persistence/time_progress_entity.dart';
 import 'package:time_progress_calculator/uuid.dart';
@@ -11,6 +12,11 @@ class TimeProgress {
 
   TimeProgress(this.name, this.startTime, this.endTime, {String id})
       : id = id ?? Uuid().generateV4();
+
+  factory TimeProgress.initialDefault() {
+    int thisYear = DateTime.now().year;
+    return TimeProgress("", DateTime(thisYear - 1), DateTime(thisYear + 1));
+  }
 
   TimeProgress copyWith(
       {String id, String name, DateTime startTime, DateTime endTime}) {

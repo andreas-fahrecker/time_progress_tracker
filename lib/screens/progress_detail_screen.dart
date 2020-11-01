@@ -35,8 +35,7 @@ class ProgressDetailScreen extends StatefulWidget {
 class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
   final TextEditingController _nameController = TextEditingController();
   bool _isBeingEdited = false;
-  TimeProgress _editedProgress = TimeProgress(
-      "Default Name", DateTime.now(), DateTime(DateTime.now().year + 1));
+  TimeProgress _editedProgress = TimeProgress.initialDefault();
 
   void _onStartDateChanged(DateTime picked) {
     if (picked != null) {
