@@ -18,7 +18,7 @@ class TimeProgressTrackerApp extends StatelessWidget {
     return StoreProvider(
       store: store,
       child: MaterialApp(
-        title: "Time Progress Tracker",
+        title: name,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,

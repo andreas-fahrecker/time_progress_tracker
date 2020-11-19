@@ -20,7 +20,7 @@ class AppDrawer extends StatelessWidget {
         builder: (context, _ViewModel vm) {
           List<Widget> drawerTileList = List<Widget>();
           drawerTileList.add(DrawerHeader(
-            child: Text("Time Progress Tracker"),
+            child: Text(TimeProgressTrackerApp.name),
             decoration: BoxDecoration(color: Colors.blue),
             margin: EdgeInsets.zero,
           ));
@@ -28,7 +28,7 @@ class AppDrawer extends StatelessWidget {
             color: Colors.lightBlue,
             margin: EdgeInsets.only(bottom: 8),
             child: ListTile(
-              title: Text("Time Progress Dashboard"),
+              title: Text(ProgressDashboardScreen.title),
               trailing: Icon(Icons.dashboard),
               onTap: () {
                 Navigator.pop(context);

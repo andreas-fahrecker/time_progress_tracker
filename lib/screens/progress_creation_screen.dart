@@ -48,7 +48,7 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create Progress"),
+        title: Text("Create Time Progress"),
       ),
       drawer: AppDrawer(),
       body: Container(

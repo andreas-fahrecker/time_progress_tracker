@@ -11,12 +11,13 @@ import 'package:time_progress_tracker/widgets/app_drawer_widget.dart';
 
 class ProgressDashboardScreen extends StatelessWidget {
   static const routeName = "/progress-dashboard";
+  static const title = "Time Progress Dashboard";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Time Progress Tracker Dashboard"),
+        title: Text(title),
       ),
       drawer: AppDrawer(),
       body: StoreConnector(
