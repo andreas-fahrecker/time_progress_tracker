@@ -19,7 +19,8 @@ List<Middleware<AppState>> createStoreTimeProgressListMiddleware(
   ];
 }
 
-Middleware<AppState> _createSaveTimeProgressList(TimeProgressRepository repository) {
+Middleware<AppState> _createSaveTimeProgressList(
+    TimeProgressRepository repository) {
   return (Store<AppState> store, dynamic action, NextDispatcher next) {
     next(action);
 
@@ -31,12 +32,18 @@ Middleware<AppState> _createSaveTimeProgressList(TimeProgressRepository reposito
   };
 }
 
-Middleware<AppState> _createLoadTimeProgressList(TimeProgressRepository repository) {
+Middleware<AppState> _createLoadTimeProgressList(
+    TimeProgressRepository repository) {
   return (Store<AppState> store, dynamic action, NextDispatcher next) {
     repository.loadTimeProgressList().then((timeProgresses) {
-      store.dispatch(
-        TimeProgressListLoadedAction(timeProgresses.map<TimeProgress>(TimeProgress.fromEntity).toList()),
-      );
-    }).catchError((_) => store.dispatch(TimeProgressListNotLoadedAction()));
+      List<TimeProgress> timeProgressList =
+          timeProgresses.map<TimeProgress>(TimeProgress.fromEntity).toList();
+      if (timeProgressList == null) {
+        timeProgressList = [];
+      }
+      store.dispatch(TimeProgressListLoadedAction(
+        timeProgressList,
+      ));
+    }).catchError((_) => {store.dispatch(TimeProgressListNotLoadedAction())});
   };
 }

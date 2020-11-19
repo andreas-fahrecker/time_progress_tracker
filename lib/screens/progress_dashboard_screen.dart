@@ -24,6 +24,11 @@ class ProgressDashboardScreen extends StatelessWidget {
         converter: _ViewModel.fromStore,
         onInit: loadTimeProgressListIfUnloaded,
         builder: (BuildContext context, _ViewModel vm) {
+          if (!vm.hasLoaded) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           List<Widget> dashboardTileList = List<Widget>();
 
           if (vm.timeProgressList.length > 0) {
@@ -73,10 +78,17 @@ class ProgressDashboardScreen extends StatelessWidget {
 
 class _ViewModel {
   final List<TimeProgress> timeProgressList;
+  final bool hasLoaded;
 
-  _ViewModel({@required this.timeProgressList});
+  _ViewModel({
+    @required this.timeProgressList,
+    @required this.hasLoaded,
+  });
 
   static _ViewModel fromStore(Store<AppState> store) {
-    return _ViewModel(timeProgressList: store.state.timeProgressList);
+    return _ViewModel(
+      timeProgressList: store.state.timeProgressList,
+      hasLoaded: store.state.hasLoaded,
+    );
   }
 }

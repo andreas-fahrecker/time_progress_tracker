@@ -2,6 +2,8 @@ import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 
+import 'dart:developer' as developer;
+
 final timeProgressListReducer = combineReducers<List<TimeProgress>>([
   TypedReducer<List<TimeProgress>, TimeProgressListLoadedAction>(
       _setLoadedTimeProgressList),
@@ -20,6 +22,7 @@ List<TimeProgress> _setLoadedTimeProgressList(
 
 List<TimeProgress> _setEmptyTimeProgressList(
     List<TimeProgress> timeProgressList, TimeProgressListNotLoadedAction action) {
+  developer.log("Time Progress Not Loaded Action");
   return [];
 }
 
