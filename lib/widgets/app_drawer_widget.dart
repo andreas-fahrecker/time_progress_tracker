@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
+import 'package:time_progress_tracker/app.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/screens/progress_dashboard_screen.dart';
@@ -19,7 +20,7 @@ class AppDrawer extends StatelessWidget {
         builder: (context, _ViewModel vm) {
           List<Widget> drawerTileList = List<Widget>();
           drawerTileList.add(DrawerHeader(
-            child: Text("Select Time Progress"),
+            child: Text("Time Progress Tracker"),
             decoration: BoxDecoration(color: Colors.blue),
             margin: EdgeInsets.zero,
           ));
@@ -70,6 +71,23 @@ class AppDrawer extends StatelessWidget {
               title: Text("You don't have any tracked time progress."),
             ));
           }
+          drawerTileList.add(Divider(
+            color: Colors.black38,
+          ));
+          drawerTileList.add(Container(
+            margin: EdgeInsets.only(bottom: 8),
+            child: ListTile(
+              title: Text("About"),
+              onTap: () {
+                showAboutDialog(
+                  context: context,
+                  applicationName: TimeProgressTrackerApp.name,
+                  applicationVersion: ' Version 0.0.1',
+                  applicationLegalese: '\u00a9Andreas Fahrecker 2020'
+                );
+              },
+            ),
+          ));
           return ListView(
             children: drawerTileList,
           );

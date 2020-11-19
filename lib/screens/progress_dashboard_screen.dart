@@ -16,7 +16,7 @@ class ProgressDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Progress Dashboard"),
+        title: Text("Time Progress Tracker Dashboard"),
       ),
       drawer: AppDrawer(),
       body: StoreConnector(

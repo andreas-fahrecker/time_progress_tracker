@@ -7,6 +7,8 @@ import 'package:time_progress_tracker/screens/progress_dashboard_screen.dart';
 import 'package:time_progress_tracker/screens/progress_detail_screen.dart';
 
 class TimeProgressTrackerApp extends StatelessWidget {
+  static const String name = "Time Progress Tracker";
+
   final Store<AppState> store;
 
   TimeProgressTrackerApp({Key key, this.store}) : super(key: key);
@@ -16,7 +18,7 @@ class TimeProgressTrackerApp extends StatelessWidget {
     return StoreProvider(
       store: store,
       child: MaterialApp(
-        title: "Time Progress Calculator",
+        title: "Time Progress Tracker",
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
