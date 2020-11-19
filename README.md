@@ -1,4 +1,4 @@
-# time_progress_calculator
+# time_progress_tracker
 
 A Flutter Application to create Timers with a percentage indicator.
 

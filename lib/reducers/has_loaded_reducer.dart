@@ -1,5 +1,5 @@
 import 'package:redux/redux.dart';
-import 'package:time_progress_calculator/actions/actions.dart';
+import 'package:time_progress_tracker/actions/actions.dart';
 
 final hasLoadedReducer = combineReducers<bool>([
   TypedReducer<bool, TimeProgressListLoadedAction>(_setLoaded),

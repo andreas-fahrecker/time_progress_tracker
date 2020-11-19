@@ -1,7 +1,6 @@
 import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:time_progress_calculator/persistence/time_progress_entity.dart';
+import 'package:time_progress_tracker/persistence/time_progress_entity.dart';
 
 class TimeProgressRepository {
   static const String _key = "time_progress_repo";

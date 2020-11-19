@@ -1,10 +1,10 @@
 import 'package:redux/redux.dart';
-import 'package:time_progress_calculator/actions/actions.dart';
-import 'package:time_progress_calculator/models/app_state.dart';
-import 'package:time_progress_calculator/models/time_progress.dart';
-import 'package:time_progress_calculator/persistence/time_progress_entity.dart';
-import 'package:time_progress_calculator/persistence/time_progress_repository.dart';
-import 'package:time_progress_calculator/selectors/time_progress_selectors.dart';
+import 'package:time_progress_tracker/actions/actions.dart';
+import 'package:time_progress_tracker/models/app_state.dart';
+import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/persistence/time_progress_entity.dart';
+import 'package:time_progress_tracker/persistence/time_progress_repository.dart';
+import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
 
 List<Middleware<AppState>> createStoreTimeProgressListMiddleware(
     TimeProgressRepository repository) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_select_date_btn_widget.dart';
+import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_select_date_btn_widget.dart';
 
 class ProgressDetailEditDatesRow extends StatelessWidget {
   final DateTime startTime;

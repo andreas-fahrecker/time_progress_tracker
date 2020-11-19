@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import 'package:time_progress_calculator/models/time_progress.dart';
+import 'package:time_progress_tracker/models/time_progress.dart';
 
 @immutable
 class AppState {

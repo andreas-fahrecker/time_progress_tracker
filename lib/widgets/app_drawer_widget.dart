@@ -3,11 +3,11 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:redux/redux.dart';
-import 'package:time_progress_calculator/actions/actions.dart';
-import 'package:time_progress_calculator/models/app_state.dart';
-import 'package:time_progress_calculator/models/time_progress.dart';
-import 'package:time_progress_calculator/screens/progress_dashboard_screen.dart';
-import 'package:time_progress_calculator/screens/progress_detail_screen.dart';
+import 'package:time_progress_tracker/actions/actions.dart';
+import 'package:time_progress_tracker/models/app_state.dart';
+import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/screens/progress_dashboard_screen.dart';
+import 'package:time_progress_tracker/screens/progress_detail_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override

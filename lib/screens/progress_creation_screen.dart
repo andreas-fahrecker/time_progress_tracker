@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:time_progress_calculator/actions/actions.dart';
-import 'package:time_progress_calculator/models/app_state.dart';
-import 'package:time_progress_calculator/models/time_progress.dart';
-import 'package:time_progress_calculator/screens/progress_dashboard_screen.dart';
-import 'package:time_progress_calculator/widgets/app_drawer_widget.dart';
+import 'package:time_progress_tracker/actions/actions.dart';
+import 'package:time_progress_tracker/models/app_state.dart';
+import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/screens/progress_dashboard_screen.dart';
+import 'package:time_progress_tracker/widgets/app_drawer_widget.dart';
 
 class ProgressCreationScreen extends StatefulWidget {
   static const routeName = "/progress-creation";

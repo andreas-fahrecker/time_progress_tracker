@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:time_progress_calculator/models/time_progress.dart';
+import 'package:time_progress_tracker/models/time_progress.dart';
 
 class ProgressDetailLinearPercent extends StatelessWidget {
   final TimeProgress timeProgress;

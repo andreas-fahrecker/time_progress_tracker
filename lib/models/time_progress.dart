@@ -1,7 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:meta/meta.dart';
-import 'package:time_progress_calculator/persistence/time_progress_entity.dart';
-import 'package:time_progress_calculator/uuid.dart';
+import 'package:time_progress_tracker/persistence/time_progress_entity.dart';
+import 'package:time_progress_tracker/uuid.dart';
 
 @immutable
 class TimeProgress {

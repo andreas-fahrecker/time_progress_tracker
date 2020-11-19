@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:redux/redux.dart';
-import 'package:time_progress_calculator/actions/actions.dart';
-import 'package:time_progress_calculator/models/app_state.dart';
-import 'package:time_progress_calculator/models/time_progress.dart';
-import 'package:time_progress_calculator/screens/progress_dashboard_screen.dart';
-import 'package:time_progress_calculator/selectors/time_progress_selectors.dart';
-import 'package:time_progress_calculator/widgets/app_drawer_widget.dart';
-import 'package:time_progress_calculator/widgets/app_yes_no_dialog_widget.dart';
-import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_circular_percent_widget.dart';
-import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_edit_dates_row_widget.dart';
-import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_fab_editing_row_widget.dart';
-import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_fab_row_widget.dart';
-import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_linear_percent_widget.dart';
-import 'package:time_progress_calculator/widgets/progress_detail_widgets/progress_detail_select_date_btn_widget.dart';
+import 'package:time_progress_tracker/actions/actions.dart';
+import 'package:time_progress_tracker/models/app_state.dart';
+import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/screens/progress_dashboard_screen.dart';
+import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
+import 'package:time_progress_tracker/widgets/app_drawer_widget.dart';
+import 'package:time_progress_tracker/widgets/app_yes_no_dialog_widget.dart';
+import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_circular_percent_widget.dart';
+import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_edit_dates_row_widget.dart';
+import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_fab_editing_row_widget.dart';
+import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_fab_row_widget.dart';
+import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_linear_percent_widget.dart';
 
 class ProgressDetailScreenArguments {
   final String id;
@@ -199,9 +196,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                         ),
                       )
                     : Spacer(flex: 1),
-                Spacer(
-                  flex: 1,
-                )
+                Spacer(flex: 1)
               ],
             );
           },
