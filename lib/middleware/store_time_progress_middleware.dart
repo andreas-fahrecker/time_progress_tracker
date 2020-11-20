@@ -44,6 +44,6 @@ Middleware<AppState> _createLoadTimeProgressList(
       store.dispatch(TimeProgressListLoadedAction(
         timeProgressList,
       ));
-    }).catchError((_) => {store.dispatch(TimeProgressListNotLoadedAction())});
+    }).catchError((_) => store.dispatch(TimeProgressListNotLoadedAction()));
   };
 }
