@@ -1,10 +1,10 @@
 import 'package:redux/redux.dart';
-import 'package:time_progress_calculator/actions/actions.dart';
-import 'package:time_progress_calculator/models/app_state.dart';
-import 'package:time_progress_calculator/models/time_progress.dart';
-import 'package:time_progress_calculator/persistence/time_progress_entity.dart';
-import 'package:time_progress_calculator/persistence/time_progress_repository.dart';
-import 'package:time_progress_calculator/selectors/time_progress_selectors.dart';
+import 'package:time_progress_tracker/actions/actions.dart';
+import 'package:time_progress_tracker/models/app_state.dart';
+import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/persistence/time_progress_entity.dart';
+import 'package:time_progress_tracker/persistence/time_progress_repository.dart';
+import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
 
 List<Middleware<AppState>> createStoreTimeProgressListMiddleware(
     TimeProgressRepository repository) {
@@ -19,7 +19,8 @@ List<Middleware<AppState>> createStoreTimeProgressListMiddleware(
   ];
 }
 
-Middleware<AppState> _createSaveTimeProgressList(TimeProgressRepository repository) {
+Middleware<AppState> _createSaveTimeProgressList(
+    TimeProgressRepository repository) {
   return (Store<AppState> store, dynamic action, NextDispatcher next) {
     next(action);
 
@@ -31,12 +32,18 @@ Middleware<AppState> _createSaveTimeProgressList(TimeProgressRepository reposito
   };
 }
 
-Middleware<AppState> _createLoadTimeProgressList(TimeProgressRepository repository) {
+Middleware<AppState> _createLoadTimeProgressList(
+    TimeProgressRepository repository) {
   return (Store<AppState> store, dynamic action, NextDispatcher next) {
     repository.loadTimeProgressList().then((timeProgresses) {
-      store.dispatch(
-        TimeProgressListLoadedAction(timeProgresses.map<TimeProgress>(TimeProgress.fromEntity).toList()),
-      );
+      List<TimeProgress> timeProgressList =
+          timeProgresses.map<TimeProgress>(TimeProgress.fromEntity).toList();
+      if (timeProgressList == null) {
+        timeProgressList = [];
+      }
+      store.dispatch(TimeProgressListLoadedAction(
+        timeProgressList,
+      ));
     }).catchError((_) => store.dispatch(TimeProgressListNotLoadedAction()));
   };
 }

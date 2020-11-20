@@ -1,35 +1,36 @@
 import 'package:meta/meta.dart';
-import 'package:time_progress_calculator/models/time_progress.dart';
+import 'package:time_progress_tracker/models/time_progress.dart';
 
 @immutable
 class AppState {
-  final bool isLoading;
+  final bool hasLoaded;
   final List<TimeProgress> timeProgressList;
 
   AppState({
-    this.isLoading = false,
+    this.hasLoaded = false,
     this.timeProgressList = const [],
   });
 
-  factory AppState.initial() => AppState(isLoading: true);
+  factory AppState.initial() => AppState(hasLoaded: false);
 
   AppState copyWith({
-    bool isLoading,
+    bool hasLoaded,
     List<TimeProgress> timeProgressList,
   }) {
     return AppState(
-      isLoading: isLoading ?? this.isLoading,
+      hasLoaded: hasLoaded ?? this.hasLoaded,
       timeProgressList: timeProgressList ?? this.timeProgressList,
     );
   }
 
   @override
-  int get hashCode => timeProgressList.hashCode;
+  int get hashCode => hasLoaded.hashCode ^ timeProgressList.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is AppState &&
           runtimeType == other.runtimeType &&
+          hasLoaded == other.hasLoaded &&
           timeProgressList == other.timeProgressList;
 }

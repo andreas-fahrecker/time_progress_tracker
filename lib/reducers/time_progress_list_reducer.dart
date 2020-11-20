@@ -1,6 +1,6 @@
-import 'package:time_progress_calculator/actions/actions.dart';
-import 'package:time_progress_calculator/models/time_progress.dart';
 import 'package:redux/redux.dart';
+import 'package:time_progress_tracker/actions/actions.dart';
+import 'package:time_progress_tracker/models/time_progress.dart';
 
 final timeProgressListReducer = combineReducers<List<TimeProgress>>([
   TypedReducer<List<TimeProgress>, TimeProgressListLoadedAction>(

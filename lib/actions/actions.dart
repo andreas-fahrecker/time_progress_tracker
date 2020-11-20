@@ -1,4 +1,6 @@
-import 'package:time_progress_calculator/models/time_progress.dart';
+import 'package:redux/redux.dart';
+import 'package:time_progress_tracker/models/app_state.dart';
+import 'package:time_progress_tracker/models/time_progress.dart';
 
 class LoadTimeProgressListAction {}
 
@@ -27,4 +29,10 @@ class DeleteTimeProgressAction {
   final String id;
 
   DeleteTimeProgressAction(this.id);
+}
+
+void loadTimeProgressListIfUnloaded(Store<AppState> store) {
+  if (!store.state.hasLoaded) {
+    store.dispatch(LoadTimeProgressListAction());
+  }
 }
