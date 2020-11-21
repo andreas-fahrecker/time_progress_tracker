@@ -1,4 +1,5 @@
 import 'package:meta/meta.dart';
+import 'package:time_progress_tracker/models/app_exceptions.dart';
 import 'package:time_progress_tracker/persistence/time_progress_entity.dart';
 import 'package:time_progress_tracker/uuid.dart';
 
@@ -10,11 +11,15 @@ class TimeProgress {
   final DateTime endTime;
 
   TimeProgress(this.name, this.startTime, this.endTime, {String id})
-      : id = id ?? Uuid().generateV4();
+      : id = id ?? Uuid().generateV4() {
+    if (this.name == null || this.name == "") {
+      throw new TimeProgressInvalidNameException(this.name);
+    }
+  }
 
   factory TimeProgress.initialDefault() {
     int thisYear = DateTime.now().year;
-    return TimeProgress("", DateTime(thisYear - 1), DateTime(thisYear + 1));
+    return TimeProgress("Initial Name", DateTime(thisYear - 1), DateTime(thisYear + 1));
   }
 
   TimeProgress copyWith(

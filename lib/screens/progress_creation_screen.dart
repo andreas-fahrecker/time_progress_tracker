@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
+import 'package:time_progress_tracker/models/app_exceptions.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/screens/progress_dashboard_screen.dart';
@@ -22,6 +23,8 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
   DateTime pickedEndTime = DateTime(
       DateTime.now().year + 1, DateTime.now().month, DateTime.now().day);
 
+  bool _validName = true;
+
   Future<DateTime> _selectDate(
       BuildContext context, DateTime initialDate) async {
     return await showDatePicker(
@@ -32,10 +35,17 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
   }
 
   void _createTimeProgress(BuildContext context) {
-    StoreProvider.of<AppState>(context).dispatch(AddTimeProgressAction(
-      TimeProgress(_nameController.text, pickedStartTime, pickedEndTime),
-    ));
-    Navigator.pushNamed(context, ProgressDashboardScreen.routeName);
+    try {
+      TimeProgress tpToCreate =
+          TimeProgress(_nameController.text, pickedStartTime, pickedEndTime);
+      StoreProvider.of<AppState>(context)
+          .dispatch(AddTimeProgressAction(tpToCreate));
+      Navigator.pushNamed(context, ProgressDashboardScreen.routeName);
+    } on TimeProgressInvalidNameException catch (e) {
+      setState(() {
+        _validName = false;
+      });
+    }
   }
 
   @override
@@ -60,7 +70,12 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
               child: TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(), labelText: "Progress Name"),
+                  border: OutlineInputBorder(),
+                  labelText: "Progress Name",
+                  errorText: _validName
+                      ? null
+                      : "The Name of the Time Progress has to be set.",
+                ),
               ),
             ),
             Expanded(
