@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
+import 'package:time_progress_tracker/models/app_exceptions.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/screens/progress_dashboard_screen.dart';
@@ -30,9 +31,12 @@ class ProgressDetailScreen extends StatefulWidget {
 }
 
 class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
-  final TextEditingController _nameController = TextEditingController();
   bool _isBeingEdited = false;
+  final TextEditingController _nameController = TextEditingController();
+
   TimeProgress _editedProgress = TimeProgress.initialDefault();
+
+  bool _validName = true;
 
   void _onStartDateChanged(DateTime picked) {
     if (picked != null) {
@@ -118,10 +122,18 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
   void initState() {
     super.initState();
     _nameController.addListener(() {
-      this.setState(() {
-        this._editedProgress =
-            this._editedProgress.copyWith(name: _nameController.text);
-      });
+      try {
+        TimeProgress editedProgress =
+            _editedProgress.copyWith(name: _nameController.text);
+        setState(() {
+          _editedProgress = editedProgress;
+          _validName = true;
+        });
+      } on TimeProgressInvalidNameException catch (e) {
+        setState(() {
+          _validName = false;
+        });
+      }
     });
   }
 
@@ -151,8 +163,12 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                       ? TextField(
                           controller: _nameController,
                           decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              labelText: "Progress Name"),
+                            border: OutlineInputBorder(),
+                            labelText: "Progress Name",
+                            errorText: _validName
+                                ? null
+                                : "The Name of the Time Progress has to be set.",
+                          ),
                         )
                       : FittedBox(
                           fit: BoxFit.fitWidth,
@@ -205,7 +221,8 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: _isBeingEdited
           ? ProgressDetailFabEditingRow(
-              onSave: () => _onSaveTimeProgress(store, args.id),
+              onSave: () =>
+                  _validName ? _onSaveTimeProgress(store, args.id) : null,
               onCancelEdit: () =>
                   _showCancelEditTimeProgressDialog(store.state, args.id),
             )
