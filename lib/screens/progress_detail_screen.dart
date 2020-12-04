@@ -170,32 +170,56 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                                 : "The Name of the Time Progress has to be set.",
                           ),
                         )
-                      : FittedBox(
-                          fit: BoxFit.fitWidth,
-                          child: Text(
-                            vm.timeProgress.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
+                      : vm.hasProgressStarted
+                          ? FittedBox(
+                              fit: BoxFit.fitWidth,
+                              child: Text(
+                                vm.timeProgress.name,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            )
+                          : Center(
+                              child: FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                  vm.timeProgress.name,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                ),
+                vm.hasProgressStarted
+                    ? Expanded(
+                        flex: 2,
+                        child: ProgressDetailCircularPercent(
+                          percentDone: _isBeingEdited
+                              ? _editedProgress.percentDone()
+                              : vm.timeProgress.percentDone(),
                         ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: ProgressDetailCircularPercent(
-                    percentDone: _isBeingEdited
-                        ? _editedProgress.percentDone()
-                        : vm.timeProgress.percentDone(),
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: ProgressDetailLinearPercent(
-                    timeProgress:
-                        _isBeingEdited ? _editedProgress : vm.timeProgress,
-                  ),
-                ),
+                      )
+                    : Spacer(
+                        flex: 2,
+                      ),
+                vm.hasProgressStarted
+                    ? Expanded(
+                        flex: 1,
+                        child: ProgressDetailLinearPercent(
+                          timeProgress: _isBeingEdited
+                              ? _editedProgress
+                              : vm.timeProgress,
+                        ),
+                      )
+                    : Spacer(
+                        flex: 1,
+                      ),
                 Expanded(
                   flex: 1,
                   child: Text(
@@ -242,15 +266,19 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
 
 class _ViewModel {
   final TimeProgress timeProgress;
+  final bool hasProgressStarted;
 
   _ViewModel({
     @required this.timeProgress,
+    @required this.hasProgressStarted,
   });
 
   static _ViewModel fromStoreAndArg(
       Store<AppState> store, ProgressDetailScreenArguments args) {
+    TimeProgress tp = timeProgressByIdSelector(store.state, args.id);
     return _ViewModel(
-      timeProgress: timeProgressByIdSelector(store.state, args.id),
-    );
+        timeProgress: tp,
+        hasProgressStarted: DateTime.now().millisecondsSinceEpoch >
+            tp.startTime.millisecondsSinceEpoch);
   }
 }
