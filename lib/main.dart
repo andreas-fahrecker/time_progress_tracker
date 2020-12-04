@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:package_info/package_info.dart';
 import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:time_progress_tracker/app.dart';
@@ -18,5 +19,6 @@ Future<void> main() async {
         TimeProgressRepository(await SharedPreferences.getInstance()),
       ),
     ),
+    appVersion: (await PackageInfo.fromPlatform()).version,
   ));
 }

@@ -14,6 +14,13 @@ class ProgressDashboardScreen extends StatelessWidget {
   static const routeName = "/progress-dashboard";
   static const title = "Time Progress Dashboard";
 
+  final String appVersion;
+
+  ProgressDashboardScreen({
+    Key key,
+    @required this.appVersion,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     AppBar appBar = AppBar(
@@ -22,7 +29,9 @@ class ProgressDashboardScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: appBar,
-      drawer: AppDrawer(),
+      drawer: AppDrawer(
+        appVersion: appVersion,
+      ),
       body: StoreConnector(
         converter: _ViewModel.fromStore,
         onInit: loadTimeProgressListIfUnloaded,

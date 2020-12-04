@@ -12,6 +12,13 @@ import 'package:time_progress_tracker/screens/progress_detail_screen.dart';
 import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
 
 class AppDrawer extends StatelessWidget {
+  final String appVersion;
+
+  AppDrawer({
+    Key key,
+    @required this.appVersion,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -88,7 +95,7 @@ class AppDrawer extends StatelessWidget {
                 showAboutDialog(
                     context: context,
                     applicationName: TimeProgressTrackerApp.name,
-                    applicationVersion: ' Version 0.0.1',
+                    applicationVersion: " Version $appVersion",
                     applicationLegalese: '\u00a9Andreas Fahrecker 2020');
               },
             ),
