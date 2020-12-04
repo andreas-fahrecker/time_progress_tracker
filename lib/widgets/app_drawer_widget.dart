@@ -9,6 +9,7 @@ import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/screens/progress_dashboard_screen.dart';
 import 'package:time_progress_tracker/screens/progress_detail_screen.dart';
+import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -18,6 +19,11 @@ class AppDrawer extends StatelessWidget {
         converter: _ViewModel.fromStore,
         onInit: loadTimeProgressListIfUnloaded,
         builder: (context, _ViewModel vm) {
+          if (!vm.hasLoaded) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           List<Widget> drawerTileList = List<Widget>();
           drawerTileList.add(DrawerHeader(
             child: Text(TimeProgressTrackerApp.name),
@@ -36,8 +42,8 @@ class AppDrawer extends StatelessWidget {
               },
             ),
           ));
-          if (vm.timeProgressList.length > 0) {
-            for (TimeProgress tp in vm.timeProgressList) {
+          if (vm.startedTimeProgresses.length > 0) {
+            for (TimeProgress tp in vm.startedTimeProgresses) {
               drawerTileList.add(ListTile(
                 title: Text(tp.name),
                 trailing: CircularPercentIndicator(
@@ -60,7 +66,7 @@ class AppDrawer extends StatelessWidget {
                   );
                 },
               ));
-              if (vm.timeProgressList.last != tp) {
+              if (vm.startedTimeProgresses.last != tp) {
                 drawerTileList.add(Divider(
                   color: Colors.black12,
                 ));
@@ -80,11 +86,10 @@ class AppDrawer extends StatelessWidget {
               title: Text("About"),
               onTap: () {
                 showAboutDialog(
-                  context: context,
-                  applicationName: TimeProgressTrackerApp.name,
-                  applicationVersion: ' Version 0.0.1',
-                  applicationLegalese: '\u00a9Andreas Fahrecker 2020'
-                );
+                    context: context,
+                    applicationName: TimeProgressTrackerApp.name,
+                    applicationVersion: ' Version 0.0.1',
+                    applicationLegalese: '\u00a9Andreas Fahrecker 2020');
               },
             ),
           ));
@@ -98,13 +103,18 @@ class AppDrawer extends StatelessWidget {
 }
 
 class _ViewModel {
-  final List<TimeProgress> timeProgressList;
+  final List<TimeProgress> startedTimeProgresses;
+  final bool hasLoaded;
 
-  _ViewModel({@required this.timeProgressList});
+  _ViewModel({
+    @required this.startedTimeProgresses,
+    @required this.hasLoaded,
+  });
 
   static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(
-      timeProgressList: store.state.timeProgressList,
+      startedTimeProgresses: startedTimeProgressesSelector(store.state),
+      hasLoaded: store.state.hasLoaded,
     );
   }
 }

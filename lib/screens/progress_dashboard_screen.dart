@@ -7,6 +7,7 @@ import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/screens/progress_creation_screen.dart';
 import 'package:time_progress_tracker/screens/progress_detail_screen.dart';
+import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
 import 'package:time_progress_tracker/widgets/app_drawer_widget.dart';
 
 class ProgressDashboardScreen extends StatelessWidget {
@@ -31,8 +32,8 @@ class ProgressDashboardScreen extends StatelessWidget {
           }
           List<Widget> dashboardTileList = List<Widget>();
 
-          if (vm.timeProgressList.length > 0) {
-            for (TimeProgress tp in vm.timeProgressList) {
+          if (vm.startedTimeProgreses.length > 0) {
+            for (TimeProgress tp in vm.startedTimeProgreses) {
               dashboardTileList.add(
                 Card(
                   child: ListTile(
@@ -77,17 +78,20 @@ class ProgressDashboardScreen extends StatelessWidget {
 }
 
 class _ViewModel {
-  final List<TimeProgress> timeProgressList;
+  final List<TimeProgress> startedTimeProgreses;
+  final List<TimeProgress> futureTimeProgresses;
   final bool hasLoaded;
 
   _ViewModel({
-    @required this.timeProgressList,
+    @required this.startedTimeProgreses,
+    @required this.futureTimeProgresses,
     @required this.hasLoaded,
   });
 
   static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(
-      timeProgressList: store.state.timeProgressList,
+      startedTimeProgreses: startedTimeProgressesSelector(store.state),
+      futureTimeProgresses: futureTimeProgressesSelector(store.state),
       hasLoaded: store.state.hasLoaded,
     );
   }
