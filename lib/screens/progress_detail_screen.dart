@@ -205,8 +205,10 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                               : vm.timeProgress.percentDone(),
                         ),
                       )
-                    : Spacer(
+                    : Expanded(
                         flex: 2,
+                        child: Text(
+                            "Starts in ${vm.timeProgress.startTime.difference(DateTime.now()).inDays} Days."),
                       ),
                 vm.hasProgressStarted
                     ? Expanded(
