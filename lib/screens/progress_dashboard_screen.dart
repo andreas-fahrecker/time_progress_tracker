@@ -43,8 +43,8 @@ class ProgressDashboardScreen extends StatelessWidget {
           }
 
           List<Widget> startedProgressesTileList = List<Widget>();
-          if (vm.hasStartedProgresses) {
-            for (TimeProgress tp in vm.startedTimeProgreses) {
+          if (vm.hasCurrentProgresses) {
+            for (TimeProgress tp in vm.currentTimeProgresses) {
               startedProgressesTileList.add(
                 Card(
                   child: ListTile(
@@ -87,44 +87,78 @@ class ProgressDashboardScreen extends StatelessWidget {
             }
           }
 
+          List<Widget> pastProgressesTileList = List<Widget>();
+          if (vm.pastTimeProgresses.length > 0) {
+            for (TimeProgress tp in vm.pastTimeProgresses) {
+              pastProgressesTileList.add(
+                Card(
+                    child: ListTile(
+                  title: Text(tp.name),
+                  subtitle: Text(
+                      "Ended ${DateTime.now().difference(tp.endTime).inDays} Days ago."),
+                  onTap: () {
+                    Navigator.pushNamed(context, ProgressDetailScreen.routeName,
+                        arguments: ProgressDetailScreenArguments(tp.id));
+                  },
+                )),
+              );
+            }
+          }
+
           double dividerHeight = 1;
           double screenHeight = MediaQuery.of(context).size.height -
               appBar.preferredSize.height -
               24 -
-              dividerHeight; //Divider
+              dividerHeight -
+              1; //Divider
 
           List<Widget> columnChildren = List<Widget>();
-          int tpCount =
-              vm.startedTimeProgreses.length + vm.futureTimeProgresses.length;
-          if (vm.hasStartedProgresses) {
+          int tpCount = vm.currentTimeProgresses.length +
+              vm.futureTimeProgresses.length +
+              vm.pastTimeProgresses.length;
+          if (vm.hasCurrentProgresses) {
             columnChildren.add(Container(
-              height: vm.hasFutureProgresses
-                  ? (screenHeight / tpCount) * vm.startedTimeProgreses.length
-                  : screenHeight,
+              height:
+                  (screenHeight / tpCount) * vm.currentTimeProgresses.length,
               child: ListView(
                 padding: EdgeInsets.all(8),
                 children: startedProgressesTileList,
               ),
             ));
           }
-          if (vm.hasStartedProgresses && vm.hasFutureProgresses) {
+          if (vm.hasCurrentProgresses && vm.hasFutureProgresses) {
             columnChildren.add(Divider(
               height: dividerHeight,
             ));
           }
           if (vm.hasFutureProgresses) {
             columnChildren.add(Container(
-              height: vm.hasStartedProgresses
-                  ? (screenHeight / tpCount) * vm.futureTimeProgresses.length
-                  : screenHeight,
+              height: (screenHeight / tpCount) * vm.futureTimeProgresses.length,
               child: ListView(
                 padding: EdgeInsets.all(8),
                 children: futureProgressesTileList,
               ),
             ));
           }
+          if ((vm.hasCurrentProgresses || vm.hasFutureProgresses) &&
+              vm.pastTimeProgresses.length > 0) {
+            columnChildren.add(Divider(
+              height: dividerHeight,
+            ));
+          }
+          if (vm.pastTimeProgresses.length > 0) {
+            columnChildren.add(Container(
+              height: (screenHeight / tpCount) * vm.pastTimeProgresses.length,
+              child: ListView(
+                padding: EdgeInsets.all(8),
+                children: pastProgressesTileList,
+              ),
+            ));
+          }
 
-          if (!vm.hasStartedProgresses && !vm.hasFutureProgresses) {
+          if (!vm.hasCurrentProgresses &&
+              !vm.hasFutureProgresses &&
+              vm.pastTimeProgresses.length < 1) {
             columnChildren.add(Container(
               margin: EdgeInsets.all(16),
               child: Center(
@@ -151,30 +185,31 @@ class ProgressDashboardScreen extends StatelessWidget {
 }
 
 class _ViewModel {
-  final List<TimeProgress> startedTimeProgreses;
-  final bool hasStartedProgresses;
+  final List<TimeProgress> currentTimeProgresses;
+  final bool hasCurrentProgresses;
   final List<TimeProgress> futureTimeProgresses;
   final bool hasFutureProgresses;
+  final List<TimeProgress> pastTimeProgresses;
   final bool hasLoaded;
 
   _ViewModel({
-    @required this.startedTimeProgreses,
-    @required this.hasStartedProgresses,
+    @required this.currentTimeProgresses,
+    @required this.hasCurrentProgresses,
     @required this.futureTimeProgresses,
     @required this.hasFutureProgresses,
+    @required this.pastTimeProgresses,
     @required this.hasLoaded,
   });
 
   static _ViewModel fromStore(Store<AppState> store) {
-    List<TimeProgress> startedTPList =
-        startedTimeProgressesSelector(store.state);
-    List<TimeProgress> furtureTPList =
-        futureTimeProgressesSelector(store.state);
+    List<TimeProgress> currentTPList = currentTimeProgressSelector(store.state);
+    List<TimeProgress> futureTPList = futureTimeProgressesSelector(store.state);
     return _ViewModel(
-      startedTimeProgreses: startedTPList,
-      hasStartedProgresses: startedTPList.length > 0,
-      futureTimeProgresses: furtureTPList,
-      hasFutureProgresses: furtureTPList.length > 0,
+      currentTimeProgresses: currentTPList,
+      hasCurrentProgresses: currentTPList.length > 0,
+      futureTimeProgresses: futureTPList,
+      hasFutureProgresses: futureTPList.length > 0,
+      pastTimeProgresses: pastTimeProgressesSelector(store.state),
       hasLoaded: store.state.hasLoaded,
     );
   }

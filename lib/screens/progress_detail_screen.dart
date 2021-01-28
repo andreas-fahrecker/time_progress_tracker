@@ -179,7 +179,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                                 : "The Name of the Time Progress has to be set.",
                           ),
                         )
-                      : vm.hasProgressStarted
+                      : (vm.hasProgressStarted && !vm.hasEnded)
                           ? FittedBox(
                               fit: BoxFit.fitWidth,
                               child: Text(
@@ -205,7 +205,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                               ),
                             ),
                 ),
-                vm.hasProgressStarted
+                (vm.hasProgressStarted && !vm.hasEnded)
                     ? Expanded(
                         flex: 2,
                         child: ProgressDetailCircularPercent(
@@ -216,10 +216,13 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                       )
                     : Expanded(
                         flex: 2,
-                        child: Text(
-                            "Starts in ${vm.timeProgress.startTime.difference(DateTime.now()).inDays} Days."),
+                        child: !vm.hasEnded
+                            ? Text(
+                                "Starts in ${vm.timeProgress.startTime.difference(DateTime.now()).inDays} Days.")
+                            : Text(
+                                "Ended ${DateTime.now().difference(vm.timeProgress.endTime).inDays} Days ago."),
                       ),
-                vm.hasProgressStarted
+                (vm.hasProgressStarted && !vm.hasEnded)
                     ? Expanded(
                         flex: 1,
                         child: ProgressDetailLinearPercent(
@@ -278,18 +281,21 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
 class _ViewModel {
   final TimeProgress timeProgress;
   final bool hasProgressStarted;
+  final bool hasEnded;
 
   _ViewModel({
     @required this.timeProgress,
     @required this.hasProgressStarted,
+    @required this.hasEnded,
   });
 
   static _ViewModel fromStoreAndArg(
       Store<AppState> store, ProgressDetailScreenArguments args) {
+    int currentTime = DateTime.now().millisecondsSinceEpoch;
     TimeProgress tp = timeProgressByIdSelector(store.state, args.id);
     return _ViewModel(
         timeProgress: tp,
-        hasProgressStarted: DateTime.now().millisecondsSinceEpoch >
-            tp.startTime.millisecondsSinceEpoch);
+        hasProgressStarted: currentTime > tp.startTime.millisecondsSinceEpoch,
+        hasEnded: tp.endTime.millisecondsSinceEpoch < currentTime);
   }
 }
