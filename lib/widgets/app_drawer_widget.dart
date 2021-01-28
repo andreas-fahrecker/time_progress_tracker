@@ -49,8 +49,8 @@ class AppDrawer extends StatelessWidget {
               },
             ),
           ));
-          if (vm.startedTimeProgresses.length > 0) {
-            for (TimeProgress tp in vm.startedTimeProgresses) {
+          if (vm.currentTimeProgresses.length > 0) {
+            for (TimeProgress tp in vm.currentTimeProgresses) {
               drawerTileList.add(ListTile(
                 title: Text(tp.name),
                 trailing: CircularPercentIndicator(
@@ -73,7 +73,7 @@ class AppDrawer extends StatelessWidget {
                   );
                 },
               ));
-              if (vm.startedTimeProgresses.last != tp) {
+              if (vm.currentTimeProgresses.last != tp) {
                 drawerTileList.add(Divider(
                   color: Colors.black12,
                 ));
@@ -110,17 +110,17 @@ class AppDrawer extends StatelessWidget {
 }
 
 class _ViewModel {
-  final List<TimeProgress> startedTimeProgresses;
+  final List<TimeProgress> currentTimeProgresses;
   final bool hasLoaded;
 
   _ViewModel({
-    @required this.startedTimeProgresses,
+    @required this.currentTimeProgresses,
     @required this.hasLoaded,
   });
 
   static _ViewModel fromStore(Store<AppState> store) {
     return _ViewModel(
-      startedTimeProgresses: startedTimeProgressesSelector(store.state),
+      currentTimeProgresses: currentTimeProgressSelector(store.state),
       hasLoaded: store.state.hasLoaded,
     );
   }

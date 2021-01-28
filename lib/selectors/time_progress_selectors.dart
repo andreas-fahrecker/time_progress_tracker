@@ -4,18 +4,27 @@ import 'package:time_progress_tracker/models/time_progress.dart';
 List<TimeProgress> timeProgressListSelector(AppState state) =>
     state.timeProgressList;
 
-List<TimeProgress> startedTimeProgressesSelector(AppState state) =>
-    state.timeProgressList
-        .where((timeProgress) =>
-            DateTime.now().millisecondsSinceEpoch >=
-            timeProgress.startTime.millisecondsSinceEpoch)
-        .toList();
+List<TimeProgress> currentTimeProgressSelector(AppState state) {
+  int currentTime = DateTime.now().millisecondsSinceEpoch;
+  return state.timeProgressList
+      .where((tp) =>
+          currentTime >= tp.startTime.millisecondsSinceEpoch &&
+          tp.endTime.millisecondsSinceEpoch >= currentTime)
+      .toList();
+}
 
 List<TimeProgress> futureTimeProgressesSelector(AppState state) =>
     state.timeProgressList
         .where((timeProgress) =>
             DateTime.now().millisecondsSinceEpoch <
             timeProgress.startTime.millisecondsSinceEpoch)
+        .toList();
+
+List<TimeProgress> pastTimeProgressesSelector(AppState state) =>
+    state.timeProgressList
+        .where((tp) =>
+            tp.endTime.millisecondsSinceEpoch <
+            DateTime.now().millisecondsSinceEpoch)
         .toList();
 
 TimeProgress timeProgressByIdSelector(AppState state, String id) {
