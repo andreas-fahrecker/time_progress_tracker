@@ -19,7 +19,8 @@ class TimeProgress {
 
   factory TimeProgress.initialDefault() {
     int thisYear = DateTime.now().year;
-    return TimeProgress("Initial Name", DateTime(thisYear - 1), DateTime(thisYear + 1));
+    return TimeProgress(
+        "Initial Name", DateTime(thisYear - 1), DateTime(thisYear + 1));
   }
 
   TimeProgress copyWith(
@@ -46,6 +47,16 @@ class TimeProgress {
 
   double percentDone() {
     return this.daysBehind() / (this.allDays() / 100) / 100;
+  }
+
+  bool hasStarted() {
+    return DateTime.now().millisecondsSinceEpoch >
+        startTime.millisecondsSinceEpoch;
+  }
+
+  bool hasEnded() {
+    return DateTime.now().millisecondsSinceEpoch >
+        endTime.millisecondsSinceEpoch;
   }
 
   @override

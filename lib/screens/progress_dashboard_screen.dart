@@ -1,38 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:redux/redux.dart';
-import 'package:time_progress_tracker/actions/actions.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/screens/progress_creation_screen.dart';
-import 'package:time_progress_tracker/screens/progress_detail_screen.dart';
 import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
-import 'package:time_progress_tracker/widgets/app_drawer_widget.dart';
+import 'package:time_progress_tracker/widgets/home_widgets/home_bottom_navbar.dart';
+import 'package:time_progress_tracker/widgets/home_widgets/home_active_progresses_tab.dart';
+import 'package:time_progress_tracker/widgets/home_widgets/home_inactive_progresses_tab.dart';
+import 'package:time_progress_tracker/widgets/home_widgets/home_settings_tab.dart';
 
-class ProgressDashboardScreen extends StatelessWidget {
+class ProgressDashboardScreen extends StatefulWidget {
   static const routeName = "/progress-dashboard";
-  static const title = "Time Progress Dashboard";
+  static const title = "Time Progress Tracker";
 
-  final String appVersion;
+  @override
+  State<StatefulWidget> createState() {
+    return _ProgressDashboardScreenState();
+  }
+}
 
-  ProgressDashboardScreen({
-    Key key,
-    @required this.appVersion,
-  }) : super(key: key);
+class _ProgressDashboardScreenState extends State<ProgressDashboardScreen> {
+  int _currentIndex = 0;
+  final List<Widget> _children = [
+    HomeActiveProgressesTab(),
+    HomeInactiveProgressesTab(),
+    HomeSettingsTab(),
+  ];
+
+  void onBottomTabTapped(int index) {
+    setState(() {
+      _currentIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    AppBar appBar = AppBar(
-      title: Text(title),
-    );
+    ThemeData appTheme = Theme.of(context);
 
     return Scaffold(
-      appBar: appBar,
-      drawer: AppDrawer(
-        appVersion: appVersion,
+      appBar: AppBar(
+        title: Text(ProgressDashboardScreen.title),
       ),
-      body: StoreConnector(
+      body: _children[_currentIndex],
+      /*
+      StoreConnector(
         converter: _ViewModel.fromStore,
         onInit: loadTimeProgressListIfUnloaded,
         builder: (BuildContext context, _ViewModel vm) {
@@ -43,29 +54,6 @@ class ProgressDashboardScreen extends StatelessWidget {
           }
 
           List<Widget> startedProgressesTileList = List<Widget>();
-          if (vm.hasCurrentProgresses) {
-            for (TimeProgress tp in vm.currentTimeProgresses) {
-              startedProgressesTileList.add(
-                Card(
-                  child: ListTile(
-                    title: Text(tp.name),
-                    subtitle: LinearPercentIndicator(
-                      center: Text("${(tp.percentDone() * 100).floor()} %"),
-                      percent: tp.percentDone(),
-                      progressColor: Colors.green,
-                      backgroundColor: Colors.red,
-                      lineHeight: 20,
-                    ),
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, ProgressDetailScreen.routeName,
-                          arguments: ProgressDetailScreenArguments(tp.id));
-                    },
-                  ),
-                ),
-              );
-            }
-          }
 
           List<Widget> futureProgressesTileList = List<Widget>();
           if (vm.hasFutureProgresses) {
@@ -107,8 +95,7 @@ class ProgressDashboardScreen extends StatelessWidget {
 
           double dividerHeight = 1;
           double screenHeight = MediaQuery.of(context).size.height -
-              appBar.preferredSize.height -
-              24 -
+              50 -
               dividerHeight -
               1; //Divider
 
@@ -118,40 +105,10 @@ class ProgressDashboardScreen extends StatelessWidget {
               vm.pastTimeProgresses.length;
           if (vm.hasCurrentProgresses) {
             columnChildren.add(Container(
-              height:
-                  (screenHeight / tpCount) * vm.currentTimeProgresses.length,
+              height: screenHeight - 100,
               child: ListView(
                 padding: EdgeInsets.all(8),
                 children: startedProgressesTileList,
-              ),
-            ));
-          }
-          if (vm.hasCurrentProgresses && vm.hasFutureProgresses) {
-            columnChildren.add(Divider(
-              height: dividerHeight,
-            ));
-          }
-          if (vm.hasFutureProgresses) {
-            columnChildren.add(Container(
-              height: (screenHeight / tpCount) * vm.futureTimeProgresses.length,
-              child: ListView(
-                padding: EdgeInsets.all(8),
-                children: futureProgressesTileList,
-              ),
-            ));
-          }
-          if ((vm.hasCurrentProgresses || vm.hasFutureProgresses) &&
-              vm.pastTimeProgresses.length > 0) {
-            columnChildren.add(Divider(
-              height: dividerHeight,
-            ));
-          }
-          if (vm.pastTimeProgresses.length > 0) {
-            columnChildren.add(Container(
-              height: (screenHeight / tpCount) * vm.pastTimeProgresses.length,
-              child: ListView(
-                padding: EdgeInsets.all(8),
-                children: pastProgressesTileList,
               ),
             ));
           }
@@ -171,14 +128,21 @@ class ProgressDashboardScreen extends StatelessWidget {
             children: columnChildren,
           );
         },
-      ),
+      )
+      */
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        heroTag: "createProgressBTN",
-        child: Icon(Icons.add),
-        onPressed: () {
-          Navigator.pushNamed(context, ProgressCreationScreen.routeName);
-        },
+      floatingActionButton: _currentIndex != 2
+          ? FloatingActionButton(
+              heroTag: "createProgressBTN",
+              child: Icon(Icons.add),
+              onPressed: () {
+                Navigator.pushNamed(context, ProgressCreationScreen.routeName);
+              },
+            )
+          : null,
+      bottomNavigationBar: HomeBottomNavBar(
+        currentIndex: _currentIndex,
+        onTap: onBottomTabTapped,
       ),
     );
   }

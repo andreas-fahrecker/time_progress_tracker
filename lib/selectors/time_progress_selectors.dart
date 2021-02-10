@@ -4,6 +4,21 @@ import 'package:time_progress_tracker/models/time_progress.dart';
 List<TimeProgress> timeProgressListSelector(AppState state) =>
     state.timeProgressList;
 
+List<TimeProgress> activeTimeProgressesSelector(AppState state) {
+  return state.timeProgressList
+      .where((timeProgress) =>
+          timeProgress.hasStarted() && !timeProgress.hasEnded())
+      .toList();
+}
+
+List<TimeProgress> inactiveTimeProgressesSelector(AppState state) {
+  return state.timeProgressList
+      .where((timeProgress) =>
+          !timeProgress.hasStarted() || timeProgress.hasEnded())
+      .toList();
+}
+
+@Deprecated("use active TimeProgresses Selector instead.")
 List<TimeProgress> currentTimeProgressSelector(AppState state) {
   int currentTime = DateTime.now().millisecondsSinceEpoch;
   return state.timeProgressList

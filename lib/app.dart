@@ -10,12 +10,10 @@ class TimeProgressTrackerApp extends StatelessWidget {
   static const String name = "Time Progress Tracker";
 
   final Store<AppState> store;
-  final String appVersion;
 
   TimeProgressTrackerApp({
     Key key,
     this.store,
-    this.appVersion,
   }) : super(key: key);
 
   @override
@@ -33,17 +31,11 @@ class TimeProgressTrackerApp extends StatelessWidget {
         initialRoute: ProgressDashboardScreen.routeName,
         routes: {
           ProgressDashboardScreen.routeName: (BuildContext context) =>
-              ProgressDashboardScreen(
-                appVersion: appVersion,
-              ),
+              ProgressDashboardScreen(),
           ProgressDetailScreen.routeName: (BuildContext context) =>
-              ProgressDetailScreen(
-                appVersion: appVersion,
-              ),
+              ProgressDetailScreen(),
           ProgressCreationScreen.routeName: (BuildContext context) =>
-              ProgressCreationScreen(
-                appVersion: appVersion,
-              ),
+              ProgressCreationScreen(),
         },
       ),
     );

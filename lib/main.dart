@@ -19,6 +19,5 @@ Future<void> main() async {
         TimeProgressRepository(await SharedPreferences.getInstance()),
       ),
     ),
-    appVersion: (await PackageInfo.fromPlatform()).version,
   ));
 }

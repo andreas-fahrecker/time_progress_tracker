@@ -11,11 +11,6 @@ import 'package:time_progress_tracker/widgets/app_drawer_widget.dart';
 class ProgressCreationScreen extends StatefulWidget {
   static const routeName = "/progress-creation";
 
-  final String appVersion;
-
-  ProgressCreationScreen({Key key, @required this.appVersion})
-      : super(key: key);
-
   @override
   State<StatefulWidget> createState() {
     return _ProgressCreationScreenState();
@@ -67,9 +62,9 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
       appBar: AppBar(
         title: Text("Create Time Progress"),
       ),
-      drawer: AppDrawer(
+      /*drawer: AppDrawer(
         appVersion: widget.appVersion,
-      ),
+      ),*/
       body: Container(
         padding: EdgeInsets.all(8),
         child: Column(

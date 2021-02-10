@@ -24,13 +24,6 @@ class ProgressDetailScreenArguments {
 class ProgressDetailScreen extends StatefulWidget {
   static const routeName = "/progress-detail";
 
-  final String appVersion;
-
-  ProgressDetailScreen({
-    Key key,
-    @required this.appVersion,
-  }) : super(key: key);
-
   @override
   State<StatefulWidget> createState() {
     return _ProgressDetailScreenState();
@@ -154,9 +147,9 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
       appBar: AppBar(
         title: Text("Progress"),
       ),
-      drawer: AppDrawer(
+      /*drawer: AppDrawer(
         appVersion: widget.appVersion,
-      ),
+      ),*/
       body: Container(
         margin: EdgeInsets.all(8),
         child: StoreConnector(
