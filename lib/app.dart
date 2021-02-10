@@ -25,7 +25,9 @@ class TimeProgressTrackerApp extends StatelessWidget {
       child: MaterialApp(
         title: name,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.indigo,
+          accentColor: Colors.indigoAccent,
+          brightness: Brightness.light,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         initialRoute: ProgressDashboardScreen.routeName,

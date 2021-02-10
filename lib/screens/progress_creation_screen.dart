@@ -61,6 +61,8 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData appTheme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Create Time Progress"),
@@ -95,7 +97,7 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
                   Expanded(
                     flex: 5,
                     child: FlatButton(
-                      color: Colors.blue,
+                      color: appTheme.accentColor,
                       child: Text(
                           "Start Date: ${pickedStartTime.toLocal().toString().split(" ")[0]}"),
                       onPressed: () async {
@@ -115,7 +117,7 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
                   Expanded(
                     flex: 5,
                     child: FlatButton(
-                      color: Colors.blue,
+                      color: appTheme.accentColor,
                       child: Text(
                           "End Date: ${pickedEndTime.toLocal().toString().split(" ")[0]}"),
                       onPressed: () async {

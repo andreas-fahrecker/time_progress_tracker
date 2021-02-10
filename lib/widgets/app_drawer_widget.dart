@@ -21,6 +21,8 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData appTheme = Theme.of(context);
+
     return Drawer(
       child: StoreConnector(
         converter: _ViewModel.fromStore,
@@ -34,11 +36,11 @@ class AppDrawer extends StatelessWidget {
           List<Widget> drawerTileList = List<Widget>();
           drawerTileList.add(DrawerHeader(
             child: Text(TimeProgressTrackerApp.name),
-            decoration: BoxDecoration(color: Colors.blue),
+            decoration: BoxDecoration(color: appTheme.primaryColor),
             margin: EdgeInsets.zero,
           ));
           drawerTileList.add(Container(
-            color: Colors.lightBlue,
+            color: appTheme.accentColor,
             margin: EdgeInsets.only(bottom: 8),
             child: ListTile(
               title: Text(ProgressDashboardScreen.title),
@@ -96,7 +98,7 @@ class AppDrawer extends StatelessWidget {
                     context: context,
                     applicationName: TimeProgressTrackerApp.name,
                     applicationVersion: " Version $appVersion",
-                    applicationLegalese: '\u00a9Andreas Fahrecker 2020');
+                    applicationLegalese: '\u00a9Andreas Fahrecker 2020-2021');
               },
             ),
           ));

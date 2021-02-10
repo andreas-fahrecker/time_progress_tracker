@@ -14,8 +14,10 @@ class ProgressDetailSelectDateButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData appTheme = Theme.of(context);
+
     return FlatButton(
-      color: Colors.blue,
+      color: appTheme.accentColor,
       child: Text(
           "$leadingString ${selectedDate.toLocal().toString().split(" ")[0]}"),
       onPressed: () async {
