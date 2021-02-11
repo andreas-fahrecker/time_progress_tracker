@@ -46,60 +46,71 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
   Widget build(BuildContext context) {
     final ProgressDetailScreenArguments args =
         ModalRoute.of(context).settings.arguments;
-    final Store<AppState> store = StoreProvider.of<AppState>(context);
-    final TimeProgress _timeProgress =
-        timeProgressByIdSelector(store.state, args.id);
-
-    if (_timeProgress == null) //+++++Time Progress Not Found Error+++++
-      return Center(
-        child: Text("Error Invalid Time Progress"),
-      );
-    if (_editedProgress == null)
-      _editedProgress = _timeProgress; // initialize _editedProgress
-
-    void _saveEditedProgress() {
-      store.dispatch(UpdateTimeProgressAction(args.id, _editedProgress));
-      _switchEditMode(false);
-    }
-
-    void _deleteTimeProgress() {
-      store.dispatch(DeleteTimeProgressAction(args.id));
-      Navigator.popUntil(context, ModalRoute.withName(HomeScreen.routeName));
-    }
-
-    List<Widget> columnChildren = [
-      Expanded(
-        child: ProgressViewWidget(
-            timeProgress: _editMode ? _editedProgress : _timeProgress),
-      )
-    ];
-    if (_editMode)
-      columnChildren.add(Expanded(
-        child: ProgressEditorWidget(
-          timeProgress: _editedProgress,
-          onTimeProgressChanged: _onEditedProgressChanged,
-        ),
-      ));
-
     return Scaffold(
       appBar: AppBar(
         title: Text(ProgressDetailScreen.title),
       ),
       body: Container(
         margin: EdgeInsets.all(8),
-        child: Column(
-          children: columnChildren,
+        child: StoreConnector(
+          onInit: loadTimeProgressListIfUnloaded,
+          converter: (store) => timeProgressByIdSelector(store.state, args.id),
+          builder: (BuildContext context, TimeProgress timeProgress) {
+            if (timeProgress == null) //+++++Time Progress Not Found Error+++++
+              return Center(
+                child: Text("Error Invalid Time Progress"),
+              );
+            if (_editedProgress == null)
+              _editedProgress = timeProgress; // initialize _editedProgress
+
+            List<Widget> columnChildren = [
+              Expanded(
+                child: ProgressViewWidget(
+                    timeProgress: _editMode ? _editedProgress : timeProgress),
+              )
+            ];
+            if (_editMode)
+              columnChildren.add(Expanded(
+                child: ProgressEditorWidget(
+                  timeProgress: _editedProgress,
+                  onTimeProgressChanged: _onEditedProgressChanged,
+                ),
+              ));
+
+            return Column(
+              children: columnChildren,
+            );
+          },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: DetailScreenFloatingActionButtons(
-          editMode: _editMode,
-          originalProgress: timeProgressByIdSelector(store.state, args.id),
-          editedProgress: _editedProgress,
-          onEditProgress: () => _switchEditMode(true),
-          onSaveEditedProgress: _saveEditedProgress,
-          onCancelEditProgress: () => _switchEditMode(false),
-          onDeleteProgress: _deleteTimeProgress),
+      floatingActionButton: StoreConnector(
+          onInit: loadTimeProgressListIfUnloaded,
+          converter: (store) => timeProgressByIdSelector(store.state, args.id),
+          builder: (BuildContext context, TimeProgress timeProgress) {
+            final Store<AppState> store = StoreProvider.of<AppState>(context);
+
+            void _saveEditedProgress() {
+              store
+                  .dispatch(UpdateTimeProgressAction(args.id, _editedProgress));
+              _switchEditMode(false);
+            }
+
+            void _deleteTimeProgress() {
+              store.dispatch(DeleteTimeProgressAction(args.id));
+              Navigator.popUntil(
+                  context, ModalRoute.withName(HomeScreen.routeName));
+            }
+
+            return DetailScreenFloatingActionButtons(
+                editMode: _editMode,
+                originalProgress: timeProgress,
+                editedProgress: _editedProgress,
+                onEditProgress: () => _switchEditMode(true),
+                onSaveEditedProgress: _saveEditedProgress,
+                onCancelEditProgress: () => _switchEditMode(false),
+                onDeleteProgress: _deleteTimeProgress);
+          }),
     );
   }
 }
