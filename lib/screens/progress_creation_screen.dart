@@ -6,6 +6,7 @@ import 'package:time_progress_tracker/models/app_exceptions.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/widgets/date_picker_btn.dart';
+import 'package:time_progress_tracker/widgets/progress_editor_widget.dart';
 
 class ProgressCreationScreen extends StatefulWidget {
   static const routeName = "/progress-creation";
@@ -18,115 +19,26 @@ class ProgressCreationScreen extends StatefulWidget {
 }
 
 class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
-  final TextEditingController _nameController = TextEditingController();
-  DateTime pickedStartTime = DateTime.now();
-  DateTime pickedEndTime = DateTime(
-      DateTime.now().year + 1, DateTime.now().month, DateTime.now().day);
+  TimeProgress timeProgressToCreate =
+      TimeProgress("", DateTime.now(), DateTime(DateTime.now().year + 1));
 
-  bool _validName = true;
-  bool _validDates = true;
-
-  void _createTimeProgress(BuildContext context) {
-    try {
-      TimeProgress tpToCreate =
-          TimeProgress(_nameController.text, pickedStartTime, pickedEndTime);
-      StoreProvider.of<AppState>(context)
-          .dispatch(AddTimeProgressAction(tpToCreate));
-      Navigator.pop(context);
-    } on TimeProgressInvalidNameException catch (e) {
-      setState(() {
-        _validName = false;
-      });
-    } on TimeProgressStartTimeIsNotBeforeEndTimeException catch (e) {
-      setState(() {
-        _validDates = false;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
+  void onTimeProgressChanged(TimeProgress newTimeProgress) {
+    setState(() {
+      timeProgressToCreate = newTimeProgress;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    ThemeData appTheme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(ProgressCreationScreen.title),
       ),
       body: Container(
-        padding: EdgeInsets.all(8),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              flex: 1,
-              child: TextField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: "Progress Name",
-                  errorText: _validName
-                      ? null
-                      : "The Name of the Time Progress has to be set.",
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 5,
-                    child: DatePickerBtn(
-                      leadingString: "Start Date:",
-                      pickedDate: pickedStartTime,
-                      onDatePicked: (DateTime startTime) {
-                        if (startTime != null) {
-                          setState(() {
-                            pickedStartTime = startTime;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                  Spacer(
-                    flex: 1,
-                  ),
-                  Expanded(
-                    flex: 5,
-                    child: DatePickerBtn(
-                      leadingString: "EndDate:",
-                      pickedDate: pickedEndTime,
-                      onDatePicked: (DateTime endTime) {
-                        if (endTime != null) {
-                          setState(() {
-                            pickedEndTime = endTime;
-                          });
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            _validDates
-                ? Spacer(
-                    flex: 1,
-                  )
-                : Expanded(
-                    child: Center(
-                      child: Text(
-                          "Your Picked Dates are invalid. The Start Date has to be before the end Date."),
-                    ),
-                  ),
-            Spacer(
-              flex: 4,
-            )
-          ],
+        padding: EdgeInsets.all(12),
+        child: ProgressEditorWidget(
+          timeProgress: timeProgressToCreate,
+          onTimeProgressChanged: onTimeProgressChanged,
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -136,9 +48,13 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
             child: FloatingActionButton(
               heroTag: "createTimeProgressBTN",
               child: Icon(Icons.save),
-              onPressed: () {
-                _createTimeProgress(context);
-              },
+              onPressed: TimeProgress.isValid(timeProgressToCreate)
+                  ? () {
+                      StoreProvider.of<AppState>(context).dispatch(
+                          AddTimeProgressAction(timeProgressToCreate));
+                      Navigator.pop(context);
+                    }
+                  : null,
             ),
           ),
           Expanded(

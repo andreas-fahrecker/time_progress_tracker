@@ -11,13 +11,7 @@ class TimeProgress {
   final DateTime endTime;
 
   TimeProgress(this.name, this.startTime, this.endTime, {String id})
-      : id = id ?? Uuid().generateV4() {
-    if (this.name == null || this.name == "")
-      throw new TimeProgressInvalidNameException(this.name);
-    if (!this.startTime.isBefore(this.endTime))
-      throw new TimeProgressStartTimeIsNotBeforeEndTimeException(
-          startTime, endTime);
-  }
+      : id = id ?? Uuid().generateV4();
 
   factory TimeProgress.initialDefault() {
     int thisYear = DateTime.now().year;
@@ -81,6 +75,11 @@ class TimeProgress {
   }
 
   TimeProgressEntity toEntity() {
+    if (!TimeProgress.isNameValid(name))
+      throw new TimeProgressInvalidNameException(name);
+    if (!TimeProgress.areTimesValid(startTime, endTime))
+      throw new TimeProgressStartTimeIsNotBeforeEndTimeException(
+          startTime, endTime);
     return TimeProgressEntity(id, name, startTime, endTime);
   }
 
@@ -91,5 +90,18 @@ class TimeProgress {
       entity.endTime,
       id: entity.id ?? Uuid().generateV4(),
     );
+  }
+
+  static bool isValid(TimeProgress tp) {
+    return TimeProgress.isNameValid(tp.name) &&
+        TimeProgress.areTimesValid(tp.startTime, tp.endTime);
+  }
+
+  static bool isNameValid(String name) {
+    return name != null && name != "" && name.length > 3 && name.length < 20;
+  }
+
+  static bool areTimesValid(DateTime startTime, DateTime endTime) {
+    return startTime.isBefore(endTime);
   }
 }
