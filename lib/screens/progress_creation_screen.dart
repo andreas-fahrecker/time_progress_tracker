@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
-import 'package:time_progress_tracker/models/app_exceptions.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
-import 'package:time_progress_tracker/widgets/date_picker_btn.dart';
 import 'package:time_progress_tracker/widgets/progress_editor_widget.dart';
 
 class ProgressCreationScreen extends StatefulWidget {

@@ -1,20 +1,16 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
-import 'package:time_progress_tracker/models/app_exceptions.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/screens/home_screen.dart';
 import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
 import 'package:time_progress_tracker/widgets/app_yes_no_dialog_widget.dart';
-import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_circular_percent_widget.dart';
-import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_edit_dates_row_widget.dart';
 import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_fab_editing_row_widget.dart';
 import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_fab_row_widget.dart';
-import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_linear_percent_widget.dart';
+import 'package:time_progress_tracker/widgets/progress_editor_widget.dart';
+import 'package:time_progress_tracker/widgets/progress_view_widget.dart';
 
 class ProgressDetailScreenArguments {
   final String id;
@@ -32,69 +28,55 @@ class ProgressDetailScreen extends StatefulWidget {
 }
 
 class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
-  bool _isBeingEdited = false;
-  final TextEditingController _nameController = TextEditingController();
-
+  bool _editMode = false;
   TimeProgress _editedProgress = TimeProgress.initialDefault();
 
-  bool _validName = true;
-
-  void _onStartDateChanged(DateTime picked) {
-    if (picked != null) {
-      setState(() {
-        _editedProgress = _editedProgress.copyWith(startTime: picked);
-      });
-    }
-  }
-
-  void _onEndDateChanged(DateTime picked) {
-    if (picked != null) {
-      setState(() {
-        _editedProgress = _editedProgress.copyWith(endTime: picked);
-      });
-    }
+  void _onEditedProgressChanged(TimeProgress newProgress) {
+    setState(() {
+      _editedProgress = newProgress;
+    });
   }
 
   void _onSaveTimeProgress(Store<AppState> store, id) {
+    if (!TimeProgress.isValid(_editedProgress)) return;
     store.dispatch(UpdateTimeProgressAction(id, _editedProgress));
     setState(() {
-      _isBeingEdited = false;
+      _editMode = false;
     });
   }
 
   void _showCancelEditTimeProgressDialog(AppState state, id) {
     TimeProgress originalTp = timeProgressByIdSelector(state, id);
     if (originalTp != _editedProgress) {
-      String originalName = timeProgressByIdSelector(state, id).name;
+      String originalName = originalTp.name;
       showDialog(
         context: context,
         builder: (_) => AppYesNoDialog(
           titleText: "Cancel Editing of $originalName",
           contentText:
               "Are you sure that you want to discard the changes done to $originalName",
-          onYesPressed: _onCancelEditTimeProgress,
+          onYesPressed: () {
+            _cancelEditMode();
+            Navigator.pop(context);
+          },
           onNoPressed: _onCloseDialog,
         ),
       );
     } else {
-      setState(() {
-        _isBeingEdited = false;
-      });
+      _cancelEditMode();
     }
   }
 
-  void _onCancelEditTimeProgress() {
+  void _cancelEditMode() {
     setState(() {
-      _isBeingEdited = false;
+      _editMode = false;
     });
-    Navigator.pop(context);
   }
 
-  void _onEditTimeProgress(Store<AppState> store, id) {
+  void _onEditTimeProgress(AppState state, id) {
     setState(() {
-      _isBeingEdited = true;
-      _editedProgress = timeProgressByIdSelector(store.state, id);
-      _nameController.text = _editedProgress.name;
+      _editMode = true;
+      _editedProgress = timeProgressByIdSelector(state, id);
     });
   }
 
@@ -120,37 +102,16 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    _nameController.addListener(() {
-      try {
-        TimeProgress editedProgress =
-            _editedProgress.copyWith(name: _nameController.text);
-        setState(() {
-          _editedProgress = editedProgress;
-          _validName = true;
-        });
-      } on TimeProgressInvalidNameException catch (e) {
-        setState(() {
-          _validName = false;
-        });
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final ProgressDetailScreenArguments args =
         ModalRoute.of(context).settings.arguments;
     final Store<AppState> store = StoreProvider.of<AppState>(context);
+    final ThemeData appTheme = Theme.of(context);
 
     return Scaffold(
       appBar: AppBar(
         title: Text("Progress"),
       ),
-      /*drawer: AppDrawer(
-        appVersion: widget.appVersion,
-      ),*/
       body: Container(
         margin: EdgeInsets.all(8),
         child: StoreConnector(
@@ -162,118 +123,64 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
               return Center(
                 child: Text("Error Invalid Time Progress"),
               );
+            List<Widget> columnChildren = [
+              Expanded(
+                child: ProgressViewWidget(
+                    timeProgress:
+                        _editMode ? _editedProgress : vm.timeProgress),
+              )
+            ];
+            if (_editMode)
+              columnChildren.add(Expanded(
+                child: ProgressEditorWidget(
+                  timeProgress: _editedProgress,
+                  onTimeProgressChanged: _onEditedProgressChanged,
+                ),
+              ));
             return Column(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: _isBeingEdited
-                      ? TextField(
-                          controller: _nameController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: "Progress Name",
-                            errorText: _validName
-                                ? null
-                                : "The Name of the Time Progress has to be set.",
-                          ),
-                        )
-                      : (vm.timeProgress.hasStarted() &&
-                              !vm.timeProgress.hasEnded())
-                          ? FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: Text(
-                                vm.timeProgress.name,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black87,
-                                ),
-                              ),
-                            )
-                          : Center(
-                              child: FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: Text(
-                                  vm.timeProgress.name,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                            ),
-                ),
-                (vm.timeProgress.hasStarted() && !vm.timeProgress.hasEnded())
-                    ? Expanded(
-                        flex: 2,
-                        child: ProgressDetailCircularPercent(
-                          percentDone: _isBeingEdited
-                              ? _editedProgress.percentDone()
-                              : vm.timeProgress.percentDone(),
-                        ),
-                      )
-                    : Expanded(
-                        flex: 2,
-                        child: !vm.timeProgress.hasEnded()
-                            ? Text(
-                                "Starts in ${vm.timeProgress.startTime.difference(DateTime.now()).inDays} Days.")
-                            : Text(
-                                "Ended ${DateTime.now().difference(vm.timeProgress.endTime).inDays} Days ago."),
-                      ),
-                (vm.timeProgress.hasStarted() && !vm.timeProgress.hasEnded())
-                    ? Expanded(
-                        flex: 1,
-                        child: ProgressDetailLinearPercent(
-                          timeProgress: _isBeingEdited
-                              ? _editedProgress
-                              : vm.timeProgress,
-                        ),
-                      )
-                    : Spacer(
-                        flex: 1,
-                      ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                      "${_isBeingEdited ? _editedProgress.allDays() : vm.timeProgress.allDays()} Days"),
-                ),
-                this._isBeingEdited
-                    ? Expanded(
-                        flex: 1,
-                        child: ProgressDetailEditDatesRow(
-                          startTime: _editedProgress.startTime,
-                          endTime: _editedProgress.endTime,
-                          onStartTimeChanged: _onStartDateChanged,
-                          onEndTimeChanged: _onEndDateChanged,
-                        ),
-                      )
-                    : Spacer(flex: 1),
-                Spacer(flex: 1)
-              ],
+              children: columnChildren,
             );
           },
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: _isBeingEdited
-          ? ProgressDetailFabEditingRow(
-              onSave: () =>
-                  _validName ? _onSaveTimeProgress(store, args.id) : null,
-              onCancelEdit: () =>
-                  _showCancelEditTimeProgressDialog(store.state, args.id),
-            )
-          : ProgressDetailFabRow(
-              onEdit: () => _onEditTimeProgress(store, args.id),
-              onDelete: () => _showDeleteTimeProgressDialog(store, args.id),
+      floatingActionButton: Row(
+        children: [
+          Expanded(
+            child: FloatingActionButton(
+              heroTag: _editMode
+                  ? "saveEditedTimeProgressBTN"
+                  : "editTimeProgressBTN",
+              child: _editMode ? Icon(Icons.save) : Icon(Icons.edit),
+              backgroundColor: _editMode ? Colors.green : appTheme.accentColor,
+              onPressed: _editMode
+                  ? () {
+                      _onSaveTimeProgress(store, args.id);
+                    }
+                  : () {
+                      _onEditTimeProgress(store.state, args.id);
+                    },
             ),
+          ),
+          Expanded(
+            child: FloatingActionButton(
+              heroTag: _editMode
+                  ? "cancelEditTimeProgressBTN"
+                  : "deleteTimeProgressBTN",
+              child: _editMode ? Icon(Icons.cancel) : Icon(Icons.delete),
+              backgroundColor: Colors.red,
+              onPressed: _editMode
+                  ? () {
+                      _showCancelEditTimeProgressDialog(store.state, args.id);
+                    }
+                  : () {
+                      _showDeleteTimeProgressDialog(store, args.id);
+                    },
+            ),
+          ),
+        ],
+      ),
     );
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
   }
 }
 

@@ -18,41 +18,53 @@ class ProgressEditorWidget extends StatefulWidget {
 }
 
 class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
+  final _nameTextController = TextEditingController();
   bool _validName = true, _validDate = true;
 
-  void _onNameChanged(String newName) {
-    if (!TimeProgress.isNameValid(newName))
+  void _onNameChanged() {
+    if (TimeProgress.isNameValid(_nameTextController.text)) {
+      widget.onTimeProgressChanged(
+          widget.timeProgress.copyWith(name: _nameTextController.text));
+      setState(() {
+        _validName = true;
+      });
+    } else
       setState(() {
         _validName = false;
       });
-
-    widget.onTimeProgressChanged(widget.timeProgress.copyWith(name: newName));
-    setState(() {
-      _validName = true;
-    });
   }
 
   void _onStartDateChanged(DateTime newStartDate) {
-    if (!TimeProgress.areTimesValid(newStartDate, widget.timeProgress.endTime))
+    if (TimeProgress.areTimesValid(newStartDate, widget.timeProgress.endTime)) {
+      widget.onTimeProgressChanged(
+          widget.timeProgress.copyWith(startTime: newStartDate));
+      setState(() {
+        _validDate = true;
+      });
+    } else
       setState(() {
         _validDate = false;
       });
-
-    widget.onTimeProgressChanged(
-        widget.timeProgress.copyWith(startTime: newStartDate));
-    setState(() {
-      _validDate = true;
-    });
   }
 
   void _onEndDateChanged(DateTime newEndDate) {
-    if (!TimeProgress.areTimesValid(widget.timeProgress.startTime, newEndDate))
+    if (TimeProgress.areTimesValid(widget.timeProgress.startTime, newEndDate)) {
+      widget.onTimeProgressChanged(
+          widget.timeProgress.copyWith(endTime: newEndDate));
+      setState(() {
+        _validDate = true;
+      });
+    } else
       setState(() {
         _validDate = false;
       });
+  }
 
-    widget.onTimeProgressChanged(
-        widget.timeProgress.copyWith(endTime: newEndDate));
+  @override
+  void initState() {
+    _nameTextController.text = widget.timeProgress.name;
+    _nameTextController.addListener(_onNameChanged);
+    super.initState();
   }
 
   @override
@@ -60,12 +72,13 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
     List<Widget> columnChildren = [
       Expanded(
         child: TextField(
-          onChanged: _onNameChanged,
+          controller: _nameTextController,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
             labelText: "Progress Name",
-            errorText:
-                _validName ? null : "The Name of the Progress can't be empty.",
+            errorText: _validName
+                ? null
+                : "The Name need to have at least 3 and at max 20 symbols.",
           ),
         ),
       ),
@@ -102,7 +115,9 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
         Expanded(
           child: Center(
             child: Text(
-                "Invalid Dates. The Start Date has to be before the End Date"),
+              "Invalid Dates. The Start Date has to be before the End Date",
+              style: TextStyle(color: Colors.red),
+            ),
           ),
         ),
       );

@@ -98,7 +98,7 @@ class TimeProgress {
   }
 
   static bool isNameValid(String name) {
-    return name != null && name != "" && name.length > 3 && name.length < 20;
+    return name != null && name != "" && name.length > 2 && name.length < 21;
   }
 
   static bool areTimesValid(DateTime startTime, DateTime endTime) {
