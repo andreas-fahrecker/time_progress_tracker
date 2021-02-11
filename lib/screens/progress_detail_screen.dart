@@ -17,7 +17,7 @@ class ProgressDetailScreenArguments {
 }
 
 class ProgressDetailScreen extends StatefulWidget {
-  static const routeName = "/progress-detail";
+  static const routeName = "/progress";
   static const title = "Progress View";
 
   @override

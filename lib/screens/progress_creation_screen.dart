@@ -7,7 +7,7 @@ import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/widgets/progress_editor_widget.dart';
 
 class ProgressCreationScreen extends StatefulWidget {
-  static const routeName = "/progress-creation";
+  static const routeName = "/create-progress";
   static const title = "Create Time Progress";
 
   @override

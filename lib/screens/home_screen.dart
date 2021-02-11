@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:time_progress_tracker/screens/progress_creation_screen.dart';
-import 'package:time_progress_tracker/widgets/home_widgets/home_bottom_navbar.dart';
-import 'package:time_progress_tracker/widgets/home_widgets/home_active_progresses_tab.dart';
-import 'package:time_progress_tracker/widgets/home_widgets/home_inactive_progresses_tab.dart';
-import 'package:time_progress_tracker/widgets/home_widgets/home_settings_tab.dart';
+import 'package:time_progress_tracker/widgets/home/home_bottom_navbar.dart';
+import 'package:time_progress_tracker/widgets/home/tabs/home_active_progresses_tab.dart';
+import 'package:time_progress_tracker/widgets/home/tabs/home_inactive_progresses_tab.dart';
+import 'package:time_progress_tracker/widgets/home/tabs/home_settings_tab.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = "/home";
@@ -31,8 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ThemeData appTheme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(HomeScreen.title),

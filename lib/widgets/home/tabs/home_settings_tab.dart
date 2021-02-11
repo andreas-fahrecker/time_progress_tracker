@@ -5,8 +5,6 @@ import 'package:time_progress_tracker/app.dart';
 class HomeSettingsTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    ThemeData appTheme = Theme.of(context);
-
     return Container(
       padding: EdgeInsets.all(16),
       child: Center(
