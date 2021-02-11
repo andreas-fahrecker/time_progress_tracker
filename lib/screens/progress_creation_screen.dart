@@ -5,10 +5,11 @@ import 'package:time_progress_tracker/actions/actions.dart';
 import 'package:time_progress_tracker/models/app_exceptions.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
-import 'package:time_progress_tracker/screens/home_screen.dart';
+import 'package:time_progress_tracker/widgets/date_picker_btn.dart';
 
 class ProgressCreationScreen extends StatefulWidget {
   static const routeName = "/progress-creation";
+  static const title = "Create Time Progress";
 
   @override
   State<StatefulWidget> createState() {
@@ -23,15 +24,7 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
       DateTime.now().year + 1, DateTime.now().month, DateTime.now().day);
 
   bool _validName = true;
-
-  Future<DateTime> _selectDate(
-      BuildContext context, DateTime initialDate) async {
-    return await showDatePicker(
-        context: context,
-        initialDate: initialDate,
-        firstDate: DateTime(DateTime.now().year - 5),
-        lastDate: DateTime(DateTime.now().year + 5));
-  }
+  bool _validDates = true;
 
   void _createTimeProgress(BuildContext context) {
     try {
@@ -43,6 +36,10 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
     } on TimeProgressInvalidNameException catch (e) {
       setState(() {
         _validName = false;
+      });
+    } on TimeProgressStartTimeIsNotBeforeEndTimeException catch (e) {
+      setState(() {
+        _validDates = false;
       });
     }
   }
@@ -59,11 +56,8 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Create Time Progress"),
+        title: Text(ProgressCreationScreen.title),
       ),
-      /*drawer: AppDrawer(
-        appVersion: widget.appVersion,
-      ),*/
       body: Container(
         padding: EdgeInsets.all(8),
         child: Column(
@@ -82,24 +76,18 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
               ),
             ),
             Expanded(
-              child: Text("${_nameController.text}"),
-            ),
-            Expanded(
               flex: 1,
               child: Row(
                 children: <Widget>[
                   Expanded(
                     flex: 5,
-                    child: FlatButton(
-                      color: appTheme.accentColor,
-                      child: Text(
-                          "Start Date: ${pickedStartTime.toLocal().toString().split(" ")[0]}"),
-                      onPressed: () async {
-                        DateTime dt =
-                            await _selectDate(context, pickedStartTime);
-                        if (dt != null) {
+                    child: DatePickerBtn(
+                      leadingString: "Start Date:",
+                      pickedDate: pickedStartTime,
+                      onDatePicked: (DateTime startTime) {
+                        if (startTime != null) {
                           setState(() {
-                            pickedStartTime = dt;
+                            pickedStartTime = startTime;
                           });
                         }
                       },
@@ -110,15 +98,13 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
                   ),
                   Expanded(
                     flex: 5,
-                    child: FlatButton(
-                      color: appTheme.accentColor,
-                      child: Text(
-                          "End Date: ${pickedEndTime.toLocal().toString().split(" ")[0]}"),
-                      onPressed: () async {
-                        DateTime dt = await _selectDate(context, pickedEndTime);
-                        if (dt != null) {
+                    child: DatePickerBtn(
+                      leadingString: "EndDate:",
+                      pickedDate: pickedEndTime,
+                      onDatePicked: (DateTime endTime) {
+                        if (endTime != null) {
                           setState(() {
-                            pickedEndTime = dt;
+                            pickedEndTime = endTime;
                           });
                         }
                       },
@@ -127,8 +113,18 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
                 ],
               ),
             ),
+            _validDates
+                ? Spacer(
+                    flex: 1,
+                  )
+                : Expanded(
+                    child: Center(
+                      child: Text(
+                          "Your Picked Dates are invalid. The Start Date has to be before the end Date."),
+                    ),
+                  ),
             Spacer(
-              flex: 5,
+              flex: 4,
             )
           ],
         ),

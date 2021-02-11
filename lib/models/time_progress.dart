@@ -12,9 +12,11 @@ class TimeProgress {
 
   TimeProgress(this.name, this.startTime, this.endTime, {String id})
       : id = id ?? Uuid().generateV4() {
-    if (this.name == null || this.name == "") {
+    if (this.name == null || this.name == "")
       throw new TimeProgressInvalidNameException(this.name);
-    }
+    if (!this.startTime.isBefore(this.endTime))
+      throw new TimeProgressStartTimeIsNotBeforeEndTimeException(
+          startTime, endTime);
   }
 
   factory TimeProgress.initialDefault() {
