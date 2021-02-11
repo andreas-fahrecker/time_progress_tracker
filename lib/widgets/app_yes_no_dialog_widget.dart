@@ -4,14 +4,12 @@ class AppYesNoDialog extends StatelessWidget {
   final String titleText;
   final String contentText;
   final void Function() onYesPressed;
-  final void Function() onNoPressed;
 
   AppYesNoDialog({
     Key key,
     @required this.titleText,
     @required this.contentText,
     @required this.onYesPressed,
-    @required this.onNoPressed,
   }) : super(key: key);
 
   @override
@@ -26,7 +24,9 @@ class AppYesNoDialog extends StatelessWidget {
         ),
         FlatButton(
           child: Text("No"),
-          onPressed: onNoPressed,
+          onPressed: () {
+            Navigator.pop(context);
+          },
         )
       ],
     );
