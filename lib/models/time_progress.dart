@@ -42,7 +42,10 @@ class TimeProgress {
   }
 
   double percentDone() {
-    return this.daysBehind() / (this.allDays() / 100) / 100;
+    double percent = this.daysBehind() / (this.allDays() / 100) / 100;
+    if (percent < 0) percent = 0;
+    if (percent > 1) percent = 1;
+    return percent;
   }
 
   bool hasStarted() {
