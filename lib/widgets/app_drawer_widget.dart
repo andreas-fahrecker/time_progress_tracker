@@ -7,7 +7,7 @@ import 'package:time_progress_tracker/actions/actions.dart';
 import 'package:time_progress_tracker/app.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
-import 'package:time_progress_tracker/screens/progress_dashboard_screen.dart';
+import 'package:time_progress_tracker/screens/home_screen.dart';
 import 'package:time_progress_tracker/screens/progress_detail_screen.dart';
 import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
 
@@ -43,11 +43,11 @@ class AppDrawer extends StatelessWidget {
             color: appTheme.accentColor,
             margin: EdgeInsets.only(bottom: 8),
             child: ListTile(
-              title: Text(ProgressDashboardScreen.title),
+              title: Text(HomeScreen.title),
               trailing: Icon(Icons.dashboard),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushNamed(context, ProgressDashboardScreen.routeName);
+                Navigator.pushNamed(context, HomeScreen.routeName);
               },
             ),
           ));

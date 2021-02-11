@@ -5,8 +5,7 @@ import 'package:time_progress_tracker/actions/actions.dart';
 import 'package:time_progress_tracker/models/app_exceptions.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
-import 'package:time_progress_tracker/screens/progress_dashboard_screen.dart';
-import 'package:time_progress_tracker/widgets/app_drawer_widget.dart';
+import 'package:time_progress_tracker/screens/home_screen.dart';
 
 class ProgressCreationScreen extends StatefulWidget {
   static const routeName = "/progress-creation";
@@ -40,7 +39,7 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
           TimeProgress(_nameController.text, pickedStartTime, pickedEndTime);
       StoreProvider.of<AppState>(context)
           .dispatch(AddTimeProgressAction(tpToCreate));
-      Navigator.pushNamed(context, ProgressDashboardScreen.routeName);
+      Navigator.pushNamed(context, HomeScreen.routeName);
     } on TimeProgressInvalidNameException catch (e) {
       setState(() {
         _validName = false;
@@ -151,7 +150,7 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
               heroTag: "cancelTimeProgressCreationBTN",
               child: Icon(Icons.cancel),
               onPressed: () {
-                Navigator.pushNamed(context, ProgressDashboardScreen.routeName);
+                Navigator.pushNamed(context, HomeScreen.routeName);
               },
             ),
           )

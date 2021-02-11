@@ -5,9 +5,8 @@ import 'package:time_progress_tracker/actions/actions.dart';
 import 'package:time_progress_tracker/models/app_exceptions.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
-import 'package:time_progress_tracker/screens/progress_dashboard_screen.dart';
+import 'package:time_progress_tracker/screens/home_screen.dart';
 import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
-import 'package:time_progress_tracker/widgets/app_drawer_widget.dart';
 import 'package:time_progress_tracker/widgets/app_yes_no_dialog_widget.dart';
 import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_circular_percent_widget.dart';
 import 'package:time_progress_tracker/widgets/progress_detail_widgets/progress_detail_edit_dates_row_widget.dart';
@@ -111,7 +110,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
 
   void _onDeleteTimeProgress(Store<AppState> store, String id) {
     store.dispatch(DeleteTimeProgressAction(id));
-    Navigator.popAndPushNamed(context, ProgressDashboardScreen.routeName);
+    Navigator.popAndPushNamed(context, HomeScreen.routeName);
   }
 
   void _onCloseDialog() {
