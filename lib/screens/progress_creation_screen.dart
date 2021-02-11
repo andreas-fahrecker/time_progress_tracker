@@ -39,7 +39,7 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
           TimeProgress(_nameController.text, pickedStartTime, pickedEndTime);
       StoreProvider.of<AppState>(context)
           .dispatch(AddTimeProgressAction(tpToCreate));
-      Navigator.pushNamed(context, HomeScreen.routeName);
+      Navigator.pop(context);
     } on TimeProgressInvalidNameException catch (e) {
       setState(() {
         _validName = false;
@@ -150,7 +150,7 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
               heroTag: "cancelTimeProgressCreationBTN",
               child: Icon(Icons.cancel),
               onPressed: () {
-                Navigator.pushNamed(context, HomeScreen.routeName);
+                Navigator.pop(context);
               },
             ),
           )
