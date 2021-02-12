@@ -4,7 +4,7 @@ import 'package:time_progress_tracker/widgets/date_picker_btn.dart';
 
 class ProgressEditorWidget extends StatefulWidget {
   final TimeProgress timeProgress;
-  final Function(TimeProgress) onTimeProgressChanged;
+  final Function(TimeProgress, bool) onTimeProgressChanged;
 
   ProgressEditorWidget({
     @required this.timeProgress,
@@ -22,42 +22,35 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
   bool _validName = true, _validDate = true;
 
   void _onNameChanged() {
-    if (TimeProgress.isNameValid(_nameTextController.text)) {
-      widget.onTimeProgressChanged(
-          widget.timeProgress.copyWith(name: _nameTextController.text));
-      setState(() {
-        _validName = true;
-      });
-    } else
-      setState(() {
-        _validName = false;
-      });
+    TimeProgress newProgress =
+        widget.timeProgress.copyWith(name: _nameTextController.text);
+    widget.onTimeProgressChanged(
+        newProgress, TimeProgress.isValid(newProgress));
+    setState(() {
+      _validName = TimeProgress.isNameValid(newProgress.name);
+    });
   }
 
   void _onStartDateChanged(DateTime newStartDate) {
-    if (TimeProgress.areTimesValid(newStartDate, widget.timeProgress.endTime)) {
-      widget.onTimeProgressChanged(
-          widget.timeProgress.copyWith(startTime: newStartDate));
-      setState(() {
-        _validDate = true;
-      });
-    } else
-      setState(() {
-        _validDate = false;
-      });
+    TimeProgress newProgress =
+        widget.timeProgress.copyWith(startTime: newStartDate);
+    widget.onTimeProgressChanged(
+        newProgress, TimeProgress.isValid(newProgress));
+    setState(() {
+      _validDate =
+          TimeProgress.areTimesValid(newStartDate, newProgress.endTime);
+    });
   }
 
   void _onEndDateChanged(DateTime newEndDate) {
-    if (TimeProgress.areTimesValid(widget.timeProgress.startTime, newEndDate)) {
-      widget.onTimeProgressChanged(
-          widget.timeProgress.copyWith(endTime: newEndDate));
-      setState(() {
-        _validDate = true;
-      });
-    } else
-      setState(() {
-        _validDate = false;
-      });
+    TimeProgress newProgress =
+        widget.timeProgress.copyWith(endTime: newEndDate);
+    widget.onTimeProgressChanged(
+        newProgress, TimeProgress.isValid(newProgress));
+    setState(() {
+      _validDate =
+          TimeProgress.areTimesValid(newProgress.startTime, newEndDate);
+    });
   }
 
   @override

@@ -27,18 +27,27 @@ class ProgressDetailScreen extends StatefulWidget {
 }
 
 class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
-  bool _editMode = false;
-  TimeProgress _editedProgress;
+  bool _editMode = false, _isEditedProgressValid = false;
+  TimeProgress _editedProgress, _originalProgress;
 
-  void _onEditedProgressChanged(TimeProgress newProgress) {
+  void _onEditedProgressChanged(
+      TimeProgress newProgress, bool isNewProgressValid) {
     setState(() {
       _editedProgress = newProgress;
+      _isEditedProgressValid = isNewProgressValid;
     });
   }
 
   void _switchEditMode(bool newMode) {
     setState(() {
       _editMode = newMode;
+    });
+  }
+
+  void _cancelEditMode() {
+    setState(() {
+      _editMode = false;
+      _editedProgress = _originalProgress;
     });
   }
 
@@ -60,8 +69,10 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
               return Center(
                 child: Text("Error Invalid Time Progress"),
               );
-            if (_editedProgress == null)
-              _editedProgress = timeProgress; // initialize _editedProgress
+            if (_editedProgress == null) {
+              _editedProgress = timeProgress;
+              _originalProgress = timeProgress;
+            } // initialize _editedProgress
 
             List<Widget> columnChildren = [
               Expanded(
@@ -106,9 +117,10 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
                 editMode: _editMode,
                 originalProgress: timeProgress,
                 editedProgress: _editedProgress,
+                isEditedProgressValid: _isEditedProgressValid,
                 onEditProgress: () => _switchEditMode(true),
                 onSaveEditedProgress: _saveEditedProgress,
-                onCancelEditProgress: () => _switchEditMode(false),
+                onCancelEditProgress: _cancelEditMode,
                 onDeleteProgress: _deleteTimeProgress);
           }),
     );

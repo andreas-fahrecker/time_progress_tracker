@@ -3,7 +3,7 @@ import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/widgets/app_yes_no_dialog_widget.dart';
 
 class DetailScreenFloatingActionButtons extends StatelessWidget {
-  final bool editMode;
+  final bool editMode, isEditedProgressValid;
   final TimeProgress originalProgress, editedProgress;
   final void Function() onEditProgress,
       onSaveEditedProgress,
@@ -14,6 +14,7 @@ class DetailScreenFloatingActionButtons extends StatelessWidget {
     @required this.editMode,
     @required this.originalProgress,
     @required this.editedProgress,
+    @required this.isEditedProgressValid,
     @required this.onEditProgress,
     @required this.onSaveEditedProgress,
     @required this.onCancelEditProgress,
@@ -63,7 +64,7 @@ class DetailScreenFloatingActionButtons extends StatelessWidget {
             child: editMode ? Icon(Icons.save) : Icon(Icons.edit),
             backgroundColor: editMode ? Colors.green : appTheme.accentColor,
             onPressed: editMode
-                ? TimeProgress.isValid(editedProgress)
+                ? isEditedProgressValid
                     ? onSaveEditedProgress
                     : null
                 : onEditProgress,

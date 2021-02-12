@@ -19,10 +19,13 @@ class ProgressCreationScreen extends StatefulWidget {
 class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
   TimeProgress timeProgressToCreate =
       TimeProgress("", DateTime.now(), DateTime(DateTime.now().year + 1));
+  bool _isProgressValid = false;
 
-  void onTimeProgressChanged(TimeProgress newTimeProgress) {
+  void onTimeProgressChanged(
+      TimeProgress newTimeProgress, bool isNewProgressValid) {
     setState(() {
       timeProgressToCreate = newTimeProgress;
+      _isProgressValid = isNewProgressValid;
     });
   }
 
@@ -46,7 +49,7 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
             child: FloatingActionButton(
               heroTag: "createTimeProgressBTN",
               child: Icon(Icons.save),
-              onPressed: TimeProgress.isValid(timeProgressToCreate)
+              onPressed: _isProgressValid
                   ? () {
                       StoreProvider.of<AppState>(context).dispatch(
                           AddTimeProgressAction(timeProgressToCreate));
