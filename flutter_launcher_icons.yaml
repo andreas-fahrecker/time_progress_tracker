@@ -1,4 +1,4 @@
 flutter_icons:
   android: true
-  ios: false
+  ios: true
   image_path: "assets/icons/launcher_icon.png"
