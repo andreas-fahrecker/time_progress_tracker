@@ -8,7 +8,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="Time Progress Tracker"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/android_1024">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
