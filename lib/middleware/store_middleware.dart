@@ -1,21 +1,28 @@
 import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
+import 'package:time_progress_tracker/models/app_settings.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/persistence/app_settings.dart';
 import 'package:time_progress_tracker/persistence/time_progress_entity.dart';
 import 'package:time_progress_tracker/persistence/time_progress_repository.dart';
 import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
 
-List<Middleware<AppState>> createStoreTimeProgressListMiddleware(
-    TimeProgressRepository repository) {
-  final saveTimeProgressList = _createSaveTimeProgressList(repository);
-  final loadTimeProgressList = _createLoadTimeProgressList(repository);
+List<Middleware<AppState>> createStoreMiddleware(
+    TimeProgressRepository progressRepo, AppSettingsRepository settingsRepo) {
+  final saveTimeProgressList = _createSaveTimeProgressList(progressRepo);
+  final loadTimeProgressList = _createLoadTimeProgressList(progressRepo);
+
+  final saveSettings = _createSaveAppSettings(settingsRepo);
+  final loadSettings = _createLoadAppSettings(settingsRepo);
 
   return [
     TypedMiddleware<AppState, LoadTimeProgressListAction>(loadTimeProgressList),
     TypedMiddleware<AppState, AddTimeProgressAction>(saveTimeProgressList),
     TypedMiddleware<AppState, UpdateTimeProgressAction>(saveTimeProgressList),
     TypedMiddleware<AppState, DeleteTimeProgressAction>(saveTimeProgressList),
+    TypedMiddleware<AppState, LoadSettingsAction>(loadSettings),
+    TypedMiddleware<AppState, UpdateAppSettingsActions>(saveSettings)
   ];
 }
 
@@ -47,3 +54,17 @@ Middleware<AppState> _createLoadTimeProgressList(
     }).catchError((_) => store.dispatch(TimeProgressListNotLoadedAction()));
   };
 }
+
+Middleware<AppState> _createSaveAppSettings(AppSettingsRepository repo) =>
+    (Store<AppState> store, dynamic action, NextDispatcher next) {
+      next(action);
+      repo.saveAppSettings(store.state.appSettings.toEntity());
+    };
+
+Middleware<AppState> _createLoadAppSettings(AppSettingsRepository repo) =>
+    (Store<AppState> store, dynamic action, NextDispatcher next) {
+      repo.loadAppSettings().then((appSettings) {
+        store.dispatch(
+            AppSettingsLoadedActions(AppSettings.fromEntity(appSettings)));
+      });
+    };
