@@ -20,26 +20,19 @@ class TimeProgress {
   }
 
   TimeProgress copyWith(
-      {String id, String name, DateTime startTime, DateTime endTime}) {
-    return TimeProgress(
-      name ?? this.name,
-      startTime ?? this.startTime,
-      endTime ?? this.endTime,
-      id: id ?? this.id,
-    );
-  }
+          {String id, String name, DateTime startTime, DateTime endTime}) =>
+      TimeProgress(
+        name ?? this.name,
+        startTime ?? this.startTime,
+        endTime ?? this.endTime,
+        id: id ?? this.id,
+      );
 
-  int daysBehind() {
-    return DateTime.now().difference(startTime).inDays;
-  }
+  int daysBehind() => DateTime.now().difference(startTime).inDays;
 
-  int daysLeft() {
-    return endTime.difference(DateTime.now()).inDays;
-  }
+  int daysLeft() => endTime.difference(DateTime.now()).inDays;
 
-  int allDays() {
-    return endTime.difference(startTime).inDays;
-  }
+  int allDays() => endTime.difference(startTime).inDays;
 
   double percentDone() {
     double percent = this.daysBehind() / (this.allDays() / 100) / 100;
@@ -48,15 +41,11 @@ class TimeProgress {
     return percent;
   }
 
-  bool hasStarted() {
-    return DateTime.now().millisecondsSinceEpoch >
-        startTime.millisecondsSinceEpoch;
-  }
+  bool hasStarted() =>
+      DateTime.now().millisecondsSinceEpoch > startTime.millisecondsSinceEpoch;
 
-  bool hasEnded() {
-    return DateTime.now().millisecondsSinceEpoch >
-        endTime.millisecondsSinceEpoch;
-  }
+  bool hasEnded() =>
+      DateTime.now().millisecondsSinceEpoch > endTime.millisecondsSinceEpoch;
 
   @override
   int get hashCode =>
@@ -73,9 +62,8 @@ class TimeProgress {
           endTime == other.endTime;
 
   @override
-  String toString() {
-    return "TimeProgress{id: $id, name: $name, startTime: $startTime, endTime: $endTime}";
-  }
+  String toString() =>
+      "TimeProgress{id: $id, name: $name, startTime: $startTime, endTime: $endTime}";
 
   TimeProgressEntity toEntity() {
     if (!TimeProgress.isNameValid(name))
@@ -86,25 +74,17 @@ class TimeProgress {
     return TimeProgressEntity(id, name, startTime, endTime);
   }
 
-  static TimeProgress fromEntity(TimeProgressEntity entity) {
-    return TimeProgress(
-      entity.name,
-      entity.startTime,
-      entity.endTime,
-      id: entity.id ?? Uuid().generateV4(),
-    );
-  }
+  static TimeProgress fromEntity(TimeProgressEntity entity) =>
+      TimeProgress(entity.name, entity.startTime, entity.endTime,
+          id: entity.id ?? Uuid().generateV4());
 
-  static bool isValid(TimeProgress tp) {
-    return TimeProgress.isNameValid(tp.name) &&
-        TimeProgress.areTimesValid(tp.startTime, tp.endTime);
-  }
+  static bool isValid(TimeProgress tp) =>
+      TimeProgress.isNameValid(tp.name) &&
+      TimeProgress.areTimesValid(tp.startTime, tp.endTime);
 
-  static bool isNameValid(String name) {
-    return name != null && name != "" && name.length > 2 && name.length < 21;
-  }
+  static bool isNameValid(String name) =>
+      name != null && name != "" && name.length > 2 && name.length < 21;
 
-  static bool areTimesValid(DateTime startTime, DateTime endTime) {
-    return startTime.isBefore(endTime);
-  }
+  static bool areTimesValid(DateTime startTime, DateTime endTime) =>
+      startTime.isBefore(endTime);
 }
