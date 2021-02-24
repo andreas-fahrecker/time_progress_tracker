@@ -10,7 +10,7 @@ class HomeInactiveProgressesTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector(
       onInit: loadTimeProgressListIfUnloaded,
-      converter: (store) => store.state.hasLoaded,
+      converter: (store) => store.state.hasProgressesLoaded,
       builder: (BuildContext context, dynamic hasLoaded) {
         if (!(hasLoaded as bool))
           return Center(
