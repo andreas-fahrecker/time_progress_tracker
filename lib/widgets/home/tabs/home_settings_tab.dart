@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:package_info/package_info.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:time_progress_tracker/app.dart';
 
 class HomeSettingsTab extends StatelessWidget {
@@ -19,7 +19,7 @@ class HomeSettingsTab extends StatelessWidget {
                       applicationVersion: "Beta",
                       applicationLegalese: '\u00a9Andreas Fahrecker 2020-2021');
                 },
-                child: Text("About"))
+                child: Text("About")),
           ],
         ),
       ),

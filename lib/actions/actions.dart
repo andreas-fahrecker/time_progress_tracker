@@ -17,6 +17,8 @@ class UpdateAppSettingsActions {
   UpdateAppSettingsActions(this.appSettings);
 }
 
+class AppSettingsNotLoadedAction {}
+
 class LoadTimeProgressListAction {}
 
 class TimeProgressListLoadedAction {
@@ -47,7 +49,10 @@ class DeleteTimeProgressAction {
 }
 
 void loadTimeProgressListIfUnloaded(Store<AppState> store) {
-  if (!store.state.hasProgressesLoaded) {
+  if (!store.state.hasProgressesLoaded)
     store.dispatch(LoadTimeProgressListAction());
-  }
+}
+
+void loadSettingsIfUnloaded(Store<AppState> store) {
+  if (!store.state.hasSettingsLoaded) store.dispatch(LoadSettingsAction());
 }

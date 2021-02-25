@@ -9,17 +9,23 @@ AppState appStateReducer(AppState state, dynamic action) {
   return AppState(
     hasProgressesLoaded: hasLoadedReducer(state.hasProgressesLoaded, action),
     timeProgressList: timeProgressListReducer(state.timeProgressList, action),
+    appSettings: appSettingsReducers(state.appSettings, action),
   );
 }
 
 final appSettingsReducers = combineReducers<AppSettings>([
   TypedReducer<AppSettings, AppSettingsLoadedActions>(_loadAppSettings),
-  TypedReducer<AppSettings, UpdateAppSettingsActions>(_updateAppSettings)
+  TypedReducer<AppSettings, UpdateAppSettingsActions>(_updateAppSettings),
+  TypedReducer<AppSettings, AppSettingsNotLoadedAction>(_setDefaultSettings)
 ]);
 
 AppSettings _loadAppSettings(
         AppSettings appSettings, AppSettingsLoadedActions nS) =>
     nS.appSettings;
+
+AppSettings _setDefaultSettings(
+        AppSettings appSettings, AppSettingsNotLoadedAction action) =>
+    AppSettings.defaults();
 
 AppSettings _updateAppSettings(
         AppSettings appSettings, UpdateAppSettingsActions nS) =>

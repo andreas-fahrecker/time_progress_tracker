@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
+import 'package:time_progress_tracker/models/app_settings.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/screens/home_screen.dart';
@@ -76,8 +77,17 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
 
             List<Widget> columnChildren = [
               Expanded(
-                child: ProgressViewWidget(
-                    timeProgress: _editMode ? _editedProgress : timeProgress),
+                child: StoreConnector<AppState, AppSettings>(
+                  onInit: loadSettingsIfUnloaded,
+                  converter: (store) => appSettingsSelector(store.state),
+                  builder: (BuildContext context, AppSettings settings) {
+                    return ProgressViewWidget(
+                      timeProgress: _editMode ? _editedProgress : timeProgress,
+                      doneColor: settings.doneColor,
+                      leftColor: settings.leftColor,
+                    );
+                  },
+                ),
               )
             ];
             if (_editMode)
