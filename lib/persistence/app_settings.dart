@@ -15,7 +15,7 @@ class AppSettingsRepository {
     if (jsonString == null)
       return Future<AppSettingsEntity>.value(AppSettingsEntity.defaults());
     return Future<AppSettingsEntity>.value(
-        codec.decode(jsonString) as AppSettingsEntity);
+        AppSettingsEntity.fromJson(codec.decode(jsonString)));
   }
 
   Future<bool> saveAppSettings(AppSettingsEntity appSettings) =>

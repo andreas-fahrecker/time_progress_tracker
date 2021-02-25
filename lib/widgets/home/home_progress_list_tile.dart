@@ -19,7 +19,10 @@ class HomeProgressListTile extends StatelessWidget {
     Widget listTileSubTitle;
     if (timeProgress.hasStarted() && !timeProgress.hasEnded())
       listTileSubTitle = LinearPercentIndicator(
-        center: Text("${(timeProgress.percentDone() * 100).floor()} %"),
+        center: Text(
+          "${(timeProgress.percentDone() * 100).floor()} %",
+          style: TextStyle(color: Colors.white),
+        ),
         percent: timeProgress.percentDone(),
         progressColor: doneColor,
         backgroundColor: leftColor,

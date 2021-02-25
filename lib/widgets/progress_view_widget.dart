@@ -47,7 +47,10 @@ class ProgressViewWidget extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 15),
               percent: timeProgress.percentDone(),
               leading: Text("${timeProgress.daysBehind()} Days"),
-              center: Text("${(timeProgress.percentDone() * 100).floor()} %"),
+              center: Text(
+                "${(timeProgress.percentDone() * 100).floor()} %",
+                style: TextStyle(color: Colors.white),
+              ),
               trailing: Text("${timeProgress.daysLeft()} Days"),
               progressColor: doneColor,
               backgroundColor: leftColor,
