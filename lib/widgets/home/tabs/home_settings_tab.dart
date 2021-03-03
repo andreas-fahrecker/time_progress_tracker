@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
@@ -7,6 +6,7 @@ import 'package:time_progress_tracker/app.dart';
 import 'package:time_progress_tracker/models/app_settings.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
+import 'package:time_progress_tracker/widgets/home/tabs/settings/color_settings_widget.dart';
 
 class HomeSettingsTab extends StatelessWidget {
   @override
@@ -15,75 +15,41 @@ class HomeSettingsTab extends StatelessWidget {
       onInit: loadSettingsIfUnloaded,
       converter: (store) => appSettingsSelector(store.state),
       builder: (context, AppSettings settings) {
+        Store<AppState> store = StoreProvider.of<AppState>(context);
+        void updateDoneColor(Color newDoneColor) => store.dispatch(
+              UpdateAppSettingsActions(
+                  settings.copyWith(doneColor: newDoneColor)),
+            );
+        void updateLeftColor(Color newLeftColor) => store.dispatch(
+              UpdateAppSettingsActions(
+                  settings.copyWith(leftColor: newLeftColor)),
+            );
+
         return Container(
           padding: EdgeInsets.all(16),
           child: Center(
             child: Column(
               children: [
-                Text("Color Settings",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black87)),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: EdgeInsets.only(right: 5),
-                        child: TextButton(
-                          child: Text("Done Color"),
-                          style: TextButton.styleFrom(
-                            primary: Colors.white,
-                            backgroundColor: settings.doneColor,
-                          ),
-                          onPressed: () {
-                            showDialog(
-                                context: context,
-                                builder: (context) {
-                                  Store<AppState> store =
-                                      StoreProvider.of<AppState>(context);
-                                  return AlertDialog(
-                                    title: Text("Select a Done Color"),
-                                    content: SingleChildScrollView(
-                                      child: BlockPicker(
-                                        pickerColor: settings.doneColor,
-                                        onColorChanged: (c) => store.dispatch(
-                                            UpdateAppSettingsActions(settings
-                                                .copyWith(doneColor: c))),
-                                      ),
-                                    ),
-                                  );
-                                });
-                          },
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                        child: Padding(
-                      padding: EdgeInsets.only(left: 5),
-                      child: TextButton(
-                        child: Text("Left Color"),
-                        style: TextButton.styleFrom(
-                          primary: Colors.white,
-                          backgroundColor: settings.leftColor,
-                        ),
-                        onPressed: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                    title: Text("Select a Left Color"),
-                                    content: SingleChildScrollView(
-                                        child: BlockPicker(
-                                      pickerColor: settings.leftColor,
-                                      onColorChanged: (c) => StoreProvider.of<
-                                              AppState>(context)
-                                          .dispatch(UpdateAppSettingsActions(
-                                              settings.copyWith(leftColor: c))),
-                                    )));
-                              });
-                        },
-                      ),
-                    ))
-                  ],
+                Expanded(
+                  child: ColorSettingsWidget(
+                    doneColor: settings.doneColor,
+                    leftColor: settings.leftColor,
+                    updateDoneColor: updateDoneColor,
+                    updateLeftColor: updateLeftColor,
+                  ),
+                ),
+                TextButton(
+                  child: Text("Default Progress Duration"),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          final yearElements = [];
+                          return AlertDialog(
+                            title: Text("Default Duration"),
+                          );
+                        });
+                  },
                 ),
                 FlatButton(
                     onPressed: () {

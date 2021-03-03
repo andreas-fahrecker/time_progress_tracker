@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:time_progress_tracker/models/app_settings.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
@@ -52,3 +54,5 @@ TimeProgress timeProgressByIdSelector(AppState state, String id) {
 AppSettings appSettingsSelector(AppState state) {
   return state.appSettings;
 }
+
+Color doneColorSelector(AppState state) => state.appSettings.doneColor;
