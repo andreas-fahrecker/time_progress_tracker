@@ -38,20 +38,9 @@ class HomeSettingsTab extends StatelessWidget {
                     updateLeftColor: updateLeftColor,
                   ),
                 ),
-                TextButton(
-                  child: Text("Default Progress Duration"),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (context) {
-                          final yearElements = [];
-                          return AlertDialog(
-                            title: Text("Default Duration"),
-                          );
-                        });
-                  },
-                ),
-                FlatButton(
+                Spacer(),
+                Expanded(
+                  child: TextButton(
                     onPressed: () {
                       showAboutDialog(
                           context: context,
@@ -60,7 +49,9 @@ class HomeSettingsTab extends StatelessWidget {
                           applicationLegalese:
                               '\u00a9Andreas Fahrecker 2020-2021');
                     },
-                    child: Text("About")),
+                    child: Text("About"),
+                  ),
+                ),
               ],
             ),
           ),
