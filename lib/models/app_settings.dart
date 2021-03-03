@@ -5,10 +5,12 @@ import 'package:time_progress_tracker/persistence/app_settings.dart';
 class AppSettings {
   final Color doneColor;
   final Color leftColor;
+  final Duration duration;
 
   AppSettings({
     this.doneColor,
     this.leftColor,
+    this.duration,
   });
 
   factory AppSettings.defaults() =>
