@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
+import 'package:time_progress_tracker/models/app_settings.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
 import 'package:time_progress_tracker/widgets/progress_editor_widget.dart';
 
 class ProgressCreationScreen extends StatefulWidget {
@@ -17,9 +20,15 @@ class ProgressCreationScreen extends StatefulWidget {
 }
 
 class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
-  TimeProgress timeProgressToCreate =
-      TimeProgress("", DateTime.now(), DateTime(DateTime.now().year + 1));
+  TimeProgress timeProgressToCreate;
   bool _isProgressValid = false;
+
+  void initTimeProgress(TimeProgress timeProgress) {
+    if (timeProgressToCreate == null)
+      setState(() {
+        timeProgressToCreate = timeProgress;
+      });
+  }
 
   void onTimeProgressChanged(
       TimeProgress newTimeProgress, bool isNewProgressValid) {
@@ -37,25 +46,34 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
       ),
       body: Container(
         padding: EdgeInsets.all(12),
-        child: ProgressEditorWidget(
-          timeProgress: timeProgressToCreate,
-          onTimeProgressChanged: onTimeProgressChanged,
-        ),
+        child: StoreConnector<AppState, _ViewModel>(
+            onInit: loadSettingsIfUnloaded,
+            converter: (store) => _ViewModel.create(store),
+            builder: (context, _ViewModel viewModel) {
+              initTimeProgress(viewModel.defaultDurationProgress);
+              return ProgressEditorWidget(
+                timeProgress: timeProgressToCreate,
+                onTimeProgressChanged: onTimeProgressChanged,
+              );
+            }),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Row(
         children: <Widget>[
           Expanded(
-            child: FloatingActionButton(
-              heroTag: "createTimeProgressBTN",
-              child: Icon(Icons.save),
-              onPressed: _isProgressValid
-                  ? () {
-                      StoreProvider.of<AppState>(context).dispatch(
-                          AddTimeProgressAction(timeProgressToCreate));
-                      Navigator.pop(context);
-                    }
-                  : null,
+            child: StoreConnector<AppState, _ViewModel>(
+              onInit: loadSettingsIfUnloaded,
+              converter: (store) => _ViewModel.create(store),
+              builder: (context, _ViewModel vm) => FloatingActionButton(
+                heroTag: "createTimeProgressBTN",
+                child: Icon(Icons.save),
+                onPressed: _isProgressValid
+                    ? () {
+                        vm.onAddTimeProgress(timeProgressToCreate);
+                        Navigator.pop(context);
+                      }
+                    : null,
+              ),
             ),
           ),
           Expanded(
@@ -69,6 +87,30 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
           )
         ],
       ),
+    );
+  }
+}
+
+class _ViewModel {
+  final TimeProgress defaultDurationProgress;
+  final void Function(TimeProgress) onAddTimeProgress;
+
+  _ViewModel({
+    @required this.defaultDurationProgress,
+    @required this.onAddTimeProgress,
+  });
+
+  factory _ViewModel.create(Store<AppState> store) {
+    AppSettings settings = appSettingsSelector(store.state);
+
+    _onAddTimeProgress(TimeProgress tp) {
+      if (TimeProgress.isValid(tp)) store.dispatch(AddTimeProgressAction(tp));
+    }
+
+    return _ViewModel(
+      defaultDurationProgress:
+          TimeProgress.defaultFromDuration(settings.duration),
+      onAddTimeProgress: _onAddTimeProgress,
     );
   }
 }

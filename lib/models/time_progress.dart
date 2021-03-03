@@ -19,6 +19,9 @@ class TimeProgress {
         "Initial Name", DateTime(thisYear - 1), DateTime(thisYear + 1));
   }
 
+  factory TimeProgress.defaultFromDuration(Duration duration) =>
+      TimeProgress("", DateTime.now(), DateTime.now().add(duration));
+
   TimeProgress copyWith(
           {String id, String name, DateTime startTime, DateTime endTime}) =>
       TimeProgress(
