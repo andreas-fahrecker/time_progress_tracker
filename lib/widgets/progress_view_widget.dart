@@ -5,9 +5,13 @@ import 'package:time_progress_tracker/models/time_progress.dart';
 
 class ProgressViewWidget extends StatelessWidget {
   final TimeProgress timeProgress;
+  final Color doneColor;
+  final Color leftColor;
 
   ProgressViewWidget({
     @required this.timeProgress,
+    @required this.doneColor,
+    @required this.leftColor,
   });
 
   @override
@@ -33,8 +37,8 @@ class ProgressViewWidget extends StatelessWidget {
               radius: 100,
               lineWidth: 10,
               percent: timeProgress.percentDone(),
-              progressColor: Colors.green,
-              backgroundColor: Colors.red,
+              progressColor: doneColor,
+              backgroundColor: leftColor,
               center: Text("${(timeProgress.percentDone() * 100).floor()} %"),
             ),
           ),
@@ -43,10 +47,13 @@ class ProgressViewWidget extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 15),
               percent: timeProgress.percentDone(),
               leading: Text("${timeProgress.daysBehind()} Days"),
-              center: Text("${(timeProgress.percentDone() * 100).floor()} %"),
+              center: Text(
+                "${(timeProgress.percentDone() * 100).floor()} %",
+                style: TextStyle(color: Colors.white),
+              ),
               trailing: Text("${timeProgress.daysLeft()} Days"),
-              progressColor: Colors.green,
-              backgroundColor: Colors.red,
+              progressColor: doneColor,
+              backgroundColor: leftColor,
               lineHeight: 25,
             ),
           ),
