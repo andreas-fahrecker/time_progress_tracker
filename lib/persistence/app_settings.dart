@@ -23,10 +23,13 @@ class AppSettingsRepository {
 }
 
 class AppSettingsEntity {
-  static const String _doneKey = "doneColorValue", _leftKey = "leftColorValue";
-  final int doneColorValue, leftColorValue;
+  static const String _doneKey = "doneColorValue",
+      _leftKey = "leftColorValue",
+      _durationDaysKey = "durationDays";
+  final int doneColorValue, leftColorValue, durationDays;
 
-  AppSettingsEntity(this.doneColorValue, this.leftColorValue);
+  AppSettingsEntity(
+      this.doneColorValue, this.leftColorValue, this.durationDays);
 
   factory AppSettingsEntity.defaults() => AppSettings.defaults().toEntity();
 
@@ -41,9 +44,16 @@ class AppSettingsEntity {
           doneColorValue == other.doneColorValue &&
           leftColorValue == other.leftColorValue;
 
-  Map<String, Object> toJson() =>
-      {_doneKey: doneColorValue, _leftKey: leftColorValue};
+  Map<String, Object> toJson() => {
+        _doneKey: doneColorValue,
+        _leftKey: leftColorValue,
+        _durationDaysKey: durationDays,
+      };
 
   static AppSettingsEntity fromJson(Map<String, Object> json) =>
-      AppSettingsEntity(json[_doneKey], json[_leftKey]);
+      AppSettingsEntity(
+        json[_doneKey],
+        json[_leftKey],
+        json[_durationDaysKey],
+      );
 }

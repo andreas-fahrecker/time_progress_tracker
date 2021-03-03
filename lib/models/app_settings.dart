@@ -13,19 +13,26 @@ class AppSettings {
     this.duration,
   });
 
-  factory AppSettings.defaults() =>
-      AppSettings(doneColor: Colors.green, leftColor: Colors.red);
+  factory AppSettings.defaults() => AppSettings(
+        doneColor: Colors.green,
+        leftColor: Colors.red,
+        duration: Duration(days: 365),
+      );
 
   AppSettings copyWith({
     Color doneColor,
     Color leftColor,
+    Duration duration,
   }) =>
       AppSettings(
-          doneColor: doneColor ?? this.doneColor,
-          leftColor: leftColor ?? this.leftColor);
+        doneColor: doneColor ?? this.doneColor,
+        leftColor: leftColor ?? this.leftColor,
+        duration: duration ?? this.duration,
+      );
 
   @override
-  int get hashCode => doneColor.hashCode ^ leftColor.hashCode;
+  int get hashCode =>
+      doneColor.hashCode ^ leftColor.hashCode ^ duration.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -33,10 +40,11 @@ class AppSettings {
       other is AppSettings &&
           runtimeType == other.runtimeType &&
           doneColor == other.doneColor &&
-          leftColor == other.leftColor;
+          leftColor == other.leftColor &&
+          duration == other.duration;
 
   AppSettingsEntity toEntity() =>
-      AppSettingsEntity(doneColor.value, leftColor.value);
+      AppSettingsEntity(doneColor.value, leftColor.value, duration.inDays);
 
   static AppSettings fromEntity(AppSettingsEntity entity) => AppSettings(
       doneColor: Color(entity.doneColorValue),
