@@ -47,6 +47,8 @@ class AppSettings {
       AppSettingsEntity(doneColor.value, leftColor.value, duration.inDays);
 
   static AppSettings fromEntity(AppSettingsEntity entity) => AppSettings(
-      doneColor: Color(entity.doneColorValue),
-      leftColor: Color(entity.leftColorValue));
+        doneColor: Color(entity.doneColorValue),
+        leftColor: Color(entity.leftColorValue),
+        duration: Duration(days: entity.durationDays),
+      );
 }
