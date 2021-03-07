@@ -15,11 +15,15 @@ class ProgressListTile extends StatelessWidget {
   String percentString() =>
       "${(this.timeProgress.percentDone() * 100).floorToDouble()} %";
 
+  String startsInDaysString() =>
+      "Starts in ${timeProgress.daysTillStart()} Days.";
+
+  String endedDaysAgoString() =>
+      "Ended ${timeProgress.daysSinceEnd()} Days ago.";
+
   Widget _renderSubtitle(BuildContext context) {
-    if (!timeProgress.hasStarted())
-      return Text("Starts in ${timeProgress.daysTillStart()} Days.");
-    if (timeProgress.hasEnded())
-      return Text("Ended ${timeProgress.daysSinceEnd()} Days ago.");
+    if (!timeProgress.hasStarted()) return Text(startsInDaysString());
+    if (timeProgress.hasEnded()) return Text(endedDaysAgoString());
     return LinearPercentIndicator(
       center: Text(percentString()),
       percent: timeProgress.percentDone(),
