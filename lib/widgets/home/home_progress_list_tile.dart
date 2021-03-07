@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
-import 'package:time_progress_tracker/screens/progress_detail_screen.dart';
+import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_tile.dart';
 
 class HomeProgressListTile extends StatelessWidget {
   final TimeProgress timeProgress;
@@ -16,33 +15,11 @@ class HomeProgressListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget listTileSubTitle;
-    if (timeProgress.hasStarted() && !timeProgress.hasEnded())
-      listTileSubTitle = LinearPercentIndicator(
-        center: Text(
-          "${(timeProgress.percentDone() * 100).floor()} %",
-          style: TextStyle(color: Colors.white),
-        ),
-        percent: timeProgress.percentDone(),
-        progressColor: doneColor,
-        backgroundColor: leftColor,
-        lineHeight: 20,
-      );
-    if (!timeProgress.hasStarted())
-      listTileSubTitle = Text(
-          "Starts in ${timeProgress.startTime.difference(DateTime.now()).inDays} Days");
-    if (timeProgress.hasEnded())
-      listTileSubTitle = Text(
-          "Ended ${DateTime.now().difference(timeProgress.endTime).inDays} Days ago.");
-
     return Card(
-      child: ListTile(
-        title: Text(timeProgress.name),
-        subtitle: listTileSubTitle,
-        onTap: () {
-          Navigator.pushNamed(context, ProgressDetailScreen.routeName,
-              arguments: ProgressDetailScreenArguments(timeProgress.id));
-        },
+      child: ProgressListTile(
+        timeProgress: timeProgress,
+        doneColor: doneColor,
+        leftColor: leftColor,
       ),
     );
   }
