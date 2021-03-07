@@ -13,10 +13,11 @@ import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_t
 import 'MaterialTesterWidget.dart';
 
 void main() {
-  testWidgets("Progress Tile has Name", (WidgetTester tester) async {
+  AppSettings appSettings = AppSettings.defaults();
+
+  testWidgets("Progress Tile has name", (WidgetTester tester) async {
     TimeProgress testProgress =
         TimeProgress("TestProgress", DateTime(2020), DateTime(2021));
-    AppSettings appSettings = AppSettings.defaults();
 
     await tester.pumpWidget(
       MaterialTesterWidget(
@@ -29,5 +30,28 @@ void main() {
 
     final nameFinder = find.text(testProgress.name);
     expect(nameFinder, findsOneWidget);
+  });
+
+  testWidgets("Progress Tile has not started", (WidgetTester tester) async {
+    int thisYear = DateTime.now().year;
+    TimeProgress notStartedProgress = TimeProgress(
+      "TestProgress",
+      DateTime(thisYear + 1),
+      DateTime(thisYear + 2),
+    );
+
+    await tester.pumpWidget(
+      MaterialTesterWidget(
+        widget: ProgressListTile(
+          timeProgress: notStartedProgress,
+          doneColor: appSettings.doneColor,
+          leftColor: appSettings.leftColor,
+        ),
+      ),
+    );
+
+    final noStartedFinder = find
+        .text(ProgressListTileStrings.startsInDaysString(notStartedProgress));
+    expect(noStartedFinder, findsOneWidget);
   });
 }
