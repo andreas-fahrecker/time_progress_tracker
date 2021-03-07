@@ -28,7 +28,6 @@ dependencies:
   flutter_picker:
     git: git://github.com/yangyxd/flutter_picker.git
   meta:
-  package_info:
   percent_indicator:
   redux:
   shared_preferences:
