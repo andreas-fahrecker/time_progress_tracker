@@ -5,26 +5,29 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:time_progress_tracker/models/app_settings.dart';
+import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_tile.dart';
 
-import 'package:time_progress_calculator/main.dart';
+import 'MaterialTesterWidget.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+  testWidgets("Progress Tile has Name", (WidgetTester tester) async {
+    TimeProgress testProgress =
+        TimeProgress("TestProgress", DateTime(2020), DateTime(2021));
+    AppSettings appSettings = AppSettings.defaults();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(
+      MaterialTesterWidget(
+        widget: ProgressListTile(
+            timeProgress: testProgress,
+            doneColor: appSettings.doneColor,
+            leftColor: appSettings.leftColor),
+      ),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    final nameFinder = find.text(testProgress.name);
+    expect(nameFinder, findsOneWidget);
   });
 }
