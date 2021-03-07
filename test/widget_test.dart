@@ -13,4 +13,5 @@ void main() {
 
   progressListTileTester.testName();
   progressListTileTester.notStartedTest();
+  progressListTileTester.alreadyEndedTest();
 }
