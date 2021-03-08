@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:time_progress_tracker/actions/actions.dart';
-import 'package:time_progress_tracker/models/app_settings.dart';
-import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/screens/home_screen.dart';
-import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
 import 'package:time_progress_tracker/widgets/detail_screen_floating_action_buttons.dart';
 import 'package:time_progress_tracker/widgets/progress_editor_widget.dart';
 import 'package:time_progress_tracker/widgets/progress_view_widget.dart';
+import 'package:time_progress_tracker/widgets/store_connectors/settings_store_connector.dart';
 import 'package:time_progress_tracker/widgets/store_connectors/time_progress_store_connector.dart';
 
 class ProgressDetailScreenArguments {
@@ -31,6 +27,13 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
   bool _editMode = false, _isEditedProgressValid = false;
   TimeProgress _editedProgress, _originalProgress;
 
+  void _initEditedProgress(TimeProgress tp) {
+    if (_editedProgress == null) {
+      _editedProgress = tp;
+      _originalProgress = tp;
+    }
+  }
+
   void _onEditedProgressChanged(
       TimeProgress newProgress, bool isNewProgressValid) {
     setState(() {
@@ -52,57 +55,48 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
     });
   }
 
+  List<Widget> _renderColumnChildren(
+      SettingsViewModel settingsVm, TimeProgressViewModel tpVm) {
+    List<Widget> columnChildren = [
+      Expanded(
+          child: ProgressViewWidget(
+        timeProgress: _editMode ? _editedProgress : tpVm.tp,
+        doneColor: settingsVm.appSettings.doneColor,
+        leftColor: settingsVm.appSettings.leftColor,
+      ))
+    ];
+    if (_editMode)
+      columnChildren.add(Expanded(
+          child: ProgressEditorWidget(
+        timeProgress: _editedProgress,
+        onTimeProgressChanged: _onEditedProgressChanged,
+      )));
+    return columnChildren;
+  }
+
   @override
   Widget build(BuildContext context) {
     final ProgressDetailScreenArguments args =
         ModalRoute.of(context).settings.arguments;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(ProgressDetailScreen.title),
       ),
-      body: Container(
-        margin: EdgeInsets.all(8),
-        child: StoreConnector(
-          onInit: loadTimeProgressListIfUnloaded,
-          converter: (store) => timeProgressByIdSelector(store.state, args.id),
-          builder: (BuildContext context, TimeProgress timeProgress) {
-            if (timeProgress == null) //+++++Time Progress Not Found Error+++++
-              return Center(
-                child: Text("Error Invalid Time Progress"),
-              );
-            if (_editedProgress == null) {
-              _editedProgress = timeProgress;
-              _originalProgress = timeProgress;
-            } // initialize _editedProgress
-
-            List<Widget> columnChildren = [
-              Expanded(
-                child: StoreConnector<AppState, AppSettings>(
-                  onInit: loadSettingsIfUnloaded,
-                  converter: (store) => appSettingsSelector(store.state),
-                  builder: (BuildContext context, AppSettings settings) {
-                    return ProgressViewWidget(
-                      timeProgress: _editMode ? _editedProgress : timeProgress,
-                      doneColor: settings.doneColor,
-                      leftColor: settings.leftColor,
-                    );
-                  },
-                ),
-              )
-            ];
-            if (_editMode)
-              columnChildren.add(Expanded(
-                child: ProgressEditorWidget(
-                  timeProgress: _editedProgress,
-                  onTimeProgressChanged: _onEditedProgressChanged,
-                ),
-              ));
-
-            return Column(
-              children: columnChildren,
-            );
-          },
-        ),
+      body: SettingsStoreConnector(
+        loadedBuilder: (context, settingsVm) {
+          return TimeProgressStoreConnector(
+            timeProgressId: args.id,
+            loadedBuilder: (context, tpVm) {
+              _initEditedProgress(tpVm.tp);
+              return Container(
+                  margin: EdgeInsets.all(8),
+                  child: Column(
+                    children: _renderColumnChildren(settingsVm, tpVm),
+                  ));
+            },
+          );
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: TimeProgressStoreConnector(
