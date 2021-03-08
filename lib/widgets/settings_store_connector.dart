@@ -32,8 +32,29 @@ class SettingsViewModel {
   final AppSettings appSettings;
   final bool hasSettingsLoaded;
 
-  SettingsViewModel(this.appSettings, this.hasSettingsLoaded);
+  final void Function(Color) updateDoneColor, updateLeftColor;
+  final void Function(Duration) updateDuration;
 
-  factory SettingsViewModel._create(Store<AppState> store) =>
-      SettingsViewModel(store.state.appSettings, store.state.hasSettingsLoaded);
+  SettingsViewModel(
+    this.appSettings,
+    this.hasSettingsLoaded,
+    this.updateDoneColor,
+    this.updateLeftColor,
+    this.updateDuration,
+  );
+
+  factory SettingsViewModel._create(Store<AppState> store) {
+    AppSettings _appSettings = store.state.appSettings;
+
+    void _updateDoneColor(Color dC) => store.dispatch(
+        UpdateAppSettingsActions(_appSettings.copyWith(doneColor: dC)));
+    void _updateLeftColor(Color lC) => store.dispatch(
+        UpdateAppSettingsActions(_appSettings.copyWith(leftColor: lC)));
+
+    void _updateDuration(Duration d) => store
+        .dispatch(UpdateAppSettingsActions(_appSettings.copyWith(duration: d)));
+
+    return SettingsViewModel(_appSettings, store.state.hasSettingsLoaded,
+        _updateDoneColor, _updateLeftColor, _updateDuration);
+  }
 }
