@@ -11,7 +11,7 @@ void main() {
   ProgressListTileTester progressListTileTester = ProgressListTileTester()
     ..initTests();
 
-  progressListTileTester.testName();
-  progressListTileTester.notStartedTest();
-  progressListTileTester.alreadyEndedTest();
+  progressListTileTester.testCurrentlyActiveProgress();
+  // progressListTileTester.notStartedTest();
+  // progressListTileTester.alreadyEndedTest();
 }

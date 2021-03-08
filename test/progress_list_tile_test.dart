@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:time_progress_tracker/models/app_settings.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_tile.dart';
@@ -13,22 +15,31 @@ class ProgressListTileTester {
     _appSettings = AppSettings.defaults();
   }
 
-  void testName() {
-    testWidgets("Progress List Tile has name", (WidgetTester tester) async {
-      TimeProgress testProgress =
-          TimeProgress("TestProgress", DateTime(2020), DateTime(2021));
+  void _verifyNameWorks(String name) => expect(find.text(name), findsOneWidget);
 
-      await tester.pumpWidget(
-        MaterialTesterWidget(
-          widget: ProgressListTile(
-              timeProgress: testProgress,
-              doneColor: _appSettings.doneColor,
-              leftColor: _appSettings.leftColor),
-        ),
-      );
+  void testCurrentlyActiveProgress() {
+    testWidgets("Progress List Tile with currently active progress works",
+        (WidgetTester tester) async {
+      TimeProgress testProgress = TimeProgress(
+          "TestProgress", DateTime(_thisYear - 2), DateTime(_thisYear + 2));
 
-      final nameFinder = find.text(testProgress.name);
-      expect(nameFinder, findsOneWidget);
+      await tester.pumpWidget(MaterialTesterWidget(
+        widget: ProgressListTile(
+            timeProgress: testProgress,
+            doneColor: _appSettings.doneColor,
+            leftColor: _appSettings.leftColor),
+      ));
+
+      _verifyNameWorks(testProgress.name);
+      expect(find.text(ProgressListTileStrings.percentString(testProgress)),
+          findsOneWidget);
+
+      WidgetPredicate linearPercentPredicate = (Widget widget) =>
+          widget is LinearPercentIndicator &&
+          widget.percent == testProgress.percentDone() &&
+          widget.progressColor == _appSettings.doneColor &&
+          widget.backgroundColor == _appSettings.leftColor;
+      expect(find.byWidgetPredicate(linearPercentPredicate), findsOneWidget);
     });
   }
 
@@ -41,15 +52,13 @@ class ProgressListTileTester {
         DateTime(_thisYear + 2),
       );
 
-      await tester.pumpWidget(
-        MaterialTesterWidget(
-          widget: ProgressListTile(
-            timeProgress: notStartedProgress,
-            doneColor: _appSettings.doneColor,
-            leftColor: _appSettings.leftColor,
-          ),
+      await tester.pumpWidget(MaterialTesterWidget(
+        widget: ProgressListTile(
+          timeProgress: notStartedProgress,
+          doneColor: _appSettings.doneColor,
+          leftColor: _appSettings.leftColor,
         ),
-      );
+      ));
 
       final noStartedFinder = find
           .text(ProgressListTileStrings.startsInDaysString(notStartedProgress));
@@ -66,15 +75,13 @@ class ProgressListTileTester {
         DateTime(_thisYear - 1),
       );
 
-      await tester.pumpWidget(
-        MaterialTesterWidget(
-          widget: ProgressListTile(
-            timeProgress: alreadyEndedProgress,
-            doneColor: _appSettings.doneColor,
-            leftColor: _appSettings.leftColor,
-          ),
+      await tester.pumpWidget(MaterialTesterWidget(
+        widget: ProgressListTile(
+          timeProgress: alreadyEndedProgress,
+          doneColor: _appSettings.doneColor,
+          leftColor: _appSettings.leftColor,
         ),
-      );
+      ));
 
       final alreadyEndedFinder = find.text(
           ProgressListTileStrings.endedDaysAgoString(alreadyEndedProgress));

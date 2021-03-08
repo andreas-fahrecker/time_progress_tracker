@@ -10,7 +10,7 @@ class ProgressListView extends StatelessWidget {
     @required this.timeProgressList,
     @required this.doneColor,
     @required this.leftColor,
-  })
+  });
 
   List<Widget> _renderListViewChildren() {
     return timeProgressList.map((e) =>
@@ -28,6 +28,6 @@ class ProgressListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: _renderListViewChildren(),
-    )
+    );
   }
 }
