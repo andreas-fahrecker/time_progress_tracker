@@ -13,20 +13,21 @@ class ProgressListView extends StatelessWidget {
   });
 
   List<Widget> _renderListViewChildren() {
-    return timeProgressList.map((e) =>
-        Card(
-          child: ProgressListTile(
-            timeProgress: e,
-            doneColor: doneColor,
-            leftColor: leftColor,
-          ),
-        )
-    ).toList(growable: false);
+    return timeProgressList
+        .map((e) => Card(
+              child: ProgressListTile(
+                timeProgress: e,
+                doneColor: doneColor,
+                leftColor: leftColor,
+              ),
+            ))
+        .toList(growable: false);
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: EdgeInsets.all(8),
       children: _renderListViewChildren(),
     );
   }
