@@ -47,8 +47,18 @@ class TimeProgress {
   bool hasStarted() =>
       DateTime.now().millisecondsSinceEpoch > startTime.millisecondsSinceEpoch;
 
+  int daysTillStart() {
+    if (hasStarted()) throw new TimeProgressHasStartedException();
+    return startTime.difference(DateTime.now()).inDays;
+  }
+
   bool hasEnded() =>
       DateTime.now().millisecondsSinceEpoch > endTime.millisecondsSinceEpoch;
+
+  int daysSinceEnd() {
+    if (!hasEnded()) throw new TimeProgressHasNotEndedException();
+    return DateTime.now().difference(endTime).inDays;
+  }
 
   @override
   int get hashCode =>
