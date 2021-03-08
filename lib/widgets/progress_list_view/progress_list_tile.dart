@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/screens/progress_detail_screen.dart';
 
 class ProgressListTileStrings {
   static String percentString(TimeProgress tp) =>
@@ -39,9 +40,14 @@ class ProgressListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    void _onTileTap() =>
+        Navigator.pushNamed(context, ProgressDetailScreen.routeName,
+            arguments: ProgressDetailScreenArguments(timeProgress.id));
+
     return ListTile(
       title: Text(timeProgress.name),
       subtitle: _renderSubtitle(context),
+      onTap: _onTileTap,
     );
   }
 }

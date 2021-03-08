@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:time_progress_tracker/widgets/home/tabs/settings/color_picker_btn.dart';
+import 'package:time_progress_tracker/widgets/buttons/color_picker_btn.dart';
 
 class ColorSettingsWidget extends StatelessWidget {
   final Color doneColor, leftColor;
@@ -14,13 +14,14 @@ class ColorSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData appTheme = Theme.of(context);
+
     return Column(
       children: [
         Expanded(
           child: Text(
             "Color Settings",
-            style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+            style: appTheme.textTheme.headline6,
           ),
         ),
         Row(

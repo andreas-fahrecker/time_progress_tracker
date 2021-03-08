@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:time_progress_tracker/helper_functions.dart';
 
 class ColorPickerButton extends StatelessWidget {
   final String title, dialogTitle;
@@ -15,13 +16,7 @@ class ColorPickerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color getBtnPrimaryColor() => Color.fromARGB(
-          selectedColor.alpha,
-          selectedColor.alpha - selectedColor.red,
-          selectedColor.alpha - selectedColor.green,
-          selectedColor.alpha - selectedColor.blue,
-        );
-
+    ThemeData appTheme = Theme.of(context);
     return TextButton(
       onPressed: () {
         showDialog(
@@ -41,7 +36,9 @@ class ColorPickerButton extends StatelessWidget {
       },
       child: Text(title),
       style: TextButton.styleFrom(
-        primary: getBtnPrimaryColor(),
+        primary: useBrightBackground(selectedColor)
+            ? appTheme.primaryTextTheme.button.color
+            : appTheme.textTheme.button.color,
         backgroundColor: selectedColor,
       ),
     );

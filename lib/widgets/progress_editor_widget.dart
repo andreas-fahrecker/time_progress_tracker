@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
-import 'package:time_progress_tracker/widgets/date_picker_btn.dart';
+import 'package:time_progress_tracker/widgets/buttons/date_picker_btn.dart';
 
 class ProgressEditorWidget extends StatefulWidget {
   final TimeProgress timeProgress;

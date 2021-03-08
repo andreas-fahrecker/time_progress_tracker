@@ -11,21 +11,26 @@ class DatePickerBtn extends StatelessWidget {
     @required this.onDatePicked,
   }) : super();
 
+  void _onButtonPressed(BuildContext context) async {
+    onDatePicked(await showDatePicker(
+      context: context,
+      initialDate: pickedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData appTheme = Theme.of(context);
-    return FlatButton(
-      onPressed: () async {
-        onDatePicked(await showDatePicker(
-          context: context,
-          initialDate: pickedDate,
-          firstDate: DateTime(1900),
-          lastDate: DateTime(2100),
-        ));
-      },
+    return TextButton(
+      onPressed: () => _onButtonPressed(context),
       child: Text(
           "$leadingString ${pickedDate.toLocal().toString().split(" ")[0]}"),
-      color: appTheme.accentColor,
+      style: TextButton.styleFrom(
+        primary: appTheme.primaryTextTheme.button.color,
+        backgroundColor: appTheme.accentColor,
+      ),
     );
   }
 }
