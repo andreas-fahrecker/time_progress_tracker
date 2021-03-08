@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:time_progress_tracker/screens/progress_creation_screen.dart';
+import 'package:time_progress_tracker/widgets/buttons/create_progress_button.dart';
 import 'package:time_progress_tracker/widgets/home/home_bottom_navbar.dart';
 import 'package:time_progress_tracker/widgets/home/tabs/home_active_progresses_tab.dart';
 import 'package:time_progress_tracker/widgets/home/tabs/home_inactive_progresses_tab.dart';
@@ -37,15 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: _children[_currentIndex],
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: _currentIndex != 2
-          ? FloatingActionButton(
-              heroTag: "createProgressBTN",
-              child: Icon(Icons.add),
-              onPressed: () {
-                Navigator.pushNamed(context, ProgressCreationScreen.routeName);
-              },
-            )
-          : null,
+      floatingActionButton: _currentIndex != 2 ? CreateProgressButton() : null,
       bottomNavigationBar: HomeBottomNavBar(
         currentIndex: _currentIndex,
         onTap: onBottomTabTapped,

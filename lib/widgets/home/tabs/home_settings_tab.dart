@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:time_progress_tracker/app.dart';
 import 'package:time_progress_tracker/widgets/home/tabs/settings/color_settings_widget.dart';
 import 'package:time_progress_tracker/widgets/home/tabs/settings/duration_settings_widget.dart';
-import 'package:time_progress_tracker/widgets/settings_store_connector.dart';
+import 'package:time_progress_tracker/widgets/store_connectors/settings_store_connector.dart';
 
 class HomeSettingsTab extends StatelessWidget {
   @override

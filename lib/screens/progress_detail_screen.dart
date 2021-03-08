@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
 import 'package:time_progress_tracker/models/app_settings.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
@@ -10,6 +9,7 @@ import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
 import 'package:time_progress_tracker/widgets/detail_screen_floating_action_buttons.dart';
 import 'package:time_progress_tracker/widgets/progress_editor_widget.dart';
 import 'package:time_progress_tracker/widgets/progress_view_widget.dart';
+import 'package:time_progress_tracker/widgets/store_connectors/time_progress_store_connector.dart';
 
 class ProgressDetailScreenArguments {
   final String id;
@@ -105,34 +105,31 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: StoreConnector(
-          onInit: loadTimeProgressListIfUnloaded,
-          converter: (store) => timeProgressByIdSelector(store.state, args.id),
-          builder: (BuildContext context, TimeProgress timeProgress) {
-            final Store<AppState> store = StoreProvider.of<AppState>(context);
+      floatingActionButton: TimeProgressStoreConnector(
+        timeProgressId: args.id,
+        loadedBuilder: (context, tpVm) {
+          void _saveEditedProgress() {
+            tpVm.updateTimeProgress(_editedProgress);
+            _switchEditMode(false);
+          }
 
-            void _saveEditedProgress() {
-              store
-                  .dispatch(UpdateTimeProgressAction(args.id, _editedProgress));
-              _switchEditMode(false);
-            }
+          void _deleteTimeProgress() {
+            tpVm.deleteTimeProgress();
+            Navigator.popUntil(
+                context, ModalRoute.withName(HomeScreen.routeName));
+          }
 
-            void _deleteTimeProgress() {
-              store.dispatch(DeleteTimeProgressAction(args.id));
-              Navigator.popUntil(
-                  context, ModalRoute.withName(HomeScreen.routeName));
-            }
-
-            return DetailScreenFloatingActionButtons(
-                editMode: _editMode,
-                originalProgress: timeProgress,
-                editedProgress: _editedProgress,
-                isEditedProgressValid: _isEditedProgressValid,
-                onEditProgress: () => _switchEditMode(true),
-                onSaveEditedProgress: _saveEditedProgress,
-                onCancelEditProgress: _cancelEditMode,
-                onDeleteProgress: _deleteTimeProgress);
-          }),
+          return DetailScreenFloatingActionButtons(
+              editMode: _editMode,
+              originalProgress: tpVm.tp,
+              editedProgress: _editedProgress,
+              isEditedProgressValid: _isEditedProgressValid,
+              onEditProgress: () => _switchEditMode(true),
+              onSaveEditedProgress: _saveEditedProgress,
+              onCancelEditProgress: _cancelEditMode,
+              onDeleteProgress: _deleteTimeProgress);
+        },
+      ),
     );
   }
 }
