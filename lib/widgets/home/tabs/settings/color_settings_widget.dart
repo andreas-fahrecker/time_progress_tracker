@@ -14,13 +14,14 @@ class ColorSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData appTheme = Theme.of(context);
+
     return Column(
       children: [
         Expanded(
           child: Text(
             "Color Settings",
-            style:
-                TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+            style: appTheme.textTheme.headline6,
           ),
         ),
         Row(
