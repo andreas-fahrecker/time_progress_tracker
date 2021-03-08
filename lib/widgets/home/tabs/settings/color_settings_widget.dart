@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:time_progress_tracker/widgets/home/tabs/settings/color_picker_btn.dart';
+import 'package:time_progress_tracker/widgets/buttons/color_picker_btn.dart';
 
 class ColorSettingsWidget extends StatelessWidget {
   final Color doneColor, leftColor;
