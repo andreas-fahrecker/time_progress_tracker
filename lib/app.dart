@@ -1,10 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
-import 'package:time_progress_tracker/screens/progress_creation_screen.dart';
-import 'package:time_progress_tracker/screens/home_screen.dart';
-import 'package:time_progress_tracker/screens/progress_detail_screen.dart';
+import 'package:time_progress_tracker/screens/dashboard_screen.dart';
+import 'package:time_progress_tracker/utils/color_utils.dart';
 
 class TimeProgressTrackerApp extends StatelessWidget {
   static const String name = "Time Progress Tracker";
@@ -20,23 +21,11 @@ class TimeProgressTrackerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreProvider(
       store: store,
-      child: MaterialApp(
+      child: PlatformApp(
         title: name,
-        theme: ThemeData(
-          primarySwatch: Colors.indigo,
-          accentColor: Colors.indigoAccent,
-          brightness: Brightness.light,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        initialRoute: HomeScreen.routeName,
-        routes: {
-          HomeScreen.routeName: (BuildContext context) =>
-              HomeScreen(),
-          ProgressDetailScreen.routeName: (BuildContext context) =>
-              ProgressDetailScreen(),
-          ProgressCreationScreen.routeName: (BuildContext context) =>
-              ProgressCreationScreen(),
-        },
+        home: DashboardScreen(),
+        material: (_, __) => MaterialAppData(theme: materialThemeData),
+        cupertino: (_, __) => CupertinoAppData(theme: cupertinoThemeData),
       ),
     );
   }
