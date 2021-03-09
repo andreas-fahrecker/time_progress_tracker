@@ -1,3 +1,6 @@
+import 'dart:io' show Platform;
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
@@ -14,11 +17,11 @@ class ProgressListTileStrings {
       "Ended ${tp.daysSinceEnd()} Days ago.";
 }
 
-class ProgressListTile extends StatelessWidget {
+class ProgressListItem extends StatelessWidget {
   final TimeProgress timeProgress;
   final Color doneColor, leftColor;
 
-  ProgressListTile({
+  ProgressListItem({
     @required this.timeProgress,
     @required this.doneColor,
     @required this.leftColor,
@@ -43,9 +46,26 @@ class ProgressListTile extends StatelessWidget {
     void _onTileTap() =>
         Navigator.pushNamed(context, ProgressDetailScreen.routeName,
             arguments: ProgressDetailScreenArguments(timeProgress.id));
+    Text titleText = Text(timeProgress.name);
 
+    if (Platform.isIOS)
+      return CupertinoButton(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            padding: EdgeInsets.fromLTRB(15, 15, 5, 5),
+            child: Column(
+              children: [
+                titleText,
+                _renderSubtitle(context),
+              ],
+            ),
+          ),
+          onPressed: _onTileTap);
     return ListTile(
-      title: Text(timeProgress.name),
+      title: titleText,
       subtitle: _renderSubtitle(context),
       onTap: _onTileTap,
     );

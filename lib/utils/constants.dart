@@ -1,0 +1,1 @@
+const txtActiveProgressesScreen = "Active Progresses";

@@ -1,6 +1,9 @@
+import 'dart:io' show Platform;
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
-import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_tile.dart';
+import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_item.dart';
 
 class ProgressListView extends StatelessWidget {
   final List<TimeProgress> timeProgressList;
@@ -12,15 +15,18 @@ class ProgressListView extends StatelessWidget {
     @required this.leftColor,
   });
 
+  Widget _renderListTile(TimeProgress tp) {
+    ProgressListItem listTile = ProgressListItem(
+        timeProgress: tp, doneColor: doneColor, leftColor: leftColor);
+    if (Platform.isIOS) return listTile;
+    return Card(
+      child: listTile,
+    );
+  }
+
   List<Widget> _renderListViewChildren() {
     return timeProgressList
-        .map((e) => Card(
-              child: ProgressListTile(
-                timeProgress: e,
-                doneColor: doneColor,
-                leftColor: leftColor,
-              ),
-            ))
+        .map((e) => _renderListTile(e))
         .toList(growable: false);
   }
 

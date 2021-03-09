@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:time_progress_tracker/screens/active_time_progresses_screen.dart';
 import 'package:time_progress_tracker/utils/color_utils.dart';
-import 'package:time_progress_tracker/widgets/home/tabs/home_active_progresses_tab.dart';
+import 'package:time_progress_tracker/utils/constants.dart';
 import 'package:time_progress_tracker/widgets/home/tabs/home_inactive_progresses_tab.dart';
 import 'package:time_progress_tracker/widgets/home/tabs/home_settings_tab.dart';
 
@@ -13,7 +14,7 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _tabSelectedIndex = 0;
-  String title = "Active Progresses";
+  String title = txtActiveProgressesScreen;
 
   Widget _renderTabScreen(int tabIndex) {
     switch (tabIndex) {
@@ -22,7 +23,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 2:
         return HomeSettingsTab();
       default:
-        return HomeActiveProgressesTab();
+        return ActiveTimeProgressesScreen();
     }
   }
 
@@ -33,7 +34,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       case 2:
         return "Settings";
       default:
-        return "ActiveProgresses";
+        return txtActiveProgressesScreen;
     }
   }
 
@@ -63,7 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           items: [
             BottomNavigationBarItem(
               icon: Icon(Icons.alarm, color: Colors.grey),
-              label: "Active Progresses",
+              label: txtActiveProgressesScreen,
               activeIcon: Icon(Icons.alarm, color: Colors.white),
             ),
             BottomNavigationBarItem(

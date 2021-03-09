@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:time_progress_tracker/models/app_settings.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
-import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_tile.dart';
+import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_item.dart';
 import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_view.dart';
 
 import 'MaterialTesterWidget.dart';
@@ -26,7 +26,7 @@ void main() {
   testWidgets("Progress List Tile with currently active progress works",
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialTesterWidget(
-      widget: ProgressListTile(
+      widget: ProgressListItem(
         timeProgress: _activeProgress,
         doneColor: _defaultAppSettings.doneColor,
         leftColor: _defaultAppSettings.leftColor,
@@ -53,7 +53,7 @@ void main() {
     );
 
     await tester.pumpWidget(MaterialTesterWidget(
-      widget: ProgressListTile(
+      widget: ProgressListItem(
         timeProgress: futureProgress,
         doneColor: _defaultAppSettings.doneColor,
         leftColor: _defaultAppSettings.leftColor,
@@ -73,7 +73,7 @@ void main() {
     );
 
     await tester.pumpWidget(MaterialTesterWidget(
-      widget: ProgressListTile(
+      widget: ProgressListItem(
         timeProgress: pastProgress,
         doneColor: _defaultAppSettings.doneColor,
         leftColor: _defaultAppSettings.leftColor,
@@ -87,7 +87,7 @@ void main() {
   WidgetPredicate getProgressListTilePredicate(
           TimeProgress tp, AppSettings as) =>
       (Widget widget) =>
-          widget is ProgressListTile &&
+          widget is ProgressListItem &&
           widget.timeProgress == tp &&
           widget.doneColor == as.doneColor &&
           widget.leftColor == as.leftColor;
