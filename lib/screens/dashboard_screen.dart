@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:time_progress_tracker/screens/active_time_progresses_screen.dart';
+import 'package:time_progress_tracker/screens/inactive_time_progresses_screen.dart';
+import 'package:time_progress_tracker/screens/settings_screen.dart';
 import 'package:time_progress_tracker/utils/color_utils.dart';
 import 'package:time_progress_tracker/utils/constants.dart';
-import 'package:time_progress_tracker/widgets/home/tabs/home_inactive_progresses_tab.dart';
-import 'package:time_progress_tracker/widgets/home/tabs/home_settings_tab.dart';
 
 class DashboardScreen extends StatefulWidget {
   @override
@@ -19,9 +19,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget _renderTabScreen(int tabIndex) {
     switch (tabIndex) {
       case 1:
-        return HomeInactiveProgressesTab();
+        return InactiveTimeProgressesScreen();
       case 2:
-        return HomeSettingsTab();
+        return SettingsScreen();
       default:
         return ActiveTimeProgressesScreen();
     }
@@ -30,9 +30,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String getScreenTitle(int tabIndex) {
     switch (tabIndex) {
       case 1:
-        return "Inactive Progresses";
+        return txtInactiveProgressesScreen;
       case 2:
-        return "Settings";
+        return txtSettingsScreen;
       default:
         return txtActiveProgressesScreen;
     }
@@ -69,12 +69,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.alarm_off, color: Colors.grey),
-              label: "Inactive Progresses",
+              label: txtInactiveProgressesScreen,
               activeIcon: Icon(Icons.alarm_off, color: Colors.white),
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings, color: Colors.grey),
-              label: "Settings",
+              label: txtSettingsScreen,
               activeIcon: Icon(Icons.settings, color: Colors.white),
             )
           ]),
