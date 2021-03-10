@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:time_progress_tracker/helper_functions.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_view.dart';
@@ -16,7 +17,7 @@ class ActiveTimeProgressesScreen extends StatelessWidget {
           return Container(
             padding: EdgeInsets.all(16),
             child: Center(
-              child: Text(
+              child: PlatformText(
                   "You don't have any active time progress, that are tracked."),
             ),
           );

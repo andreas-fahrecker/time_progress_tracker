@@ -2,6 +2,7 @@ import 'dart:io' show Platform;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/screens/progress_detail_screen.dart';
@@ -29,11 +30,11 @@ class ProgressListItem extends StatelessWidget {
 
   Widget _renderSubtitle(BuildContext context) {
     if (!timeProgress.hasStarted())
-      return Text(ProgressListTileStrings.startsInDaysString(timeProgress));
+      return PlatformText(ProgressListTileStrings.startsInDaysString(timeProgress));
     if (timeProgress.hasEnded())
-      return Text(ProgressListTileStrings.endedDaysAgoString(timeProgress));
+      return PlatformText(ProgressListTileStrings.endedDaysAgoString(timeProgress));
     return LinearPercentIndicator(
-      center: Text(ProgressListTileStrings.percentString(timeProgress)),
+      center: PlatformText(ProgressListTileStrings.percentString(timeProgress)),
       percent: timeProgress.percentDone(),
       progressColor: doneColor,
       backgroundColor: leftColor,
