@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:time_progress_tracker/helper_functions.dart';
+import 'package:time_progress_tracker/utils/helper_functions.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_view.dart';
 import 'package:time_progress_tracker/widgets/store_connectors/settings_store_connector.dart';

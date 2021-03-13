@@ -5,7 +5,7 @@ import 'package:time_progress_tracker/actions/actions.dart';
 import 'package:time_progress_tracker/models/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 
-import '../../helper_functions.dart';
+import '../../utils/helper_functions.dart';
 
 class TimeProgressStoreConnector extends StatelessWidget {
   final String timeProgressId;

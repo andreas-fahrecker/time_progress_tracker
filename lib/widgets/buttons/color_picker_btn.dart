@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:time_progress_tracker/helper_functions.dart';
+import 'package:time_progress_tracker/utils/helper_functions.dart';
 
 class ColorPickerButton extends StatelessWidget {
   final String title, dialogTitle;
