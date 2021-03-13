@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:time_progress_tracker/models/app_settings.dart';
-import 'package:time_progress_tracker/models/app_state.dart';
+import 'package:time_progress_tracker/redux/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 
 List<TimeProgress> timeProgressListSelector(AppState state) =>

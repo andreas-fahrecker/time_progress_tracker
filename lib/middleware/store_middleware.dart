@@ -1,7 +1,7 @@
 import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
 import 'package:time_progress_tracker/models/app_settings.dart';
-import 'package:time_progress_tracker/models/app_state.dart';
+import 'package:time_progress_tracker/redux/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/persistence/app_settings.dart';
 import 'package:time_progress_tracker/persistence/time_progress_entity.dart';

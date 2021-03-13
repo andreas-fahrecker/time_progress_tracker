@@ -4,7 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
 import 'package:time_progress_tracker/models/app_settings.dart';
-import 'package:time_progress_tracker/models/app_state.dart';
+import 'package:time_progress_tracker/redux/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/selectors/time_progress_selectors.dart';
 import 'package:time_progress_tracker/widgets/progress_editor_widget.dart';
