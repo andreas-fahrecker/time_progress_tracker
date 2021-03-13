@@ -10,8 +10,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:time_progress_tracker/models/app_settings.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
-import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_item.dart';
-import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_view.dart';
+import 'package:time_progress_tracker/ui/progress/progress_list_item.dart';
+import 'package:time_progress_tracker/ui/progress/progress_list_view.dart';
 
 import 'MaterialTesterWidget.dart';
 

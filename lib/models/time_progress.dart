@@ -1,6 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:time_progress_tracker/models/app_exceptions.dart';
-import 'package:time_progress_tracker/persistence/time_progress_entity.dart';
+import 'package:time_progress_tracker/persistence/time_progress.dart';
 import 'package:time_progress_tracker/uuid.dart';
 
 @immutable

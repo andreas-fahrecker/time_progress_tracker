@@ -4,7 +4,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/redux/app_state.dart';
-import 'package:time_progress_tracker/screens/dashboard_screen.dart';
+import 'package:time_progress_tracker/ui/screens/dashboard_screen.dart';
 import 'package:time_progress_tracker/utils/color_utils.dart';
 
 class TimeProgressTrackerApp extends StatelessWidget {

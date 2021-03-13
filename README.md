@@ -9,17 +9,13 @@ including their current percentages.
 
 ## Current State of the repo.
 
-Currently, the code in this branch is pretty messed up. Since I wrote that application from a
-prototype which, was developed as my first flutter project and in a very short time.
-Since, then most of the work that went into this project was cleanup work.
+Now the repo is mostly cleaned up.
 
-Currently I am working on a clean codebase in the feature/platform-widget branch.
-
-At this state, the base screens of the app are located in lib/screens,
-all other ui widgets are located in li/widgets,
-the model classes are located in lib/model,
-files related to persisting the data are in lib/persistence,
-and redux related files are spread over lib/actions lib/middleware lib/reducers and lib/reducers.
+My own model classes are located in lib/models.
+The logic for converting the models to json format and saving them is in lib/persistence.
+All redux logic, including store connector widgets are in lib/redux.
+The Flutter UI widgets are located in lib/ui.
+Other stuff is in lib/utils or directly in lib.
 
 - [Google Play](https://play.google.com/store/apps/details?id=com.fahrecker.time_progress_calculator)
 

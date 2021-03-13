@@ -1,6 +1,19 @@
 import 'dart:ui';
 
+import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/redux/actions/app_settings_actions.dart';
+import 'package:time_progress_tracker/redux/actions/time_progress_actions.dart';
+import 'package:time_progress_tracker/redux/app_state.dart';
+
+void loadTimeProgressListIfUnloaded(Store<AppState> store) {
+  if (!store.state.hasProgressesLoaded)
+    store.dispatch(LoadTimeProgressListAction());
+}
+
+void loadSettingsIfUnloaded(Store<AppState> store) {
+  if (!store.state.hasSettingsLoaded) store.dispatch(LoadAppSettingsAction());
+}
 
 TimeProgress selectProgressById(List<TimeProgress> tpList, String id) =>
     tpList.firstWhere((tp) => tp.id == id, orElse: null);

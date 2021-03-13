@@ -1,16 +1,14 @@
-import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:time_progress_tracker/models/app_settings.dart';
+import 'package:time_progress_tracker/persistence/repository.dart';
 
-class AppSettingsRepository {
+class AppSettingsRepository extends Repository<AppSettingsEntity> {
   static const String _key = "app_settings";
-  final SharedPreferences prefs;
-  final JsonCodec codec;
 
-  AppSettingsRepository(this.prefs, {this.codec = json});
+  AppSettingsRepository(SharedPreferences prefs) : super(prefs);
 
-  Future<AppSettingsEntity> loadAppSettings() {
+  @override
+  Future<AppSettingsEntity> load() {
     final String jsonString = this.prefs.getString(_key);
     if (jsonString == null)
       return Future<AppSettingsEntity>.value(AppSettingsEntity.defaults());
@@ -18,7 +16,8 @@ class AppSettingsRepository {
         AppSettingsEntity.fromJson(codec.decode(jsonString)));
   }
 
-  Future<bool> saveAppSettings(AppSettingsEntity appSettings) =>
+  @override
+  Future<bool> save(AppSettingsEntity appSettings) =>
       this.prefs.setString(_key, codec.encode(appSettings));
 }
 

@@ -1,0 +1,70 @@
+import 'package:redux/redux.dart';
+import 'package:time_progress_tracker/models/app_settings.dart';
+import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/persistence/app_settings.dart';
+import 'package:time_progress_tracker/persistence/time_progress.dart';
+import 'package:time_progress_tracker/redux/actions/app_settings_actions.dart';
+import 'package:time_progress_tracker/redux/actions/time_progress_actions.dart';
+import 'package:time_progress_tracker/redux/app_state.dart';
+import 'package:time_progress_tracker/redux/redux_selectors.dart';
+
+List<Middleware<AppState>> createStoreMiddleware(
+    TimeProgressRepository progressRepo, AppSettingsRepository settingsRepo) {
+  final saveTimeProgressList = _createSaveTimeProgressList(progressRepo);
+  final loadTimeProgressList = _createLoadTimeProgressList(progressRepo);
+
+  final saveSettings = _createSaveAppSettings(settingsRepo);
+  final loadSettings = _createLoadAppSettings(settingsRepo);
+
+  return [
+    TypedMiddleware<AppState, LoadTimeProgressListAction>(loadTimeProgressList),
+    TypedMiddleware<AppState, AddTimeProgressAction>(saveTimeProgressList),
+    TypedMiddleware<AppState, UpdateTimeProgressAction>(saveTimeProgressList),
+    TypedMiddleware<AppState, DeleteTimeProgressAction>(saveTimeProgressList),
+    TypedMiddleware<AppState, LoadAppSettingsAction>(loadSettings),
+    TypedMiddleware<AppState, UpdateAppSettingsActions>(saveSettings)
+  ];
+}
+
+Middleware<AppState> _createSaveTimeProgressList(
+    TimeProgressRepository repository) {
+  return (Store<AppState> store, dynamic action, NextDispatcher next) {
+    next(action);
+
+    repository.save(
+      timeProgressListSelector(store.state)
+          .map<TimeProgressEntity>((timeProgress) => timeProgress.toEntity())
+          .toList(growable: false),
+    );
+  };
+}
+
+Middleware<AppState> _createLoadTimeProgressList(
+    TimeProgressRepository repository) {
+  return (Store<AppState> store, dynamic action, NextDispatcher next) {
+    repository.load().then((timeProgresses) {
+      List<TimeProgress> timeProgressList =
+          timeProgresses.map<TimeProgress>(TimeProgress.fromEntity).toList();
+      if (timeProgressList == null) {
+        timeProgressList = [];
+      }
+      store.dispatch(TimeProgressListLoadedAction(
+        timeProgressList,
+      ));
+    }).catchError((_) => store.dispatch(TimeProgressListNotLoadedAction()));
+  };
+}
+
+Middleware<AppState> _createSaveAppSettings(AppSettingsRepository repo) =>
+    (Store<AppState> store, dynamic action, NextDispatcher next) {
+      next(action);
+      repo.save(store.state.appSettings.toEntity());
+    };
+
+Middleware<AppState> _createLoadAppSettings(AppSettingsRepository repo) =>
+    (Store<AppState> store, dynamic action, NextDispatcher next) {
+      repo.load().then((appSettings) {
+        store.dispatch(
+            AppSettingsLoadedActions(AppSettings.fromEntity(appSettings)));
+      });
+    };
