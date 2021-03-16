@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/ui/buttons/date_picker_btn.dart';
 
@@ -64,14 +65,25 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
   Widget build(BuildContext context) {
     List<Widget> columnChildren = [
       Expanded(
-        child: TextField(
-          controller: _nameTextController,
-          decoration: InputDecoration(
-            border: OutlineInputBorder(),
-            labelText: "Progress Name",
-            errorText: _validName
-                ? null
-                : "The Name need to have at least 3 and at max 20 symbols.",
+        child: Center(
+          child: PlatformTextField(
+            controller: _nameTextController,
+            material: (context, platform) => MaterialTextFieldData(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: "Progress Name",
+                errorText: _validName
+                    ? null
+                    : "The Name need to have at least 3 and at max 20 symbols.",
+              ),
+            ),
+            cupertino: (context, platform) => CupertinoTextFieldData(
+              placeholder: "Progress Name",
+              decoration: BoxDecoration(
+                border: Border.all(width: 2, color: Colors.grey),
+                borderRadius: BorderRadius.circular(32),
+              )
+            ),
           ),
         ),
       ),
