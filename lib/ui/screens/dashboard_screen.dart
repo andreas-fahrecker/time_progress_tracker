@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
+import 'package:time_progress_tracker/ui/buttons/create_progress_button.dart';
 import 'package:time_progress_tracker/ui/screens/active_time_progresses_screen.dart';
 import 'package:time_progress_tracker/ui/screens/inactive_time_progresses_screen.dart';
 import 'package:time_progress_tracker/ui/screens/settings_screen.dart';
@@ -40,6 +41,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
+  Widget _renderCreateProgressBtn() =>
+      _tabSelectedIndex == 2 ? null : CreateProgressButton();
+
   @override
   Widget build(BuildContext context) {
     return PlatformScaffold(
@@ -50,9 +54,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         cupertino: (_, __) => CupertinoNavigationBarData(
           transitionBetweenRoutes: false,
+          leading: _renderCreateProgressBtn(),
         ),
       ),
-      material: (_, __) => MaterialScaffoldData(),
+      material: (_, __) => MaterialScaffoldData(
+        floatingActionButton: _renderCreateProgressBtn(),
+      ),
       body: _renderTabScreen(_tabSelectedIndex),
       bottomNavBar: PlatformNavBar(
           currentIndex: _tabSelectedIndex,

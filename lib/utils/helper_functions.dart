@@ -1,5 +1,7 @@
+import 'dart:io' show Platform;
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/redux/actions/app_settings_actions.dart';
@@ -27,4 +29,9 @@ List<TimeProgress> selectInactiveProgresses(List<TimeProgress> tpList) =>
 bool useBrightBackground(Color bC) {
   double yiq = ((bC.red * 299) + (bC.green * 587) + (bC.blue * 114)) / 1000;
   return yiq >= 186 || (bC.red == 0 && bC.green == 0 && bC.blue == 0);
+}
+
+bool useCupertino() {
+  if (kIsWeb) return false;
+  return Platform.isIOS;
 }
