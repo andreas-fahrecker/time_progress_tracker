@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:time_progress_tracker/models/time_progress.dart';
-import 'package:time_progress_tracker/ui/screens/progress_creation_screen.dart';
 import 'package:time_progress_tracker/utils/helper_functions.dart';
 
 class CreateProgressButton extends StatelessWidget {

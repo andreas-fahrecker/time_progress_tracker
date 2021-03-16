@@ -10,6 +10,7 @@ import 'package:time_progress_tracker/redux/app_state.dart';
 import 'package:time_progress_tracker/redux/redux_selectors.dart';
 import 'package:time_progress_tracker/redux/store_connectors/create_time_progress_store_connector.dart';
 import 'package:time_progress_tracker/ui/buttons/create_progress_button.dart';
+import 'package:time_progress_tracker/ui/buttons/platform_action_button.dart';
 import 'package:time_progress_tracker/ui/progress/progress_editor_widget.dart';
 import 'package:time_progress_tracker/utils/color_utils.dart';
 import 'package:time_progress_tracker/utils/helper_functions.dart';
@@ -54,6 +55,14 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
     initTimeProgress(TimeProgress.defaultFromDuration(
         StoreProvider.of<AppState>(context).state.appSettings.duration));
 
+    Widget _createActionButton = CreateTimeProgressStoreConnector(
+      loadedBuilder: (context, CreateTimeProgressViewModel vm) =>
+          PlatformActionButton(
+              heroTag: "createTimeProgressBTN",
+              icon: Icons.save,
+              onBtnPressed: () => _onCreateTimeProgress(vm)),
+    );
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(
@@ -62,24 +71,14 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
         ),
         cupertino: (_, __) => CupertinoNavigationBarData(
           transitionBetweenRoutes: false,
-          trailing: CreateTimeProgressStoreConnector(
-            loadedBuilder: (context, CreateTimeProgressViewModel vm) =>
-                CreateProgressButton(
-              createProgress: () => _onCreateTimeProgress(vm),
-            ),
-          ),
+          trailing: _createActionButton,
         ),
       ),
       material: (_, __) => MaterialScaffoldData(
         floatingActionButton: Row(
           children: [
             Expanded(
-              child: CreateTimeProgressStoreConnector(
-                loadedBuilder: (context, CreateTimeProgressViewModel vm) =>
-                    CreateProgressButton(
-                  createProgress: () => _onCreateTimeProgress(vm),
-                ),
-              ),
+              child: _createActionButton,
             )
           ],
         ),

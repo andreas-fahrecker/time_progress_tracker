@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:time_progress_tracker/ui/buttons/go_to_create_progress_button.dart';
+import 'package:time_progress_tracker/ui/buttons/platform_action_button.dart';
 import 'package:time_progress_tracker/ui/screens/active_time_progresses_screen.dart';
 import 'package:time_progress_tracker/ui/screens/inactive_time_progresses_screen.dart';
+import 'package:time_progress_tracker/ui/screens/progress_creation_screen.dart';
 import 'package:time_progress_tracker/ui/screens/settings_screen.dart';
 import 'package:time_progress_tracker/utils/color_utils.dart';
 import 'package:time_progress_tracker/utils/constants.dart';
@@ -41,11 +42,22 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
 
-  Widget _renderCreateProgressBtn() =>
-      _tabSelectedIndex == 2 ? null : GoToCreateProgressButton();
-
   @override
   Widget build(BuildContext context) {
+    Widget _renderCreateProgressBtn() => _tabSelectedIndex == 2
+        ? null
+        : PlatformActionButton(
+            heroTag: "goToCreateTimeProgressBTN",
+            icon: Icons.add,
+            onBtnPressed: () => Navigator.push(
+              context,
+              platformPageRoute(
+                context: context,
+                builder: (context) => ProgressCreationScreen(),
+              ),
+            ),
+          );
+
     return PlatformScaffold(
       appBar: PlatformAppBar(
         title: Text(

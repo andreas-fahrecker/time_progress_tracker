@@ -1,36 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
-import 'package:time_progress_tracker/ui/screens/progress_creation_screen.dart';
 import 'package:time_progress_tracker/utils/helper_functions.dart';
 
-class GoToCreateProgressButton extends StatelessWidget {
-  final String _heroTag = "createProgressBTN";
+class PlatformActionButton extends StatelessWidget {
+  final String heroTag;
+  final IconData icon;
+  final void Function() onBtnPressed;
+
+  const PlatformActionButton({
+    Key key,
+    @required this.heroTag,
+    @required this.icon,
+    @required this.onBtnPressed,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    void _onButtonPressed() => Navigator.push(
-        context,
-        platformPageRoute(
-          context: context,
-          builder: (context) => ProgressCreationScreen(),
-        ));
-
     Widget _renderCupertino() {
       return PlatformButton(
         padding: EdgeInsets.all(4),
         child: Icon(
-          Icons.add,
+          icon,
           color: Colors.white,
         ),
-        onPressed: _onButtonPressed,
+        onPressed: onBtnPressed,
       );
     }
 
     Widget _renderMaterial() {
       return FloatingActionButton(
-        heroTag: _heroTag,
-        child: Icon(Icons.add),
-        onPressed: _onButtonPressed,
+        heroTag: heroTag,
+        child: Icon(icon),
+        onPressed: onBtnPressed,
       );
     }
 
