@@ -31,22 +31,45 @@ class ProgressListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _onTileTap() =>
-        Navigator.pushNamed(context, ProgressDetailScreen.routeName,
-            arguments: ProgressDetailScreenArguments(timeProgress.id));
-    Text _renderTitle(bool material) => Text(
-          timeProgress.name,
-          style: material ? null : cupertinoCardTextStyle,
+    void _onTileTap() => Navigator.push(
+          context,
+          platformPageRoute(
+              context: context,
+              builder: (context) => ProgressDetailScreen(
+                    tpId: timeProgress.id,
+                  )),
         );
 
-    Widget _renderSubtitle() {
+    Widget _renderTitle(bool material) {
+      Text name = Text(
+        timeProgress.name,
+        style: material ? null : cupertinoCardTitleStyle,
+        textAlign: material ? null : TextAlign.left,
+      );
+      Text duration = Text(
+        "${timeProgress.allDays()} Days",
+        style: material ? null : cupertinoCardSubtitleStyle,
+        textAlign: material ? null : TextAlign.left,
+      );
+      Row title = Row(
+        children: [name, Spacer(), duration],
+      );
+      if (!material)
+        return Padding(
+          padding: EdgeInsets.only(bottom: 16, right: 5),
+          child: title,
+        );
+      return title;
+    }
+
+    Widget _renderSubtitle(bool material) {
       if (!timeProgress.hasStarted())
         return PlatformText(
             ProgressListTileStrings.startsInDaysString(timeProgress));
       if (timeProgress.hasEnded())
         return PlatformText(
             ProgressListTileStrings.endedDaysAgoString(timeProgress));
-      return LinearPercentIndicator(
+      LinearPercentIndicator percentIndicator = LinearPercentIndicator(
         center:
             PlatformText(ProgressListTileStrings.percentString(timeProgress)),
         percent: timeProgress.percentDone(),
@@ -54,6 +77,15 @@ class ProgressListItem extends StatelessWidget {
         backgroundColor: leftColor,
         lineHeight: 20,
       );
+      if (!material)
+        return Padding(
+          padding: EdgeInsets.only(
+            bottom: 5,
+            right: 5,
+          ),
+          child: percentIndicator,
+        );
+      return percentIndicator;
     }
 
     Widget _renderCupertino() {
@@ -66,9 +98,10 @@ class ProgressListItem extends StatelessWidget {
             ),
             padding: EdgeInsets.fromLTRB(15, 15, 5, 5),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _renderTitle(false),
-                _renderSubtitle(),
+                _renderSubtitle(false),
               ],
             ),
           ),
@@ -78,7 +111,7 @@ class ProgressListItem extends StatelessWidget {
     Widget _renderMaterial() {
       return ListTile(
         title: _renderTitle(true),
-        subtitle: _renderSubtitle(),
+        subtitle: _renderSubtitle(true),
         onTap: _onTileTap,
       );
     }

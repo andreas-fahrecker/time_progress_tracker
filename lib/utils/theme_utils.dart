@@ -17,5 +17,8 @@ final CupertinoThemeData cupertinoThemeData = CupertinoThemeData(
   scaffoldBackgroundColor: Colors.white,
 );
 final toolbarTextStyle = TextStyle(color: Colors.white, fontSize: 16);
-final cupertinoCardTextStyle = TextStyle(color: Colors.white);
+final cupertinoCardTitleStyle =
+    TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w600);
+final cupertinoCardSubtitleStyle =
+    TextStyle(color: Colors.grey, fontSize: 18, fontWeight: FontWeight.w400);
 final bottomTabsBackground = Colors.indigoAccent;

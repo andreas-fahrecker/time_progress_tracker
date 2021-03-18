@@ -7,15 +7,12 @@ import 'package:time_progress_tracker/ui/detail_screen_floating_action_buttons.d
 import 'package:time_progress_tracker/ui/progress/progress_editor_widget.dart';
 import 'package:time_progress_tracker/ui/progress/progress_view_widget.dart';
 
-class ProgressDetailScreenArguments {
-  final String id;
-
-  ProgressDetailScreenArguments(this.id);
-}
-
 class ProgressDetailScreen extends StatefulWidget {
-  static const routeName = "/progress";
   static const title = "Progress View";
+
+  final String tpId;
+
+  const ProgressDetailScreen({Key key, @required this.tpId}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -76,9 +73,6 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ProgressDetailScreenArguments args =
-        ModalRoute.of(context).settings.arguments;
-
     return Scaffold(
       appBar: AppBar(
         title: Text(ProgressDetailScreen.title),
@@ -86,7 +80,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
       body: SettingsStoreConnector(
         loadedBuilder: (context, settingsVm) {
           return TimeProgressStoreConnector(
-            timeProgressId: args.id,
+            timeProgressId: widget.tpId,
             loadedBuilder: (context, tpVm) {
               _initEditedProgress(tpVm.tp);
               return Container(
@@ -100,7 +94,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: TimeProgressStoreConnector(
-        timeProgressId: args.id,
+        timeProgressId: widget.tpId,
         loadedBuilder: (context, tpVm) {
           void _saveEditedProgress() {
             tpVm.updateTimeProgress(_editedProgress);
