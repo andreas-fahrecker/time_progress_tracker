@@ -12,7 +12,7 @@ import 'package:time_progress_tracker/redux/store_connectors/create_time_progres
 import 'package:time_progress_tracker/ui/buttons/create_progress_button.dart';
 import 'package:time_progress_tracker/ui/buttons/platform_action_button.dart';
 import 'package:time_progress_tracker/ui/progress/progress_editor_widget.dart';
-import 'package:time_progress_tracker/utils/color_utils.dart';
+import 'package:time_progress_tracker/utils/theme_utils.dart';
 import 'package:time_progress_tracker/utils/helper_functions.dart';
 
 class ProgressCreationScreen extends StatefulWidget {

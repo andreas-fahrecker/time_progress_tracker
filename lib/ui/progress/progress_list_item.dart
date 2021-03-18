@@ -6,6 +6,7 @@ import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/ui/screens/progress_detail_screen.dart';
+import 'package:time_progress_tracker/utils/theme_utils.dart';
 
 class ProgressListTileStrings {
   static String percentString(TimeProgress tp) =>
@@ -28,47 +29,61 @@ class ProgressListItem extends StatelessWidget {
     @required this.leftColor,
   });
 
-  Widget _renderSubtitle(BuildContext context) {
-    if (!timeProgress.hasStarted())
-      return PlatformText(ProgressListTileStrings.startsInDaysString(timeProgress));
-    if (timeProgress.hasEnded())
-      return PlatformText(ProgressListTileStrings.endedDaysAgoString(timeProgress));
-    return LinearPercentIndicator(
-      center: PlatformText(ProgressListTileStrings.percentString(timeProgress)),
-      percent: timeProgress.percentDone(),
-      progressColor: doneColor,
-      backgroundColor: leftColor,
-      lineHeight: 20,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     void _onTileTap() =>
         Navigator.pushNamed(context, ProgressDetailScreen.routeName,
             arguments: ProgressDetailScreenArguments(timeProgress.id));
-    Text titleText = Text(timeProgress.name);
+    Text _renderTitle(bool material) => Text(
+          timeProgress.name,
+          style: material ? null : cupertinoCardTextStyle,
+        );
 
-    if (Platform.isIOS)
+    Widget _renderSubtitle() {
+      if (!timeProgress.hasStarted())
+        return PlatformText(
+            ProgressListTileStrings.startsInDaysString(timeProgress));
+      if (timeProgress.hasEnded())
+        return PlatformText(
+            ProgressListTileStrings.endedDaysAgoString(timeProgress));
+      return LinearPercentIndicator(
+        center:
+            PlatformText(ProgressListTileStrings.percentString(timeProgress)),
+        percent: timeProgress.percentDone(),
+        progressColor: doneColor,
+        backgroundColor: leftColor,
+        lineHeight: 20,
+      );
+    }
+
+    Widget _renderCupertino() {
+      CupertinoThemeData theme = CupertinoTheme.of(context);
       return CupertinoButton(
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.grey,
+              color: theme.primaryColor,
               borderRadius: BorderRadius.circular(12),
             ),
             padding: EdgeInsets.fromLTRB(15, 15, 5, 5),
             child: Column(
               children: [
-                titleText,
-                _renderSubtitle(context),
+                _renderTitle(false),
+                _renderSubtitle(),
               ],
             ),
           ),
           onPressed: _onTileTap);
-    return ListTile(
-      title: titleText,
-      subtitle: _renderSubtitle(context),
-      onTap: _onTileTap,
-    );
+    }
+
+    Widget _renderMaterial() {
+      return ListTile(
+        title: _renderTitle(true),
+        subtitle: _renderSubtitle(),
+        onTap: _onTileTap,
+      );
+    }
+
+    if (Platform.isIOS) return _renderCupertino();
+    return _renderMaterial();
   }
 }

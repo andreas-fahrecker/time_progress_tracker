@@ -6,7 +6,7 @@ import 'package:time_progress_tracker/ui/screens/active_time_progresses_screen.d
 import 'package:time_progress_tracker/ui/screens/inactive_time_progresses_screen.dart';
 import 'package:time_progress_tracker/ui/screens/progress_creation_screen.dart';
 import 'package:time_progress_tracker/ui/screens/settings_screen.dart';
-import 'package:time_progress_tracker/utils/color_utils.dart';
+import 'package:time_progress_tracker/utils/theme_utils.dart';
 import 'package:time_progress_tracker/utils/constants.dart';
 
 class DashboardScreen extends StatefulWidget {
