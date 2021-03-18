@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:time_progress_tracker/models/app_settings.dart';
 import 'package:time_progress_tracker/persistence/repository.dart';
+import 'package:time_progress_tracker/utils/constants.dart';
 
 class AppSettingsRepository extends Repository<AppSettingsEntity> {
   static const String _key = "app_settings";
@@ -9,7 +10,7 @@ class AppSettingsRepository extends Repository<AppSettingsEntity> {
 
   @override
   Future<AppSettingsEntity> load() {
-    final String jsonString = this.prefs.getString(_key);
+    final String? jsonString = this.prefs.getString(_key);
     if (jsonString == null)
       return Future<AppSettingsEntity>.value(AppSettingsEntity.defaults());
     return Future<AppSettingsEntity>.value(
@@ -30,7 +31,7 @@ class AppSettingsEntity {
   AppSettingsEntity(
       this.doneColorValue, this.leftColorValue, this.durationDays);
 
-  factory AppSettingsEntity.defaults() => AppSettings.defaults().toEntity();
+  factory AppSettingsEntity.defaults() => defaultAppSettings.toEntity();
 
   @override
   int get hashCode => doneColorValue.hashCode ^ leftColorValue.hashCode;
@@ -51,8 +52,8 @@ class AppSettingsEntity {
 
   static AppSettingsEntity fromJson(Map<String, Object> json) =>
       AppSettingsEntity(
-        json[_doneKey],
-        json[_leftKey],
-        json[_durationDaysKey],
+        json[_doneKey] as int,
+        json[_leftKey] as int,
+        json[_durationDaysKey] as int,
       );
 }

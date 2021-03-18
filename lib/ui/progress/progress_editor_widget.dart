@@ -8,8 +8,8 @@ class ProgressEditorWidget extends StatefulWidget {
   final Function(TimeProgress, bool) onTimeProgressChanged;
 
   ProgressEditorWidget({
-    @required this.timeProgress,
-    @required this.onTimeProgressChanged,
+    required this.timeProgress,
+    required this.onTimeProgressChanged,
   });
 
   @override

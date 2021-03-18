@@ -6,10 +6,10 @@ class AppYesNoDialog extends StatelessWidget {
   final void Function() onYesPressed;
 
   AppYesNoDialog({
-    Key key,
-    @required this.titleText,
-    @required this.contentText,
-    @required this.onYesPressed,
+    Key? key,
+    required this.titleText,
+    required this.contentText,
+    required this.onYesPressed,
   }) : super(key: key);
 
   @override

@@ -6,13 +6,15 @@ import 'package:time_progress_tracker/utils/helper_functions.dart';
 class PlatformActionButton extends StatelessWidget {
   final String heroTag;
   final IconData icon;
-  final void Function() onBtnPressed;
+  final Color? materialBackground;
+  final void Function()? onBtnPressed;
 
   const PlatformActionButton({
-    Key key,
-    @required this.heroTag,
-    @required this.icon,
-    @required this.onBtnPressed,
+    Key? key,
+    required this.heroTag,
+    required this.icon,
+    this.materialBackground,
+    required this.onBtnPressed,
   }) : super(key: key);
 
   @override
@@ -32,6 +34,7 @@ class PlatformActionButton extends StatelessWidget {
       return FloatingActionButton(
         heroTag: heroTag,
         child: Icon(icon),
+        backgroundColor: materialBackground,
         onPressed: onBtnPressed,
       );
     }

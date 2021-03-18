@@ -7,22 +7,16 @@ class AppSettings {
   final Color leftColor;
   final Duration duration;
 
-  AppSettings({
-    this.doneColor,
-    this.leftColor,
-    this.duration,
+  const AppSettings({
+    required this.doneColor,
+    required this.leftColor,
+    required this.duration,
   });
 
-  factory AppSettings.defaults() => AppSettings(
-        doneColor: Colors.green,
-        leftColor: Colors.red,
-        duration: Duration(days: 365),
-      );
-
   AppSettings copyWith({
-    Color doneColor,
-    Color leftColor,
-    Duration duration,
+    Color? doneColor,
+    Color? leftColor,
+    Duration? duration,
   }) =>
       AppSettings(
         doneColor: doneColor ?? this.doneColor,

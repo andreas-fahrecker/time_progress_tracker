@@ -4,6 +4,7 @@ import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/redux/actions/app_settings_actions.dart';
 import 'package:time_progress_tracker/redux/actions/redux_actions.dart';
 import 'package:time_progress_tracker/redux/actions/time_progress_actions.dart';
+import 'package:time_progress_tracker/utils/constants.dart';
 
 final timeProgressListReducer = combineReducers<List<TimeProgress>>([
   TypedReducer<List<TimeProgress>, TimeProgressListLoadedAction>(
@@ -55,7 +56,7 @@ final appSettingsReducers = combineReducers<AppSettings>([
 
 AppSettings _setDefaultSettings(
         AppSettings appSettings, AppSettingsNotLoadedAction action) =>
-    AppSettings.defaults();
+    defaultAppSettings;
 
 AppSettings _updateAppSettings(
         AppSettings appSettings, AppSettingsAction action) =>

@@ -10,7 +10,7 @@ class SettingsStoreConnector extends StatelessWidget {
   final Widget Function(BuildContext, SettingsViewModel) loadedBuilder;
 
   SettingsStoreConnector({
-    @required this.loadedBuilder,
+    required this.loadedBuilder,
   });
 
   @override

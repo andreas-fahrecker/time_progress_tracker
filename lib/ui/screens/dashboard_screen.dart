@@ -44,7 +44,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget _renderCreateProgressBtn() => _tabSelectedIndex == 2
+    PlatformActionButton? _renderCreateProgressBtn() => _tabSelectedIndex == 2
         ? null
         : PlatformActionButton(
             heroTag: "goToCreateTimeProgressBTN",

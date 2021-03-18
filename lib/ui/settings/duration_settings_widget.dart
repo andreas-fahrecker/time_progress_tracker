@@ -6,8 +6,8 @@ class DurationSettingsWidget extends StatelessWidget {
   final void Function(Duration) updateDuration;
 
   DurationSettingsWidget({
-    @required this.duration,
-    @required this.updateDuration,
+    required this.duration,
+    required this.updateDuration,
   });
 
   @override

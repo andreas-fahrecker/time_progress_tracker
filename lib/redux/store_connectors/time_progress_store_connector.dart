@@ -4,16 +4,16 @@ import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/redux/actions/time_progress_actions.dart';
 import 'package:time_progress_tracker/redux/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/utils/helper_functions.dart';
 
-import '../../utils/helper_functions.dart';
 
 class TimeProgressStoreConnector extends StatelessWidget {
   final String timeProgressId;
   final Widget Function(BuildContext, TimeProgressViewModel) loadedBuilder;
 
   TimeProgressStoreConnector({
-    @required this.timeProgressId,
-    @required this.loadedBuilder,
+    required this.timeProgressId,
+    required this.loadedBuilder,
   });
 
   @override
@@ -38,7 +38,7 @@ class TimeProgressStoreConnector extends StatelessWidget {
 }
 
 class TimeProgressViewModel {
-  final TimeProgress tp;
+  final TimeProgress? tp;
   final bool hasTpListLoaded;
 
   final void Function(TimeProgress) updateTimeProgress;

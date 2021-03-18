@@ -6,8 +6,8 @@ class SelectDurationBtn extends StatelessWidget {
   final void Function(Duration) updateDuration;
 
   SelectDurationBtn({
-    @required this.duration,
-    @required this.updateDuration,
+    required this.duration,
+    required this.updateDuration,
   });
 
   void _onPickerConfirm(Picker picker, List<int> values) {
@@ -40,7 +40,7 @@ class SelectDurationBtn extends StatelessWidget {
         onPressed: () => _onButtonPressed(context, appTheme),
         child: Text("$years Years $months Months $days Days"),
         style: TextButton.styleFrom(
-          primary: appTheme.primaryTextTheme.button.color,
+          primary: appTheme.primaryTextTheme.button!.color,
           backgroundColor: appTheme.accentColor,
         ));
   }

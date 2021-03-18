@@ -6,10 +6,10 @@ class ColorSettingsWidget extends StatelessWidget {
   final void Function(Color) updateDoneColor, updateLeftColor;
 
   ColorSettingsWidget({
-    @required this.doneColor,
-    @required this.leftColor,
-    @required this.updateDoneColor,
-    @required this.updateLeftColor,
+    required this.doneColor,
+    required this.leftColor,
+    required this.updateDoneColor,
+    required this.updateLeftColor,
   });
 
   @override

@@ -13,8 +13,8 @@ class TimeProgressTrackerApp extends StatelessWidget {
   final Store<AppState> store;
 
   TimeProgressTrackerApp({
-    Key key,
-    this.store,
+    Key? key,
+    required this.store,
   }) : super(key: key);
 
   @override

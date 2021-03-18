@@ -8,7 +8,7 @@ class CreateProgressButton extends StatelessWidget {
 
   final void Function() createProgress;
 
-  const CreateProgressButton({Key key, @required this.createProgress})
+  const CreateProgressButton({Key? key, required this.createProgress})
       : super(key: key);
 
   @override

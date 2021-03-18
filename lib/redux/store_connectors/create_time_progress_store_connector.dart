@@ -14,7 +14,7 @@ class CreateTimeProgressStoreConnector extends StatelessWidget {
       loadedBuilder;
 
   CreateTimeProgressStoreConnector({
-    @required this.loadedBuilder,
+    required this.loadedBuilder,
   });
 
   @override

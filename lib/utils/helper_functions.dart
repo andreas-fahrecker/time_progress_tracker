@@ -17,7 +17,7 @@ void loadSettingsIfUnloaded(Store<AppState> store) {
   if (!store.state.hasSettingsLoaded) store.dispatch(LoadAppSettingsAction());
 }
 
-TimeProgress selectProgressById(List<TimeProgress> tpList, String id) =>
+TimeProgress? selectProgressById(List<TimeProgress> tpList, String id) =>
     tpList.firstWhere((tp) => tp.id == id, orElse: null);
 
 List<TimeProgress> selectActiveProgresses(List<TimeProgress> tpList) =>

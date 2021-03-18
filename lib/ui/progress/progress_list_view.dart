@@ -10,9 +10,9 @@ class ProgressListView extends StatelessWidget {
   final Color doneColor, leftColor;
 
   ProgressListView({
-    @required this.timeProgressList,
-    @required this.doneColor,
-    @required this.leftColor,
+    required this.timeProgressList,
+    required this.doneColor,
+    required this.leftColor,
   });
 
   Widget _renderListTile(TimeProgress tp) {

@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:time_progress_tracker/models/app_settings.dart';
-import 'package:time_progress_tracker/redux/app_state.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/redux/app_state.dart';
 
 List<TimeProgress> timeProgressListSelector(AppState state) =>
     state.timeProgressList;
@@ -45,10 +45,12 @@ List<TimeProgress> pastTimeProgressesSelector(AppState state) =>
             DateTime.now().millisecondsSinceEpoch)
         .toList();
 
-TimeProgress timeProgressByIdSelector(AppState state, String id) {
+TimeProgress? timeProgressByIdSelector(AppState state, String id) {
   if (state.timeProgressList.length < 1) return null;
-  return state.timeProgressList
-      .firstWhere((timeProgress) => timeProgress.id == id, orElse: () => null);
+  TimeProgress tp = state.timeProgressList.firstWhere(
+      (timeProgress) => timeProgress.id == id,
+      orElse: () => TimeProgress.initialDefault());
+  return tp != TimeProgress.initialDefault() ? tp : null;
 }
 
 AppSettings appSettingsSelector(AppState state) {

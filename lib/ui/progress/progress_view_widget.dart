@@ -9,9 +9,9 @@ class ProgressViewWidget extends StatelessWidget {
   final Color leftColor;
 
   ProgressViewWidget({
-    @required this.timeProgress,
-    @required this.doneColor,
-    @required this.leftColor,
+    required this.timeProgress,
+    required this.doneColor,
+    required this.leftColor,
   });
 
   @override

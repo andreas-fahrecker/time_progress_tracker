@@ -26,11 +26,11 @@ class ProgressCreationScreen extends StatefulWidget {
 }
 
 class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
-  TimeProgress timeProgressToCreate;
+  TimeProgress timeProgressToCreate = TimeProgress.initialDefault();
   bool _isProgressValid = false;
 
   void initTimeProgress(TimeProgress timeProgress) {
-    if (timeProgressToCreate == null)
+    if (timeProgressToCreate == TimeProgress.initialDefault())
       setState(() {
         timeProgressToCreate = timeProgress;
       });
@@ -180,8 +180,8 @@ class _ViewModel {
   final void Function(TimeProgress) onAddTimeProgress;
 
   _ViewModel({
-    @required this.defaultDurationProgress,
-    @required this.onAddTimeProgress,
+    required this.defaultDurationProgress,
+    required this.onAddTimeProgress,
   });
 
   factory _ViewModel.create(Store<AppState> store) {

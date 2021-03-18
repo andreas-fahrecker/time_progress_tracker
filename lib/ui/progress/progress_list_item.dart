@@ -24,9 +24,9 @@ class ProgressListItem extends StatelessWidget {
   final Color doneColor, leftColor;
 
   ProgressListItem({
-    @required this.timeProgress,
-    @required this.doneColor,
-    @required this.leftColor,
+    required this.timeProgress,
+    required this.doneColor,
+    required this.leftColor,
   });
 
   @override

@@ -11,14 +11,14 @@ class DetailScreenFloatingActionButtons extends StatelessWidget {
       onDeleteProgress;
 
   DetailScreenFloatingActionButtons({
-    @required this.editMode,
-    @required this.originalProgress,
-    @required this.editedProgress,
-    @required this.isEditedProgressValid,
-    @required this.onEditProgress,
-    @required this.onSaveEditedProgress,
-    @required this.onCancelEditProgress,
-    @required this.onDeleteProgress,
+    required this.editMode,
+    required this.originalProgress,
+    required this.editedProgress,
+    required this.isEditedProgressValid,
+    required this.onEditProgress,
+    required this.onSaveEditedProgress,
+    required this.onCancelEditProgress,
+    required this.onDeleteProgress,
   });
 
   @override

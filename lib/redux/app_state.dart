@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:time_progress_tracker/models/app_settings.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
+import 'package:time_progress_tracker/utils/constants.dart';
 
 @immutable
 class AppState {
@@ -12,14 +13,14 @@ class AppState {
       {this.hasProgressesLoaded = false,
       this.hasSettingsLoaded = false,
       this.timeProgressList = const [],
-      this.appSettings});
+      this.appSettings = defaultAppSettings});
 
   factory AppState.initial() =>
-      AppState(hasProgressesLoaded: false, appSettings: AppSettings.defaults());
+      AppState(hasProgressesLoaded: false, appSettings: defaultAppSettings);
 
   AppState copyWith({
-    bool hasLoaded,
-    List<TimeProgress> timeProgressList,
+    bool? hasLoaded,
+    List<TimeProgress>? timeProgressList,
   }) {
     return AppState(
       hasProgressesLoaded: hasLoaded ?? this.hasProgressesLoaded,

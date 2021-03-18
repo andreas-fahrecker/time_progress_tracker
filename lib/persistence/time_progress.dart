@@ -8,7 +8,7 @@ class TimeProgressRepository extends Repository<List<TimeProgressEntity>> {
 
   @override
   Future<List<TimeProgressEntity>> load() {
-    final String jsonString = this.prefs.getString(_key);
+    final String? jsonString = this.prefs.getString(_key);
     if (jsonString == null) {
       return Future<List<TimeProgressEntity>>.value([]);
     }

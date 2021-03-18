@@ -9,7 +9,7 @@ class TimeProgressListStoreConnector extends StatelessWidget {
   final Widget Function(BuildContext, TimeProgressListViewModel) loadedBuilder;
 
   TimeProgressListStoreConnector({
-    @required this.loadedBuilder,
+    required this.loadedBuilder,
   });
 
   @override
