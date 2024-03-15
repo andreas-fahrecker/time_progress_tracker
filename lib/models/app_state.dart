@@ -12,18 +12,20 @@ class AppState {
       {this.hasProgressesLoaded = false,
       this.hasSettingsLoaded = false,
       this.timeProgressList = const [],
-      this.appSettings});
+      required this.appSettings});
 
   factory AppState.initial() =>
       AppState(hasProgressesLoaded: false, appSettings: AppSettings.defaults());
 
   AppState copyWith({
-    bool hasLoaded,
-    List<TimeProgress> timeProgressList,
+    bool? hasLoaded,
+    List<TimeProgress>? timeProgressList,
+    AppSettings? appSettings,
   }) {
     return AppState(
       hasProgressesLoaded: hasLoaded ?? hasProgressesLoaded,
       timeProgressList: timeProgressList ?? this.timeProgressList,
+      appSettings: appSettings ?? this.appSettings,
     );
   }
 

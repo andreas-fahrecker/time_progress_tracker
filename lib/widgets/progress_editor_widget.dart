@@ -8,8 +8,8 @@ class ProgressEditorWidget extends StatefulWidget {
 
   const ProgressEditorWidget({
     super.key,
-    @required this.timeProgress,
-    @required this.onTimeProgressChanged,
+    required this.timeProgress,
+    required this.onTimeProgressChanged,
   });
 
   @override
@@ -32,7 +32,10 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
     });
   }
 
-  void _onStartDateChanged(DateTime newStartDate) {
+  void _onStartDateChanged(DateTime? newStartDate) {
+    if (newStartDate == null) {
+      return;
+    }
     TimeProgress newProgress =
         widget.timeProgress.copyWith(startTime: newStartDate);
     widget.onTimeProgressChanged(
@@ -43,7 +46,10 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
     });
   }
 
-  void _onEndDateChanged(DateTime newEndDate) {
+  void _onEndDateChanged(DateTime? newEndDate) {
+    if (newEndDate == null) {
+      return;
+    }
     TimeProgress newProgress =
         widget.timeProgress.copyWith(endTime: newEndDate);
     widget.onTimeProgressChanged(

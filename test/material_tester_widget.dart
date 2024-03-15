@@ -5,7 +5,7 @@ class MaterialTesterWidget extends StatelessWidget {
 
   const MaterialTesterWidget({
     super.key,
-    @required this.widget,
+    required this.widget,
   });
 
   @override

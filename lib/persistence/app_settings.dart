@@ -53,8 +53,8 @@ class AppSettingsEntity {
 
   static AppSettingsEntity fromJson(Map<String, Object> json) =>
       AppSettingsEntity(
-        json[_doneKey],
-        json[_leftKey],
-        json[_durationDaysKey],
+        json[_doneKey] as int,
+        json[_leftKey] as int,
+        json[_durationDaysKey] as int,
       );
 }

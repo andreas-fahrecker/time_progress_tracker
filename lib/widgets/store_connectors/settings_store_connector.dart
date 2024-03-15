@@ -10,7 +10,7 @@ class SettingsStoreConnector extends StatelessWidget {
 
   const SettingsStoreConnector({
     super.key,
-    @required this.loadedBuilder,
+    required this.loadedBuilder,
   });
 
   @override

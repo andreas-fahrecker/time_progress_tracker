@@ -62,7 +62,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
     List<Widget> columnChildren = [
       Expanded(
           child: ProgressViewWidget(
-        timeProgress: _editMode ? _editedProgress : tpVm.tp,
+        timeProgress: _editMode ? _editedProgress ?? tpVm.tp : tpVm.tp,
         doneColor: settingsVm.appSettings.doneColor,
         leftColor: settingsVm.appSettings.leftColor,
       ))
@@ -70,7 +70,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
     if (_editMode) {
       columnChildren.add(Expanded(
           child: ProgressEditorWidget(
-        timeProgress: _editedProgress,
+        timeProgress: _editedProgress ?? tpVm.tp,
         onTimeProgressChanged: _onEditedProgressChanged,
       )));
     }
@@ -80,7 +80,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final ProgressDetailScreenArguments args =
-        ModalRoute.of(context).settings.arguments;
+        ModalRoute.of(context)?.settings.arguments as ProgressDetailScreenArguments;
 
     return Scaffold(
       appBar: AppBar(
@@ -106,7 +106,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
         timeProgressId: args.id,
         loadedBuilder: (context, tpVm) {
           void saveEditedProgress() {
-            tpVm.updateTimeProgress(_editedProgress);
+            tpVm.updateTimeProgress(_editedProgress ?? tpVm.tp);
             _switchEditMode(false);
           }
 
@@ -119,7 +119,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
           return DetailScreenFloatingActionButtons(
               editMode: _editMode,
               originalProgress: tpVm.tp,
-              editedProgress: _editedProgress,
+              editedProgress: _editedProgress ?? tpVm.tp,
               isEditedProgressValid: _isEditedProgressValid,
               onEditProgress: () => _switchEditMode(true),
               onSaveEditedProgress: saveEditedProgress,

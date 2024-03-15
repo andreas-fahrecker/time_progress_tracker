@@ -7,8 +7,8 @@ class DurationSettingsWidget extends StatelessWidget {
 
   const DurationSettingsWidget({
     super.key,
-    @required this.duration,
-    @required this.updateDuration,
+    required this.duration,
+    required this.updateDuration,
   });
 
   @override

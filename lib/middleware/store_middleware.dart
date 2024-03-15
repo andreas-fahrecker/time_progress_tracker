@@ -45,9 +45,6 @@ Middleware<AppState> _createLoadTimeProgressList(
     repository.loadTimeProgressList().then((timeProgresses) {
       List<TimeProgress> timeProgressList =
           timeProgresses.map<TimeProgress>(TimeProgress.fromEntity).toList();
-      if (timeProgressList == null) {
-        timeProgressList = [];
-      }
       store.dispatch(TimeProgressListLoadedAction(
         timeProgressList,
       ));

@@ -7,8 +7,8 @@ class SelectDurationBtn extends StatelessWidget {
 
   const SelectDurationBtn({
     super.key,
-    @required this.duration,
-    @required this.updateDuration,
+    required this.duration,
+    required this.updateDuration,
   });
 
   void _onPickerConfirm(Picker picker, List<int> values) {
@@ -26,7 +26,7 @@ class SelectDurationBtn extends StatelessWidget {
           ]),
           hideHeader: false,
           title: const Text("Default Duration"),
-          selectedTextStyle: TextStyle(color: appTheme.accentColor),
+          selectedTextStyle: TextStyle(color: appTheme.colorScheme.secondary),
           onConfirm: _onPickerConfirm)
       .showModal(context);
 
@@ -40,8 +40,8 @@ class SelectDurationBtn extends StatelessWidget {
     return TextButton(
         onPressed: () => _onButtonPressed(context, appTheme),
         style: TextButton.styleFrom(
-          primary: appTheme.primaryTextTheme.labelLarge.color,
-          backgroundColor: appTheme.accentColor,
+          foregroundColor: appTheme.primaryTextTheme.labelLarge?.color,
+          backgroundColor: appTheme.colorScheme.secondary,
         ),
         child: Text("$years Years $months Months $days Days"));
   }

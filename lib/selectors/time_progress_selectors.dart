@@ -45,10 +45,11 @@ List<TimeProgress> pastTimeProgressesSelector(AppState state) =>
             DateTime.now().millisecondsSinceEpoch)
         .toList();
 
-TimeProgress timeProgressByIdSelector(AppState state, String id) {
+TimeProgress? timeProgressByIdSelector(AppState state, String id) {
   if (state.timeProgressList.isEmpty) return null;
-  return state.timeProgressList
-      .firstWhere((timeProgress) => timeProgress.id == id, orElse: () => null);
+  return state.timeProgressList.firstWhere(
+      (timeProgress) => timeProgress.id == id,
+      orElse: () => TimeProgress.initialDefault());
 }
 
 AppSettings appSettingsSelector(AppState state) {

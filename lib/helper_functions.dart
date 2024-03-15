@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:time_progress_tracker/models/time_progress.dart';
 
 TimeProgress selectProgressById(List<TimeProgress> tpList, String id) =>
-    tpList.firstWhere((tp) => tp.id == id, orElse: null);
+    tpList.firstWhere((tp) => tp.id == id, orElse: () => TimeProgress.initialDefault());
 
 List<TimeProgress> selectActiveProgresses(List<TimeProgress> tpList) =>
     tpList.where((tp) => tp.hasStarted() && !tp.hasEnded()).toList();

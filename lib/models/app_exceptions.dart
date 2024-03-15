@@ -1,5 +1,5 @@
 class TimeProgressInvalidNameException implements Exception {
-  final invalidName;
+  final String invalidName;
 
   TimeProgressInvalidNameException(this.invalidName);
 
@@ -7,8 +7,8 @@ class TimeProgressInvalidNameException implements Exception {
 }
 
 class TimeProgressStartTimeIsNotBeforeEndTimeException implements Exception {
-  final startTime;
-  final endTime;
+  final DateTime startTime;
+  final DateTime endTime;
 
   TimeProgressStartTimeIsNotBeforeEndTimeException(
       this.startTime, this.endTime);

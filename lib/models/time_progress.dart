@@ -10,7 +10,7 @@ class TimeProgress {
   final DateTime startTime;
   final DateTime endTime;
 
-  TimeProgress(this.name, this.startTime, this.endTime, {String id})
+  TimeProgress(this.name, this.startTime, this.endTime, {String? id})
       : id = id ?? Uuid().generateV4();
 
   factory TimeProgress.initialDefault() {
@@ -23,7 +23,7 @@ class TimeProgress {
       TimeProgress("", DateTime.now(), DateTime.now().add(duration));
 
   TimeProgress copyWith(
-          {String id, String name, DateTime startTime, DateTime endTime}) =>
+          {String? id, String? name, DateTime? startTime, DateTime? endTime}) =>
       TimeProgress(
         name ?? this.name,
         startTime ?? this.startTime,
@@ -83,21 +83,22 @@ class TimeProgress {
       throw TimeProgressInvalidNameException(name);
     }
     if (!TimeProgress.areTimesValid(startTime, endTime)) {
-      throw TimeProgressStartTimeIsNotBeforeEndTimeException(startTime, endTime);
+      throw TimeProgressStartTimeIsNotBeforeEndTimeException(
+          startTime, endTime);
     }
     return TimeProgressEntity(id, name, startTime, endTime);
   }
 
   static TimeProgress fromEntity(TimeProgressEntity entity) =>
       TimeProgress(entity.name, entity.startTime, entity.endTime,
-          id: entity.id ?? Uuid().generateV4());
+          id: entity.id);
 
   static bool isValid(TimeProgress tp) =>
       TimeProgress.isNameValid(tp.name) &&
       TimeProgress.areTimesValid(tp.startTime, tp.endTime);
 
   static bool isNameValid(String name) =>
-      name != null && name != "" && name.length > 2 && name.length < 21;
+      name != "" && name.length > 2 && name.length < 21;
 
   static bool areTimesValid(DateTime startTime, DateTime endTime) =>
       startTime.isBefore(endTime);

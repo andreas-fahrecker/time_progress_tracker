@@ -19,9 +19,9 @@ class ProgressListTile extends StatelessWidget {
   final Color doneColor, leftColor;
 
   const ProgressListTile({super.key, 
-    @required this.timeProgress,
-    @required this.doneColor,
-    @required this.leftColor,
+    required this.timeProgress,
+    required this.doneColor,
+    required this.leftColor,
   });
 
   Widget _renderSubtitle(BuildContext context) {

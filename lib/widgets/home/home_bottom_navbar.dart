@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class HomeBottomNavBar extends StatelessWidget {
   final int currentIndex;
-  final Function onTap;
+  final void Function(int)? onTap;
 
   const HomeBottomNavBar({
     super.key,
-    @required this.currentIndex,
-    @required this.onTap,
+    required this.currentIndex,
+    required this.onTap,
   });
 
   @override

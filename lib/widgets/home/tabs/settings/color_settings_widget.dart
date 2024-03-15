@@ -7,10 +7,10 @@ class ColorSettingsWidget extends StatelessWidget {
 
   const ColorSettingsWidget({
     super.key,
-    @required this.doneColor,
-    @required this.leftColor,
-    @required this.updateDoneColor,
-    @required this.updateLeftColor,
+    required this.doneColor,
+    required this.leftColor,
+    required this.updateDoneColor,
+    required this.updateLeftColor,
   });
 
   @override

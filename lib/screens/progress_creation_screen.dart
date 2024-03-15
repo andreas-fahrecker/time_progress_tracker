@@ -54,7 +54,8 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
             builder: (context, _ViewModel viewModel) {
               initTimeProgress(viewModel.defaultDurationProgress);
               return ProgressEditorWidget(
-                timeProgress: timeProgressToCreate,
+                timeProgress:
+                    timeProgressToCreate ?? viewModel.defaultDurationProgress,
                 onTimeProgressChanged: onTimeProgressChanged,
               );
             }),
@@ -70,7 +71,8 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
                 heroTag: "createTimeProgressBTN",
                 onPressed: _isProgressValid
                     ? () {
-                        vm.onAddTimeProgress(timeProgressToCreate);
+                        vm.onAddTimeProgress(
+                            timeProgressToCreate ?? vm.defaultDurationProgress);
                         Navigator.pop(context);
                       }
                     : null,
@@ -98,8 +100,8 @@ class _ViewModel {
   final void Function(TimeProgress) onAddTimeProgress;
 
   _ViewModel({
-    @required this.defaultDurationProgress,
-    @required this.onAddTimeProgress,
+    required this.defaultDurationProgress,
+    required this.onAddTimeProgress,
   });
 
   factory _ViewModel.create(Store<AppState> store) {

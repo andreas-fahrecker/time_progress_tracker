@@ -8,9 +8,9 @@ class ProgressListView extends StatelessWidget {
 
   const ProgressListView({
     super.key,
-    @required this.timeProgressList,
-    @required this.doneColor,
-    @required this.leftColor,
+    required this.timeProgressList,
+    required this.doneColor,
+    required this.leftColor,
   });
 
   List<Widget> _renderListViewChildren() {

@@ -10,7 +10,7 @@ class TimeProgressListStoreConnector extends StatelessWidget {
 
   const TimeProgressListStoreConnector({
     super.key,
-    @required this.loadedBuilder,
+    required this.loadedBuilder,
   });
 
   @override

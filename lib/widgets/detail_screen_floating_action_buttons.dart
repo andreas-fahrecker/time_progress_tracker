@@ -12,14 +12,14 @@ class DetailScreenFloatingActionButtons extends StatelessWidget {
 
   const DetailScreenFloatingActionButtons({
     super.key,
-    @required this.editMode,
-    @required this.originalProgress,
-    @required this.editedProgress,
-    @required this.isEditedProgressValid,
-    @required this.onEditProgress,
-    @required this.onSaveEditedProgress,
-    @required this.onCancelEditProgress,
-    @required this.onDeleteProgress,
+    required this.editMode,
+    required this.originalProgress,
+    required this.editedProgress,
+    required this.isEditedProgressValid,
+    required this.onEditProgress,
+    required this.onSaveEditedProgress,
+    required this.onCancelEditProgress,
+    required this.onDeleteProgress,
   });
 
   @override
@@ -62,7 +62,7 @@ class DetailScreenFloatingActionButtons extends StatelessWidget {
           child: FloatingActionButton(
             heroTag:
                 editMode ? "saveEditedTimeProgressBTN" : "editTimeProgressBTN",
-            backgroundColor: editMode ? Colors.green : appTheme.accentColor,
+            backgroundColor: editMode ? Colors.green : appTheme.colorScheme.secondary,
             onPressed: editMode
                 ? isEditedProgressValid
                     ? onSaveEditedProgress

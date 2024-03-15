@@ -13,8 +13,8 @@ class TimeProgressStoreConnector extends StatelessWidget {
 
   const TimeProgressStoreConnector({
     super.key,
-    @required this.timeProgressId,
-    @required this.loadedBuilder,
+    required this.timeProgressId,
+    required this.loadedBuilder,
   });
 
   @override
@@ -27,11 +27,6 @@ class TimeProgressStoreConnector extends StatelessWidget {
         if (!vm.hasTpListLoaded) {
           return const Center(
             child: CircularProgressIndicator(),
-          );
-        }
-        if (vm.tp == null) {
-          return const Center(
-            child: Text("Error Invalid Time Progress"),
           );
         }
         return loadedBuilder(context, vm);

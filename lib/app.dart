@@ -12,9 +12,9 @@ class TimeProgressTrackerApp extends StatelessWidget {
   final Store<AppState> store;
 
   const TimeProgressTrackerApp({
-    Key key,
-    this.store,
-  }) : super(key: key);
+    super.key,
+    required this.store,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +24,16 @@ class TimeProgressTrackerApp extends StatelessWidget {
         title: name,
         theme: ThemeData(
           primarySwatch: Colors.indigo,
-          accentColor: Colors.indigoAccent,
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.indigo,
+            accentColor: Colors.indigoAccent,
+          ),
           brightness: Brightness.light,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         initialRoute: HomeScreen.routeName,
         routes: {
-          HomeScreen.routeName: (BuildContext context) =>
-              const HomeScreen(),
+          HomeScreen.routeName: (BuildContext context) => const HomeScreen(),
           ProgressDetailScreen.routeName: (BuildContext context) =>
               const ProgressDetailScreen(),
           ProgressCreationScreen.routeName: (BuildContext context) =>

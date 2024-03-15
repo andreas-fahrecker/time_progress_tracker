@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 class DatePickerBtn extends StatelessWidget {
   final String leadingString;
   final DateTime pickedDate;
-  final void Function(DateTime) onDatePicked;
+  final void Function(DateTime?) onDatePicked;
 
-  const DatePickerBtn({super.key, 
-    @required this.leadingString,
-    @required this.pickedDate,
-    @required this.onDatePicked,
+  const DatePickerBtn({
+    super.key,
+    required this.leadingString,
+    required this.pickedDate,
+    required this.onDatePicked,
   });
 
   void _onButtonPressed(BuildContext context) async {
@@ -26,8 +27,8 @@ class DatePickerBtn extends StatelessWidget {
     return TextButton(
       onPressed: () => _onButtonPressed(context),
       style: TextButton.styleFrom(
-        primary: appTheme.primaryTextTheme.labelLarge.color,
-        backgroundColor: appTheme.accentColor,
+        foregroundColor: appTheme.primaryTextTheme.labelLarge?.color,
+        backgroundColor: appTheme.colorScheme.secondary,
       ),
       child: Text(
           "$leadingString ${pickedDate.toLocal().toString().split(" ")[0]}"),
