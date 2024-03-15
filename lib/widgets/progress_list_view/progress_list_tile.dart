@@ -18,17 +18,19 @@ class ProgressListTile extends StatelessWidget {
   final TimeProgress timeProgress;
   final Color doneColor, leftColor;
 
-  ProgressListTile({
+  const ProgressListTile({super.key, 
     @required this.timeProgress,
     @required this.doneColor,
     @required this.leftColor,
   });
 
   Widget _renderSubtitle(BuildContext context) {
-    if (!timeProgress.hasStarted())
+    if (!timeProgress.hasStarted()) {
       return Text(ProgressListTileStrings.startsInDaysString(timeProgress));
-    if (timeProgress.hasEnded())
+    }
+    if (timeProgress.hasEnded()) {
       return Text(ProgressListTileStrings.endedDaysAgoString(timeProgress));
+    }
     return LinearPercentIndicator(
       center: Text(ProgressListTileStrings.percentString(timeProgress)),
       percent: timeProgress.percentDone(),
@@ -40,14 +42,14 @@ class ProgressListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void _onTileTap() =>
+    void onTileTap() =>
         Navigator.pushNamed(context, ProgressDetailScreen.routeName,
             arguments: ProgressDetailScreenArguments(timeProgress.id));
 
     return ListTile(
       title: Text(timeProgress.name),
       subtitle: _renderSubtitle(context),
-      onTap: _onTileTap,
+      onTap: onTileTap,
     );
   }
 }

@@ -5,12 +5,14 @@ import 'package:time_progress_tracker/widgets/home/tabs/settings/duration_settin
 import 'package:time_progress_tracker/widgets/store_connectors/settings_store_connector.dart';
 
 class HomeSettingsTab extends StatelessWidget {
+  const HomeSettingsTab({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SettingsStoreConnector(
       loadedBuilder: (context, settingsVm) {
         return Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Center(
             child: Column(
               children: [
@@ -28,7 +30,7 @@ class HomeSettingsTab extends StatelessWidget {
                     updateDuration: settingsVm.updateDuration,
                   ),
                 ),
-                Spacer(),
+                const Spacer(),
                 Expanded(
                   child: TextButton(
                     onPressed: () {
@@ -39,7 +41,7 @@ class HomeSettingsTab extends StatelessWidget {
                           applicationLegalese:
                               '\u00a9Andreas Fahrecker 2020-2021');
                     },
-                    child: Text("About"),
+                    child: const Text("About"),
                   ),
                 ),
               ],

@@ -13,34 +13,34 @@ import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_tile.dart';
 import 'package:time_progress_tracker/widgets/progress_list_view/progress_list_view.dart';
 
-import 'MaterialTesterWidget.dart';
+import 'material_tester_widget.dart';
 
 void main() {
-  final AppSettings _defaultAppSettings = AppSettings.defaults();
-  final int _thisYear = DateTime.now().year;
-  final TimeProgress _activeProgress = TimeProgress(
-      "TestProgress", DateTime(_thisYear - 2), DateTime(_thisYear + 2));
+  final AppSettings defaultAppSettings = AppSettings.defaults();
+  final int thisYear = DateTime.now().year;
+  final TimeProgress activeProgress = TimeProgress(
+      "TestProgress", DateTime(thisYear - 2), DateTime(thisYear + 2));
 
-  void _findStringOnce(String str) => expect(find.text(str), findsOneWidget);
+  void findStringOnce(String str) => expect(find.text(str), findsOneWidget);
 
   testWidgets("Progress List Tile with currently active progress works",
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialTesterWidget(
       widget: ProgressListTile(
-        timeProgress: _activeProgress,
-        doneColor: _defaultAppSettings.doneColor,
-        leftColor: _defaultAppSettings.leftColor,
+        timeProgress: activeProgress,
+        doneColor: defaultAppSettings.doneColor,
+        leftColor: defaultAppSettings.leftColor,
       ),
     ));
 
-    _findStringOnce(_activeProgress.name);
-    _findStringOnce(ProgressListTileStrings.percentString(_activeProgress));
+    findStringOnce(activeProgress.name);
+    findStringOnce(ProgressListTileStrings.percentString(activeProgress));
 
-    WidgetPredicate linearPercentPredicate = (Widget widget) =>
+    linearPercentPredicate(Widget widget) =>
         widget is LinearPercentIndicator &&
-        widget.percent == _activeProgress.percentDone() &&
-        widget.progressColor == _defaultAppSettings.doneColor &&
-        widget.backgroundColor == _defaultAppSettings.leftColor;
+        widget.percent == activeProgress.percentDone() &&
+        widget.progressColor == defaultAppSettings.doneColor &&
+        widget.backgroundColor == defaultAppSettings.leftColor;
     expect(find.byWidgetPredicate(linearPercentPredicate), findsOneWidget);
   });
 
@@ -48,40 +48,40 @@ void main() {
       (WidgetTester tester) async {
     TimeProgress futureProgress = TimeProgress(
       "Test Progress",
-      DateTime(_thisYear + 1),
-      DateTime(_thisYear + 2),
+      DateTime(thisYear + 1),
+      DateTime(thisYear + 2),
     );
 
     await tester.pumpWidget(MaterialTesterWidget(
       widget: ProgressListTile(
         timeProgress: futureProgress,
-        doneColor: _defaultAppSettings.doneColor,
-        leftColor: _defaultAppSettings.leftColor,
+        doneColor: defaultAppSettings.doneColor,
+        leftColor: defaultAppSettings.leftColor,
       ),
     ));
 
-    _findStringOnce(futureProgress.name);
-    _findStringOnce(ProgressListTileStrings.startsInDaysString(futureProgress));
+    findStringOnce(futureProgress.name);
+    findStringOnce(ProgressListTileStrings.startsInDaysString(futureProgress));
   });
 
   testWidgets("Progress List Tile with past progress works",
       (WidgetTester tester) async {
     TimeProgress pastProgress = TimeProgress(
       "Test Progress",
-      DateTime(_thisYear - 2),
-      DateTime(_thisYear - 1),
+      DateTime(thisYear - 2),
+      DateTime(thisYear - 1),
     );
 
     await tester.pumpWidget(MaterialTesterWidget(
       widget: ProgressListTile(
         timeProgress: pastProgress,
-        doneColor: _defaultAppSettings.doneColor,
-        leftColor: _defaultAppSettings.leftColor,
+        doneColor: defaultAppSettings.doneColor,
+        leftColor: defaultAppSettings.leftColor,
       ),
     ));
 
-    _findStringOnce(pastProgress.name);
-    _findStringOnce(ProgressListTileStrings.endedDaysAgoString(pastProgress));
+    findStringOnce(pastProgress.name);
+    findStringOnce(ProgressListTileStrings.endedDaysAgoString(pastProgress));
   });
 
   WidgetPredicate getProgressListTilePredicate(
@@ -96,35 +96,37 @@ void main() {
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialTesterWidget(
       widget: ProgressListView(
-        timeProgressList: [_activeProgress],
-        doneColor: _defaultAppSettings.doneColor,
-        leftColor: _defaultAppSettings.leftColor,
+        timeProgressList: [activeProgress],
+        doneColor: defaultAppSettings.doneColor,
+        leftColor: defaultAppSettings.leftColor,
       ),
     ));
 
-    _findStringOnce(_activeProgress.name);
+    findStringOnce(activeProgress.name);
     expect(
         find.byWidgetPredicate(
-            getProgressListTilePredicate(_activeProgress, _defaultAppSettings)),
+            getProgressListTilePredicate(activeProgress, defaultAppSettings)),
         findsOneWidget);
   });
 
   testWidgets("Progress List View displays file tiles",
       (WidgetTester tester) async {
     List<TimeProgress> tpList = [];
-    for (int i = 0; i < 5; i++) tpList.add(_activeProgress);
+    for (int i = 0; i < 5; i++) {
+      tpList.add(activeProgress);
+    }
     await tester.pumpWidget(MaterialTesterWidget(
       widget: ProgressListView(
         timeProgressList: tpList,
-        doneColor: _defaultAppSettings.doneColor,
-        leftColor: _defaultAppSettings.leftColor,
+        doneColor: defaultAppSettings.doneColor,
+        leftColor: defaultAppSettings.leftColor,
       ),
     ));
 
-    expect(find.text(_activeProgress.name), findsNWidgets(5));
+    expect(find.text(activeProgress.name), findsNWidgets(5));
     expect(
         find.byWidgetPredicate(
-            getProgressListTilePredicate(_activeProgress, _defaultAppSettings)),
+            getProgressListTilePredicate(activeProgress, defaultAppSettings)),
         findsNWidgets(5));
   });
 }

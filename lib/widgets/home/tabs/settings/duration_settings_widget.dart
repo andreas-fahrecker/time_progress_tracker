@@ -5,7 +5,8 @@ class DurationSettingsWidget extends StatelessWidget {
   final Duration duration;
   final void Function(Duration) updateDuration;
 
-  DurationSettingsWidget({
+  const DurationSettingsWidget({
+    super.key,
     @required this.duration,
     @required this.updateDuration,
   });
@@ -14,15 +15,15 @@ class DurationSettingsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     ThemeData appTheme = Theme.of(context);
 
-    int years = duration.inDays ~/ 365;
-    int months = (duration.inDays - (365 * years)) ~/ 30;
-    int days = duration.inDays - (365 * years) - (30 * months);
+    //int years = duration.inDays ~/ 365;
+    //int months = (duration.inDays - (365 * years)) ~/ 30;
+    //int days = duration.inDays - (365 * years) - (30 * months);
     return Column(
       children: [
         Expanded(
           child: Text(
             "Duration Settings",
-            style: appTheme.textTheme.headline6,
+            style: appTheme.textTheme.titleLarge,
           ),
         ),
         Row(

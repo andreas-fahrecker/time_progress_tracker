@@ -9,6 +9,8 @@ class HomeScreen extends StatefulWidget {
   static const routeName = "/home";
   static const title = "Time Progress Tracker";
 
+  const HomeScreen({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _HomeScreenState();
@@ -18,9 +20,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
   final List<Widget> _children = [
-    HomeActiveProgressesTab(),
-    HomeInactiveProgressesTab(),
-    HomeSettingsTab(),
+    const HomeActiveProgressesTab(),
+    const HomeInactiveProgressesTab(),
+    const HomeSettingsTab(),
   ];
 
   void onBottomTabTapped(int index) {
@@ -33,11 +35,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(HomeScreen.title),
+        title: const Text(HomeScreen.title),
       ),
       body: _children[_currentIndex],
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: _currentIndex != 2 ? CreateProgressButton() : null,
+      floatingActionButton: _currentIndex != 2 ? const CreateProgressButton() : null,
       bottomNavigationBar: HomeBottomNavBar(
         currentIndex: _currentIndex,
         onTap: onBottomTabTapped,

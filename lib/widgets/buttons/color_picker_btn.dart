@@ -7,7 +7,7 @@ class ColorPickerButton extends StatelessWidget {
   final Color selectedColor;
   final void Function(Color) onColorPicked;
 
-  ColorPickerButton({
+  const ColorPickerButton({super.key, 
     @required this.title,
     @required this.dialogTitle,
     @required this.selectedColor,
@@ -34,13 +34,13 @@ class ColorPickerButton extends StatelessWidget {
           },
         );
       },
-      child: Text(title),
       style: TextButton.styleFrom(
         primary: useBrightBackground(selectedColor)
-            ? appTheme.primaryTextTheme.button.color
-            : appTheme.textTheme.button.color,
+            ? appTheme.primaryTextTheme.labelLarge.color
+            : appTheme.textTheme.labelLarge.color,
         backgroundColor: selectedColor,
       ),
+      child: Text(title),
     );
   }
 }

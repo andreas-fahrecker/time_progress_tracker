@@ -5,7 +5,8 @@ class ColorSettingsWidget extends StatelessWidget {
   final Color doneColor, leftColor;
   final void Function(Color) updateDoneColor, updateLeftColor;
 
-  ColorSettingsWidget({
+  const ColorSettingsWidget({
+    super.key,
     @required this.doneColor,
     @required this.leftColor,
     @required this.updateDoneColor,
@@ -21,14 +22,14 @@ class ColorSettingsWidget extends StatelessWidget {
         Expanded(
           child: Text(
             "Color Settings",
-            style: appTheme.textTheme.headline6,
+            style: appTheme.textTheme.titleLarge,
           ),
         ),
         Row(
           children: [
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(right: 5),
+                padding: const EdgeInsets.only(right: 5),
                 child: ColorPickerButton(
                   title: "Done Color",
                   dialogTitle: "Select Done Color",
@@ -39,7 +40,7 @@ class ColorSettingsWidget extends StatelessWidget {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 5),
+                padding: const EdgeInsets.only(left: 5),
                 child: ColorPickerButton(
                   title: "Left Color",
                   dialogTitle: "Select Left Color",

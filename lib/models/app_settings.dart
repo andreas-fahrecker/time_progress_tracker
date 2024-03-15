@@ -7,13 +7,13 @@ class AppSettings {
   final Color leftColor;
   final Duration duration;
 
-  AppSettings({
+  const AppSettings({
     this.doneColor,
     this.leftColor,
     this.duration,
   });
 
-  factory AppSettings.defaults() => AppSettings(
+  factory AppSettings.defaults() => const AppSettings(
         doneColor: Colors.green,
         leftColor: Colors.red,
         duration: Duration(days: 365),

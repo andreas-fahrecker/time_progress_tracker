@@ -6,6 +6,8 @@ import 'package:time_progress_tracker/widgets/store_connectors/settings_store_co
 import 'package:time_progress_tracker/widgets/store_connectors/time_progress_list_store_connector.dart';
 
 class HomeInactiveProgressesTab extends StatelessWidget {
+  const HomeInactiveProgressesTab({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SettingsStoreConnector(
@@ -14,14 +16,15 @@ class HomeInactiveProgressesTab extends StatelessWidget {
           loadedBuilder: (context, tpListVm) {
             List<TimeProgress> inactiveTpList =
                 selectInactiveProgresses(tpListVm.tpList);
-            if (inactiveTpList.length < 1)
+            if (inactiveTpList.isEmpty) {
               return Container(
-                padding: EdgeInsets.all(16),
-                child: Center(
+                padding: const EdgeInsets.all(16),
+                child: const Center(
                   child: Text(
                       "You don't have any currently inactive time progresses, that are tracked."),
                 ),
               );
+            }
 
             return ProgressListView(
               timeProgressList: inactiveTpList,

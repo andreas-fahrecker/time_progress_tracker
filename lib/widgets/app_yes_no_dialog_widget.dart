@@ -5,7 +5,7 @@ class AppYesNoDialog extends StatelessWidget {
   final String contentText;
   final void Function() onYesPressed;
 
-  AppYesNoDialog({
+  const AppYesNoDialog({
     Key key,
     @required this.titleText,
     @required this.contentText,
@@ -19,11 +19,11 @@ class AppYesNoDialog extends StatelessWidget {
       content: Text(contentText),
       actions: <Widget>[
         FlatButton(
-          child: Text("Yes"),
+          child: const Text("Yes"),
           onPressed: onYesPressed,
         ),
         FlatButton(
-          child: Text("No"),
+          child: const Text("No"),
           onPressed: () {
             Navigator.pop(context);
           },

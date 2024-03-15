@@ -8,7 +8,7 @@ class AppState {
   final List<TimeProgress> timeProgressList;
   final AppSettings appSettings;
 
-  AppState(
+  const AppState(
       {this.hasProgressesLoaded = false,
       this.hasSettingsLoaded = false,
       this.timeProgressList = const [],
@@ -22,7 +22,7 @@ class AppState {
     List<TimeProgress> timeProgressList,
   }) {
     return AppState(
-      hasProgressesLoaded: hasLoaded ?? this.hasProgressesLoaded,
+      hasProgressesLoaded: hasLoaded ?? hasProgressesLoaded,
       timeProgressList: timeProgressList ?? this.timeProgressList,
     );
   }

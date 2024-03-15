@@ -5,7 +5,8 @@ class SelectDurationBtn extends StatelessWidget {
   final Duration duration;
   final void Function(Duration) updateDuration;
 
-  SelectDurationBtn({
+  const SelectDurationBtn({
+    super.key,
     @required this.duration,
     @required this.updateDuration,
   });
@@ -38,10 +39,10 @@ class SelectDurationBtn extends StatelessWidget {
     int days = duration.inDays - (365 * years) - (30 * months);
     return TextButton(
         onPressed: () => _onButtonPressed(context, appTheme),
-        child: Text("$years Years $months Months $days Days"),
         style: TextButton.styleFrom(
-          primary: appTheme.primaryTextTheme.button.color,
+          primary: appTheme.primaryTextTheme.labelLarge.color,
           backgroundColor: appTheme.accentColor,
-        ));
+        ),
+        child: Text("$years Years $months Months $days Days"));
   }
 }

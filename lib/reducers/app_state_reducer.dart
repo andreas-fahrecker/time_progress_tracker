@@ -17,9 +17,9 @@ AppState appStateReducer(AppState state, dynamic action) {
 }
 
 final appSettingsReducers = combineReducers<AppSettings>([
-  TypedReducer<AppSettings, AppSettingsLoadedActions>(_loadAppSettings),
-  TypedReducer<AppSettings, UpdateAppSettingsActions>(_updateAppSettings),
-  TypedReducer<AppSettings, AppSettingsNotLoadedAction>(_setDefaultSettings)
+  TypedReducer<AppSettings, AppSettingsLoadedActions>(_loadAppSettings).call,
+  TypedReducer<AppSettings, UpdateAppSettingsActions>(_updateAppSettings).call,
+  TypedReducer<AppSettings, AppSettingsNotLoadedAction>(_setDefaultSettings).call
 ]);
 
 AppSettings _loadAppSettings(

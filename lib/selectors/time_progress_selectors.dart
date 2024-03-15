@@ -46,7 +46,7 @@ List<TimeProgress> pastTimeProgressesSelector(AppState state) =>
         .toList();
 
 TimeProgress timeProgressByIdSelector(AppState state, String id) {
-  if (state.timeProgressList.length < 1) return null;
+  if (state.timeProgressList.isEmpty) return null;
   return state.timeProgressList
       .firstWhere((timeProgress) => timeProgress.id == id, orElse: () => null);
 }

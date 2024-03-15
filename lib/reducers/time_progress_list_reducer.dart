@@ -4,13 +4,13 @@ import 'package:time_progress_tracker/models/time_progress.dart';
 
 final timeProgressListReducer = combineReducers<List<TimeProgress>>([
   TypedReducer<List<TimeProgress>, TimeProgressListLoadedAction>(
-      _setLoadedTimeProgressList),
+      _setLoadedTimeProgressList).call,
   TypedReducer<List<TimeProgress>, TimeProgressListNotLoadedAction>(
-      _setEmptyTimeProgressList),
-  TypedReducer<List<TimeProgress>, AddTimeProgressAction>(_addTimeProgress),
+      _setEmptyTimeProgressList).call,
+  TypedReducer<List<TimeProgress>, AddTimeProgressAction>(_addTimeProgress).call,
   TypedReducer<List<TimeProgress>, UpdateTimeProgressAction>(
-      _updateTimeProgress),
-  TypedReducer<List<TimeProgress>, DeleteTimeProgressAction>(_deleteTimeProgress),
+      _updateTimeProgress).call,
+  TypedReducer<List<TimeProgress>, DeleteTimeProgressAction>(_deleteTimeProgress).call,
 ]);
 
 List<TimeProgress> _setLoadedTimeProgressList(

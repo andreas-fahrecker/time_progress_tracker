@@ -5,11 +5,11 @@ class DatePickerBtn extends StatelessWidget {
   final DateTime pickedDate;
   final void Function(DateTime) onDatePicked;
 
-  DatePickerBtn({
+  const DatePickerBtn({super.key, 
     @required this.leadingString,
     @required this.pickedDate,
     @required this.onDatePicked,
-  }) : super();
+  });
 
   void _onButtonPressed(BuildContext context) async {
     onDatePicked(await showDatePicker(
@@ -25,12 +25,12 @@ class DatePickerBtn extends StatelessWidget {
     ThemeData appTheme = Theme.of(context);
     return TextButton(
       onPressed: () => _onButtonPressed(context),
-      child: Text(
-          "$leadingString ${pickedDate.toLocal().toString().split(" ")[0]}"),
       style: TextButton.styleFrom(
-        primary: appTheme.primaryTextTheme.button.color,
+        primary: appTheme.primaryTextTheme.labelLarge.color,
         backgroundColor: appTheme.accentColor,
       ),
+      child: Text(
+          "$leadingString ${pickedDate.toLocal().toString().split(" ")[0]}"),
     );
   }
 }

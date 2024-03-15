@@ -10,7 +10,8 @@ class DetailScreenFloatingActionButtons extends StatelessWidget {
       onCancelEditProgress,
       onDeleteProgress;
 
-  DetailScreenFloatingActionButtons({
+  const DetailScreenFloatingActionButtons({
+    super.key,
     @required this.editMode,
     @required this.originalProgress,
     @required this.editedProgress,
@@ -25,10 +26,10 @@ class DetailScreenFloatingActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     final ThemeData appTheme = Theme.of(context);
 
-    void _onCancelEditTimeProgressBTN() {
-      if (originalProgress == editedProgress)
+    void onCancelEditTimeProgressBTN() {
+      if (originalProgress == editedProgress) {
         onCancelEditProgress();
-      else {
+      } else {
         showDialog(
           context: context,
           builder: (_) => AppYesNoDialog(
@@ -44,7 +45,7 @@ class DetailScreenFloatingActionButtons extends StatelessWidget {
       }
     }
 
-    void _onDeleteTimeProgressBTN() {
+    void onDeleteTimeProgressBTN() {
       showDialog(
         context: context,
         builder: (_) => AppYesNoDialog(
@@ -61,13 +62,13 @@ class DetailScreenFloatingActionButtons extends StatelessWidget {
           child: FloatingActionButton(
             heroTag:
                 editMode ? "saveEditedTimeProgressBTN" : "editTimeProgressBTN",
-            child: editMode ? Icon(Icons.save) : Icon(Icons.edit),
             backgroundColor: editMode ? Colors.green : appTheme.accentColor,
             onPressed: editMode
                 ? isEditedProgressValid
                     ? onSaveEditedProgress
                     : null
                 : onEditProgress,
+            child: editMode ? const Icon(Icons.save) : const Icon(Icons.edit),
           ),
         ),
         Expanded(
@@ -75,11 +76,11 @@ class DetailScreenFloatingActionButtons extends StatelessWidget {
             heroTag: editMode
                 ? "cancelEditTimeProgressBTN"
                 : "deleteTimeProgressBTN",
-            child: editMode ? Icon(Icons.cancel) : Icon(Icons.delete),
             backgroundColor: Colors.red,
             onPressed: editMode
-                ? _onCancelEditTimeProgressBTN
-                : _onDeleteTimeProgressBTN,
+                ? onCancelEditTimeProgressBTN
+                : onDeleteTimeProgressBTN,
+            child: editMode ? const Icon(Icons.cancel) : const Icon(Icons.delete),
           ),
         ),
       ],

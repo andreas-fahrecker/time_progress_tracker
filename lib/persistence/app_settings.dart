@@ -11,15 +11,16 @@ class AppSettingsRepository {
   AppSettingsRepository(this.prefs, {this.codec = json});
 
   Future<AppSettingsEntity> loadAppSettings() {
-    final String jsonString = this.prefs.getString(_key);
-    if (jsonString == null)
+    final String? jsonString = prefs.getString(_key);
+    if (jsonString == null) {
       return Future<AppSettingsEntity>.value(AppSettingsEntity.defaults());
+    }
     return Future<AppSettingsEntity>.value(
         AppSettingsEntity.fromJson(codec.decode(jsonString)));
   }
 
   Future<bool> saveAppSettings(AppSettingsEntity appSettings) =>
-      this.prefs.setString(_key, codec.encode(appSettings));
+      prefs.setString(_key, codec.encode(appSettings));
 }
 
 class AppSettingsEntity {

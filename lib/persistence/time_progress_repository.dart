@@ -10,7 +10,7 @@ class TimeProgressRepository {
   TimeProgressRepository(this.prefs, {this.codec = json});
 
   Future<List<TimeProgressEntity>> loadTimeProgressList() {
-    final String jsonString = this.prefs.getString(_key);
+    final String? jsonString = prefs.getString(_key);
     if (jsonString == null) {
       return Future<List<TimeProgressEntity>>.value([]);
     }
@@ -24,6 +24,6 @@ class TimeProgressRepository {
   Future<bool> saveTimeProgressList(List<TimeProgressEntity> timeProgressList) {
     final String jsonString = codec.encode(
         {"timers": timeProgressList.map((timer) => timer.toJson()).toList()});
-    return this.prefs.setString(_key, jsonString);
+    return prefs.setString(_key, jsonString);
   }
 }

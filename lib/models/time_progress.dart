@@ -38,7 +38,7 @@ class TimeProgress {
   int allDays() => endTime.difference(startTime).inDays;
 
   double percentDone() {
-    double percent = this.daysBehind() / (this.allDays() / 100) / 100;
+    double percent = daysBehind() / (allDays() / 100) / 100;
     if (percent < 0) percent = 0;
     if (percent > 1) percent = 1;
     return percent;
@@ -48,7 +48,7 @@ class TimeProgress {
       DateTime.now().millisecondsSinceEpoch > startTime.millisecondsSinceEpoch;
 
   int daysTillStart() {
-    if (hasStarted()) throw new TimeProgressHasStartedException();
+    if (hasStarted()) throw TimeProgressHasStartedException();
     return startTime.difference(DateTime.now()).inDays;
   }
 
@@ -56,7 +56,7 @@ class TimeProgress {
       DateTime.now().millisecondsSinceEpoch > endTime.millisecondsSinceEpoch;
 
   int daysSinceEnd() {
-    if (!hasEnded()) throw new TimeProgressHasNotEndedException();
+    if (!hasEnded()) throw TimeProgressHasNotEndedException();
     return DateTime.now().difference(endTime).inDays;
   }
 
@@ -79,11 +79,12 @@ class TimeProgress {
       "TimeProgress{id: $id, name: $name, startTime: $startTime, endTime: $endTime}";
 
   TimeProgressEntity toEntity() {
-    if (!TimeProgress.isNameValid(name))
-      throw new TimeProgressInvalidNameException(name);
-    if (!TimeProgress.areTimesValid(startTime, endTime))
-      throw new TimeProgressStartTimeIsNotBeforeEndTimeException(
-          startTime, endTime);
+    if (!TimeProgress.isNameValid(name)) {
+      throw TimeProgressInvalidNameException(name);
+    }
+    if (!TimeProgress.areTimesValid(startTime, endTime)) {
+      throw TimeProgressStartTimeIsNotBeforeEndTimeException(startTime, endTime);
+    }
     return TimeProgressEntity(id, name, startTime, endTime);
   }
 

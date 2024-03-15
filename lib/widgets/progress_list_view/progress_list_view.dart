@@ -6,7 +6,8 @@ class ProgressListView extends StatelessWidget {
   final List<TimeProgress> timeProgressList;
   final Color doneColor, leftColor;
 
-  ProgressListView({
+  const ProgressListView({
+    super.key,
     @required this.timeProgressList,
     @required this.doneColor,
     @required this.leftColor,
@@ -27,7 +28,7 @@ class ProgressListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       children: _renderListViewChildren(),
     );
   }

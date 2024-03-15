@@ -17,6 +17,8 @@ class ProgressDetailScreen extends StatefulWidget {
   static const routeName = "/progress";
   static const title = "Progress View";
 
+  const ProgressDetailScreen({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _ProgressDetailScreenState();
@@ -25,7 +27,7 @@ class ProgressDetailScreen extends StatefulWidget {
 
 class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
   bool _editMode = false, _isEditedProgressValid = false;
-  TimeProgress _editedProgress, _originalProgress;
+  TimeProgress? _editedProgress, _originalProgress;
 
   void _initEditedProgress(TimeProgress tp) {
     if (_editedProgress == null) {
@@ -65,12 +67,13 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
         leftColor: settingsVm.appSettings.leftColor,
       ))
     ];
-    if (_editMode)
+    if (_editMode) {
       columnChildren.add(Expanded(
           child: ProgressEditorWidget(
         timeProgress: _editedProgress,
         onTimeProgressChanged: _onEditedProgressChanged,
       )));
+    }
     return columnChildren;
   }
 
@@ -81,7 +84,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(ProgressDetailScreen.title),
+        title: const Text(ProgressDetailScreen.title),
       ),
       body: SettingsStoreConnector(
         loadedBuilder: (context, settingsVm) {
@@ -90,7 +93,7 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
             loadedBuilder: (context, tpVm) {
               _initEditedProgress(tpVm.tp);
               return Container(
-                  margin: EdgeInsets.all(8),
+                  margin: const EdgeInsets.all(8),
                   child: Column(
                     children: _renderColumnChildren(settingsVm, tpVm),
                   ));
@@ -102,12 +105,12 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
       floatingActionButton: TimeProgressStoreConnector(
         timeProgressId: args.id,
         loadedBuilder: (context, tpVm) {
-          void _saveEditedProgress() {
+          void saveEditedProgress() {
             tpVm.updateTimeProgress(_editedProgress);
             _switchEditMode(false);
           }
 
-          void _deleteTimeProgress() {
+          void deleteTimeProgress() {
             tpVm.deleteTimeProgress();
             Navigator.popUntil(
                 context, ModalRoute.withName(HomeScreen.routeName));
@@ -119,9 +122,9 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
               editedProgress: _editedProgress,
               isEditedProgressValid: _isEditedProgressValid,
               onEditProgress: () => _switchEditMode(true),
-              onSaveEditedProgress: _saveEditedProgress,
+              onSaveEditedProgress: saveEditedProgress,
               onCancelEditProgress: _cancelEditMode,
-              onDeleteProgress: _deleteTimeProgress);
+              onDeleteProgress: deleteTimeProgress);
         },
       ),
     );

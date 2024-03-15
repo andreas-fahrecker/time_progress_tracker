@@ -8,7 +8,8 @@ import 'package:time_progress_tracker/models/app_state.dart';
 class SettingsStoreConnector extends StatelessWidget {
   final Widget Function(BuildContext, SettingsViewModel) loadedBuilder;
 
-  SettingsStoreConnector({
+  const SettingsStoreConnector({
+    super.key,
     @required this.loadedBuilder,
   });
 
@@ -18,10 +19,11 @@ class SettingsStoreConnector extends StatelessWidget {
       onInit: loadSettingsIfUnloaded,
       converter: (store) => SettingsViewModel._create(store),
       builder: (context, SettingsViewModel vm) {
-        if (!vm.hasSettingsLoaded)
-          return Center(
+        if (!vm.hasSettingsLoaded) {
+          return const Center(
             child: CircularProgressIndicator(),
           );
+        }
         return loadedBuilder(context, vm);
       },
     );
@@ -44,17 +46,17 @@ class SettingsViewModel {
   );
 
   factory SettingsViewModel._create(Store<AppState> store) {
-    AppSettings _appSettings = store.state.appSettings;
+    AppSettings appSettings = store.state.appSettings;
 
-    void _updateDoneColor(Color dC) => store.dispatch(
-        UpdateAppSettingsActions(_appSettings.copyWith(doneColor: dC)));
-    void _updateLeftColor(Color lC) => store.dispatch(
-        UpdateAppSettingsActions(_appSettings.copyWith(leftColor: lC)));
+    void updateDoneColor(Color dC) => store.dispatch(
+        UpdateAppSettingsActions(appSettings.copyWith(doneColor: dC)));
+    void updateLeftColor(Color lC) => store.dispatch(
+        UpdateAppSettingsActions(appSettings.copyWith(leftColor: lC)));
 
-    void _updateDuration(Duration d) => store
-        .dispatch(UpdateAppSettingsActions(_appSettings.copyWith(duration: d)));
+    void updateDuration(Duration d) => store
+        .dispatch(UpdateAppSettingsActions(appSettings.copyWith(duration: d)));
 
-    return SettingsViewModel(_appSettings, store.state.hasSettingsLoaded,
-        _updateDoneColor, _updateLeftColor, _updateDuration);
+    return SettingsViewModel(appSettings, store.state.hasSettingsLoaded,
+        updateDoneColor, updateLeftColor, updateDuration);
   }
 }

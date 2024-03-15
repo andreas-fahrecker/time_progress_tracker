@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class MaterialTesterWidget extends StatelessWidget {
   final Widget widget;
 
-  MaterialTesterWidget({
+  const MaterialTesterWidget({
+    super.key,
     @required this.widget,
   });
 

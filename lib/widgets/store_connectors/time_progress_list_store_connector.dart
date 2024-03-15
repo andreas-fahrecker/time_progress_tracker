@@ -8,7 +8,8 @@ import 'package:time_progress_tracker/models/time_progress.dart';
 class TimeProgressListStoreConnector extends StatelessWidget {
   final Widget Function(BuildContext, TimeProgressListViewModel) loadedBuilder;
 
-  TimeProgressListStoreConnector({
+  const TimeProgressListStoreConnector({
+    super.key,
     @required this.loadedBuilder,
   });
 
@@ -18,10 +19,11 @@ class TimeProgressListStoreConnector extends StatelessWidget {
       onInit: loadTimeProgressListIfUnloaded,
       converter: (store) => TimeProgressListViewModel._create(store),
       builder: (context, TimeProgressListViewModel vm) {
-        if (!vm.hasTpListLoaded)
-          return Center(
+        if (!vm.hasTpListLoaded) {
+          return const Center(
             child: CircularProgressIndicator(),
           );
+        }
         return loadedBuilder(context, vm);
       },
     );

@@ -6,7 +6,8 @@ class ProgressEditorWidget extends StatefulWidget {
   final TimeProgress timeProgress;
   final Function(TimeProgress, bool) onTimeProgressChanged;
 
-  ProgressEditorWidget({
+  const ProgressEditorWidget({
+    super.key,
     @required this.timeProgress,
     @required this.onTimeProgressChanged,
   });
@@ -67,7 +68,7 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
         child: TextField(
           controller: _nameTextController,
           decoration: InputDecoration(
-            border: OutlineInputBorder(),
+            border: const OutlineInputBorder(),
             labelText: "Progress Name",
             errorText: _validName
                 ? null
@@ -80,7 +81,7 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
           children: [
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(right: 5),
+                padding: const EdgeInsets.only(right: 5),
                 child: DatePickerBtn(
                   leadingString: "Start Date:",
                   pickedDate: widget.timeProgress.startTime,
@@ -90,7 +91,7 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
             ),
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(left: 5),
+                padding: const EdgeInsets.only(left: 5),
                 child: DatePickerBtn(
                   leadingString: "End Date:",
                   pickedDate: widget.timeProgress.endTime,
@@ -103,9 +104,9 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
       )
     ];
 
-    if (!_validDate)
+    if (!_validDate) {
       columnChildren.add(
-        Expanded(
+        const Expanded(
           child: Center(
             child: Text(
               "Invalid Dates. The Start Date has to be before the End Date",
@@ -114,11 +115,10 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
           ),
         ),
       );
+    }
 
-    return Container(
-      child: Column(
-        children: columnChildren,
-      ),
+    return Column(
+      children: columnChildren,
     );
   }
 }

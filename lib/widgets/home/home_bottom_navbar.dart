@@ -4,11 +4,11 @@ class HomeBottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function onTap;
 
-  HomeBottomNavBar({
-    Key key,
+  const HomeBottomNavBar({
+    super.key,
     @required this.currentIndex,
     @required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,21 +19,21 @@ class HomeBottomNavBar extends StatelessWidget {
       currentIndex: currentIndex,
       items: [
         BottomNavigationBarItem(
-          icon: new Icon(
+          icon: Icon(
             Icons.alarm,
             color: appTheme.primaryColor,
           ),
           label: "Active Progresses",
         ),
         BottomNavigationBarItem(
-          icon: new Icon(
+          icon: Icon(
             Icons.alarm_off,
             color: appTheme.primaryColor,
           ),
           label: "Inactive Progresses",
         ),
         BottomNavigationBarItem(
-          icon: new Icon(
+          icon: Icon(
             Icons.settings,
             color: appTheme.primaryColor,
           ),

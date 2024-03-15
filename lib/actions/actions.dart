@@ -49,8 +49,9 @@ class DeleteTimeProgressAction {
 }
 
 void loadTimeProgressListIfUnloaded(Store<AppState> store) {
-  if (!store.state.hasProgressesLoaded)
+  if (!store.state.hasProgressesLoaded) {
     store.dispatch(LoadTimeProgressListAction());
+  }
 }
 
 void loadSettingsIfUnloaded(Store<AppState> store) {

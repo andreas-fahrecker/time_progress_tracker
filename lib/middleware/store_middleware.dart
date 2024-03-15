@@ -17,12 +17,12 @@ List<Middleware<AppState>> createStoreMiddleware(
   final loadSettings = _createLoadAppSettings(settingsRepo);
 
   return [
-    TypedMiddleware<AppState, LoadTimeProgressListAction>(loadTimeProgressList),
-    TypedMiddleware<AppState, AddTimeProgressAction>(saveTimeProgressList),
-    TypedMiddleware<AppState, UpdateTimeProgressAction>(saveTimeProgressList),
-    TypedMiddleware<AppState, DeleteTimeProgressAction>(saveTimeProgressList),
-    TypedMiddleware<AppState, LoadSettingsAction>(loadSettings),
-    TypedMiddleware<AppState, UpdateAppSettingsActions>(saveSettings)
+    TypedMiddleware<AppState, LoadTimeProgressListAction>(loadTimeProgressList).call,
+    TypedMiddleware<AppState, AddTimeProgressAction>(saveTimeProgressList).call,
+    TypedMiddleware<AppState, UpdateTimeProgressAction>(saveTimeProgressList).call,
+    TypedMiddleware<AppState, DeleteTimeProgressAction>(saveTimeProgressList).call,
+    TypedMiddleware<AppState, LoadSettingsAction>(loadSettings).call,
+    TypedMiddleware<AppState, UpdateAppSettingsActions>(saveSettings).call
   ];
 }
 

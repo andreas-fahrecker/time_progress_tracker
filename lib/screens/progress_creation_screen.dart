@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
 import 'package:time_progress_tracker/actions/actions.dart';
@@ -13,6 +12,8 @@ class ProgressCreationScreen extends StatefulWidget {
   static const routeName = "/create-progress";
   static const title = "Create Time Progress";
 
+  const ProgressCreationScreen({super.key});
+
   @override
   State<StatefulWidget> createState() {
     return _ProgressCreationScreenState();
@@ -20,14 +21,15 @@ class ProgressCreationScreen extends StatefulWidget {
 }
 
 class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
-  TimeProgress timeProgressToCreate;
+  TimeProgress? timeProgressToCreate;
   bool _isProgressValid = false;
 
   void initTimeProgress(TimeProgress timeProgress) {
-    if (timeProgressToCreate == null)
+    if (timeProgressToCreate == null) {
       setState(() {
         timeProgressToCreate = timeProgress;
       });
+    }
   }
 
   void onTimeProgressChanged(
@@ -42,10 +44,10 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(ProgressCreationScreen.title),
+        title: const Text(ProgressCreationScreen.title),
       ),
       body: Container(
-        padding: EdgeInsets.all(12),
+        padding: const EdgeInsets.all(12),
         child: StoreConnector<AppState, _ViewModel>(
             onInit: loadSettingsIfUnloaded,
             converter: (store) => _ViewModel.create(store),
@@ -66,23 +68,23 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
               converter: (store) => _ViewModel.create(store),
               builder: (context, _ViewModel vm) => FloatingActionButton(
                 heroTag: "createTimeProgressBTN",
-                child: Icon(Icons.save),
                 onPressed: _isProgressValid
                     ? () {
                         vm.onAddTimeProgress(timeProgressToCreate);
                         Navigator.pop(context);
                       }
                     : null,
+                child: const Icon(Icons.save),
               ),
             ),
           ),
           Expanded(
             child: FloatingActionButton(
               heroTag: "cancelTimeProgressCreationBTN",
-              child: Icon(Icons.cancel),
               onPressed: () {
                 Navigator.pop(context);
               },
+              child: const Icon(Icons.cancel),
             ),
           )
         ],
@@ -103,14 +105,14 @@ class _ViewModel {
   factory _ViewModel.create(Store<AppState> store) {
     AppSettings settings = appSettingsSelector(store.state);
 
-    _onAddTimeProgress(TimeProgress tp) {
+    onAddTimeProgress(TimeProgress tp) {
       if (TimeProgress.isValid(tp)) store.dispatch(AddTimeProgressAction(tp));
     }
 
     return _ViewModel(
       defaultDurationProgress:
           TimeProgress.defaultFromDuration(settings.duration),
-      onAddTimeProgress: _onAddTimeProgress,
+      onAddTimeProgress: onAddTimeProgress,
     );
   }
 }

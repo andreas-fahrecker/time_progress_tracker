@@ -11,7 +11,8 @@ class TimeProgressStoreConnector extends StatelessWidget {
   final String timeProgressId;
   final Widget Function(BuildContext, TimeProgressViewModel) loadedBuilder;
 
-  TimeProgressStoreConnector({
+  const TimeProgressStoreConnector({
+    super.key,
     @required this.timeProgressId,
     @required this.loadedBuilder,
   });
@@ -23,14 +24,16 @@ class TimeProgressStoreConnector extends StatelessWidget {
       converter: (store) =>
           TimeProgressViewModel._create(store, timeProgressId),
       builder: (context, TimeProgressViewModel vm) {
-        if (!vm.hasTpListLoaded)
-          return Center(
+        if (!vm.hasTpListLoaded) {
+          return const Center(
             child: CircularProgressIndicator(),
           );
-        if (vm.tp == null)
-          return Center(
+        }
+        if (vm.tp == null) {
+          return const Center(
             child: Text("Error Invalid Time Progress"),
           );
+        }
         return loadedBuilder(context, vm);
       },
     );
@@ -52,15 +55,15 @@ class TimeProgressViewModel {
   );
 
   factory TimeProgressViewModel._create(Store<AppState> store, String id) {
-    void _updateTimeProgress(TimeProgress tp) =>
+    void updateTimeProgress(TimeProgress tp) =>
         store.dispatch(UpdateTimeProgressAction(id, tp));
-    void _deleteTimeProgress() => store.dispatch(DeleteTimeProgressAction(id));
+    void deleteTimeProgress() => store.dispatch(DeleteTimeProgressAction(id));
 
     return TimeProgressViewModel(
       selectProgressById(store.state.timeProgressList, id),
       store.state.hasProgressesLoaded,
-      _updateTimeProgress,
-      _deleteTimeProgress,
+      updateTimeProgress,
+      deleteTimeProgress,
     );
   }
 }

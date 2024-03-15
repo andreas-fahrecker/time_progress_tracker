@@ -11,7 +11,7 @@ class TimeProgressTrackerApp extends StatelessWidget {
 
   final Store<AppState> store;
 
-  TimeProgressTrackerApp({
+  const TimeProgressTrackerApp({
     Key key,
     this.store,
   }) : super(key: key);
@@ -31,11 +31,11 @@ class TimeProgressTrackerApp extends StatelessWidget {
         initialRoute: HomeScreen.routeName,
         routes: {
           HomeScreen.routeName: (BuildContext context) =>
-              HomeScreen(),
+              const HomeScreen(),
           ProgressDetailScreen.routeName: (BuildContext context) =>
-              ProgressDetailScreen(),
+              const ProgressDetailScreen(),
           ProgressCreationScreen.routeName: (BuildContext context) =>
-              ProgressCreationScreen(),
+              const ProgressCreationScreen(),
         },
       ),
     );
