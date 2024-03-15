@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.fahrecker.time_progress_calculator">
     <application
-        android:label="time_progress_tracker"
+        android:label="Time Progress Tracker"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
