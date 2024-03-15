@@ -33,9 +33,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData appTheme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(HomeScreen.title),
+        backgroundColor: appTheme.colorScheme.primary,
       ),
       body: _children[_currentIndex],
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

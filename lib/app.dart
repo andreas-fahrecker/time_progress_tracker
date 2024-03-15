@@ -27,6 +27,7 @@ class TimeProgressTrackerApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSwatch(
             primarySwatch: Colors.indigo,
             accentColor: Colors.indigoAccent,
+            backgroundColor: Colors.white
           ),
           brightness: Brightness.light,
           visualDensity: VisualDensity.adaptivePlatformDensity,

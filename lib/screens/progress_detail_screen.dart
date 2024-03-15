@@ -79,12 +79,15 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final ProgressDetailScreenArguments args =
-        ModalRoute.of(context)?.settings.arguments as ProgressDetailScreenArguments;
+    final ThemeData appTheme = Theme.of(context);
+    final ProgressDetailScreenArguments args = ModalRoute.of(context)
+        ?.settings
+        .arguments as ProgressDetailScreenArguments;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text(ProgressDetailScreen.title),
+        backgroundColor: appTheme.colorScheme.primary,
       ),
       body: SettingsStoreConnector(
         loadedBuilder: (context, settingsVm) {
@@ -93,10 +96,11 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
             loadedBuilder: (context, tpVm) {
               _initEditedProgress(tpVm.tp);
               return Container(
-                  margin: const EdgeInsets.all(8),
-                  child: Column(
-                    children: _renderColumnChildren(settingsVm, tpVm),
-                  ));
+                margin: const EdgeInsets.all(8),
+                child: Column(
+                  children: _renderColumnChildren(settingsVm, tpVm),
+                ),
+              );
             },
           );
         },

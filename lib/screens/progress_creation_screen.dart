@@ -42,9 +42,12 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData appTheme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(ProgressCreationScreen.title),
+        backgroundColor: appTheme.colorScheme.primary,
       ),
       body: Container(
         padding: const EdgeInsets.all(12),
@@ -52,7 +55,9 @@ class _ProgressCreationScreenState extends State<ProgressCreationScreen> {
             onInit: loadSettingsIfUnloaded,
             converter: (store) => _ViewModel.create(store),
             builder: (context, _ViewModel viewModel) {
-              initTimeProgress(viewModel.defaultDurationProgress);
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                initTimeProgress(viewModel.defaultDurationProgress);
+              });
               return ProgressEditorWidget(
                 timeProgress:
                     timeProgressToCreate ?? viewModel.defaultDurationProgress,

@@ -29,7 +29,7 @@ class TimeProgressEntity {
     };
   }
 
-  static TimeProgressEntity fromJson(Map<String, Object> json) {
+  static TimeProgressEntity fromJson(dynamic json) {
     final String id = json["id"] as String;
     final String name = json["name"] as String;
     final DateTime startTime =

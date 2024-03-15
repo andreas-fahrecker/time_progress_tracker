@@ -16,7 +16,6 @@ class TimeProgressRepository {
     }
     return Future<List<TimeProgressEntity>>.value(codec
         .decode(jsonString)["timers"]
-        .cast<Map<String, Object>>()
         .map<TimeProgressEntity>(TimeProgressEntity.fromJson)
         .toList(growable: false));
   }
