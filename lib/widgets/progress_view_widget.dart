@@ -17,9 +17,13 @@ class ProgressViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Column(
         children: [
-          Expanded(
+          SizedBox(
+            height: MediaQuery.of(context).size.height *
+                0.3, // adjust the value as needed
             child: FittedBox(
               fit: BoxFit.fitWidth,
               child: Text(
@@ -32,7 +36,9 @@ class ProgressViewWidget extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(
+          SizedBox(
+            height: MediaQuery.of(context).size.height *
+                0.3, // adjust the value as needed
             child: CircularPercentIndicator(
               radius: 100,
               lineWidth: 10,
@@ -42,7 +48,9 @@ class ProgressViewWidget extends StatelessWidget {
               center: Text("${(timeProgress.percentDone() * 100).floor()} %"),
             ),
           ),
-          Expanded(
+          SizedBox(
+            height: MediaQuery.of(context).size.height *
+                0.3, // adjust the value as needed
             child: LinearPercentIndicator(
               padding: const EdgeInsets.symmetric(horizontal: 15),
               percent: timeProgress.percentDone(),
@@ -58,6 +66,7 @@ class ProgressViewWidget extends StatelessWidget {
             ),
           ),
         ],
-      );
+      ),
+    );
   }
 }

@@ -59,15 +59,15 @@ class _ProgressDetailScreenState extends State<ProgressDetailScreen> {
 
   List<Widget> _renderColumnChildren(
       SettingsViewModel settingsVm, TimeProgressViewModel tpVm) {
-    List<Widget> columnChildren = [
-      Expanded(
+    List<Widget> columnChildren = [];
+    if (!_editMode) {
+      columnChildren.add(Expanded(
           child: ProgressViewWidget(
         timeProgress: _editMode ? _editedProgress ?? tpVm.tp : tpVm.tp,
         doneColor: settingsVm.appSettings.doneColor,
         leftColor: settingsVm.appSettings.leftColor,
-      ))
-    ];
-    if (_editMode) {
+      )));
+    } else {
       columnChildren.add(Expanded(
           child: ProgressEditorWidget(
         timeProgress: _editedProgress ?? tpVm.tp,

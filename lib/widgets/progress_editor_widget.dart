@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:time_progress_tracker/models/time_progress.dart';
 import 'package:time_progress_tracker/widgets/buttons/date_picker_btn.dart';
 
@@ -69,8 +70,11 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
 
   @override
   Widget build(BuildContext context) {
+    double heightFactor = (!_validDate) ? 0.3 : 0.5;
+
     List<Widget> columnChildren = [
-      Expanded(
+      SizedBox(
+        height: MediaQuery.of(context).size.height * heightFactor,
         child: TextField(
           controller: _nameTextController,
           decoration: InputDecoration(
@@ -82,7 +86,8 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
           ),
         ),
       ),
-      Expanded(
+      SizedBox(
+        height: MediaQuery.of(context).size.height * heightFactor,
         child: Row(
           children: [
             Expanded(
@@ -112,8 +117,9 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
 
     if (!_validDate) {
       columnChildren.add(
-        const Expanded(
-          child: Center(
+        SizedBox(
+          height: MediaQuery.of(context).size.height * heightFactor,
+          child: const Center(
             child: Text(
               "Invalid Dates. The Start Date has to be before the End Date",
               style: TextStyle(color: Colors.red),
@@ -123,8 +129,11 @@ class _ProgressEditorWidgetState extends State<ProgressEditorWidget> {
       );
     }
 
-    return Column(
-      children: columnChildren,
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: Column(
+        children: columnChildren,
+      ),
     );
   }
 }
